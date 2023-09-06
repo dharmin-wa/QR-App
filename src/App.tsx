@@ -1,7 +1,8 @@
 import "./App.css";
+import AllRoutes from "./routes";
 
 function App() {
-  return <div className="App">React app</div>;
+  return <AllRoutes />;
 }
 
 export default App;

@@ -1,7 +1,7 @@
-import { FormLabel, TextField } from '@mui/material'
+import { StandardTextFieldProps, FormLabel, TextField } from '@mui/material'
 import React from 'react'
 
-interface QRTextFieldProps {
+interface QRTextFieldProps extends StandardTextFieldProps {
   formLabel?: string | number
 }
 
@@ -21,7 +21,6 @@ const QRTextField = ({ formLabel, ...rest }: QRTextFieldProps) => {
         </FormLabel>
       )}
       <TextField {...rest} />
-
     </>
   )
 }

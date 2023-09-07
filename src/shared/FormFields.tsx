@@ -7,7 +7,7 @@ interface FormFieldsProps {
   attribute?: Array<any>
   error: any
   formData: any
-  handleChange: (arg0: any) => any
+  handleChange: any
 }
 
 const FormFields = ({ attribute,

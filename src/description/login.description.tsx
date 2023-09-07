@@ -1,34 +1,39 @@
 import { ReactComponent as Email } from "../assets/svg/mail.svg";
-import { ReactComponent as Lock } from "../assets/svg/lock.svg";
 import { email, notEmptyOrNull } from "../utils/constant";
 import { loadStateFn } from "../utils/localStorage";
+import { attributeTypes } from "../types";
 
-export const attribute = [
+export const attribute: attributeTypes[] = [
   {
     name: "email",
-    label: "emailOrUsername",
+    label: "Email",
     type: "email",
     isRequired: true,
-    endAdornment: <Email />,
+    startAdornment: <Email />,
     pattern: email,
-    error: ["emailRequired", "invalidEmail"],
-    gridXs: 12,
+    error: ["Email Required", "Invalid Email"],
   },
   {
     name: "password",
-    label: "password",
+    label: "Password",
     type: "password",
     isRequired: true,
-    endAdornment: <Lock />,
     pattern: notEmptyOrNull,
-    error: ["passwordRequired"],
-    gridXs: 12,
+    error: ["Password Required"],
   },
 ]
 
-export const defaultValues = {
+export const defaultValues: any = {
   email: loadStateFn("rememberedEmail") || "",
   password: loadStateFn("rememberedPassword") || "",
 };
+
+export const login = "login";
+
+export const loginPageTitle = "Log In to Your Account";
+
+export const rememberMe = "Remember me";
+
+export const forgotPasswordLink = "Forgot Password";
 
 export const formPath = { parent: "logIn" };

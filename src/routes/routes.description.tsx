@@ -3,6 +3,7 @@ import MainLayout from "../presentation/layout/MainLayout";
 import AuthLayout from "../presentation/layout/AuthLayout";
 import Login from "../presentation/login";
 import SignUp from "../presentation/signup";
+import ForgotPassword from "../presentation/forgotPassword";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -27,7 +28,12 @@ const publicRoutes: RouteObject[] = [
             element: <SignUp />
           }
         ]
-      }
+      },
+      {
+        path: "/forgot-password",
+        element: <AuthLayout />,
+        children: [{ index: true, element: <ForgotPassword /> }],
+      },
     ]
   }
 ]

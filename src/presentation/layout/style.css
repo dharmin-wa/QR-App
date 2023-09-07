@@ -1,0 +1,9 @@
+.main-container {
+  height: 51px;
+  border: 1px;
+  color: #FFFFFF;
+  background-color: #4181E0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

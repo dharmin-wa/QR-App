@@ -12,9 +12,11 @@ interface FormContainerTypes {
 
 const FormContainer = ({ attribute, defaultValues, formPath }: FormContainerTypes) => {
   const [formData, setFormData] = useState(defaultValues);
-  const [error, setError] = useState({});
+  const [error, setError] = useState<any>({});
   const dispatch = useDispatch();
   const { parent } = formPath;
+
+
   const handleChange = (e: { target: { name?: any; value?: any; }; }) => {
     const { name, value } = e.target;
     setError({
@@ -28,6 +30,7 @@ const FormContainer = ({ attribute, defaultValues, formPath }: FormContainerType
     });
 
   };
+
 
   const validate = (name: string, value: any) => {
     const { isRequired, pattern, error } = getObject(attribute, name);

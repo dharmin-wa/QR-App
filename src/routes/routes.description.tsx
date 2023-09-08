@@ -15,9 +15,9 @@ const publicRoutes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Login />
-          }
-        ]
+            element: <Login />,
+          },
+        ],
       },
       {
         path: "/signup",
@@ -25,18 +25,18 @@ const publicRoutes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <SignUp />
-          }
-        ]
+            element: <SignUp />,
+          },
+        ],
       },
       {
         path: "/forgot-password",
         element: <AuthLayout />,
         children: [{ index: true, element: <ForgotPassword /> }],
       },
-    ]
-  }
-]
-const routes = [...publicRoutes]
+    ],
+  },
+];
+const routes = [...publicRoutes];
 
 export default routes;

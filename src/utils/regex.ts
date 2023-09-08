@@ -21,4 +21,3 @@ export const alphabetValidation = (value: string) => {
   const regex = /^[A-Za-z\s]+$/;
   return regex.test(value);
 };
-

@@ -4,7 +4,7 @@ const initialState = {
   loader: {},
 };
 
-const Api = (state = initialState, action: { type: any; payload: any; }) => {
+const Api = (state = initialState, action: { type: any; payload: any }) => {
   const { type, payload } = action;
   switch (type) {
     case SET_API_DATA:

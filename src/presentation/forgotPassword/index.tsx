@@ -1,23 +1,33 @@
-import React from 'react'
-import QRTypography from '../../shared/QRTypography'
-import { attribute, pageTitle, formPath, submit, defaultValues } from '../../description/forgotPassword.description'
-import Form from '../../shared/Form'
-import { attributeTypes } from '../../types'
-import QRBox from '../../shared/QRBox'
-import QRTextField from '../../shared/QRTextField'
+import React from "react";
+import QRTypography from "../../shared/QRTypography";
+import {
+  attribute,
+  pageTitle,
+  formPath,
+  submit,
+  defaultValues,
+} from "../../description/forgotPassword.description";
+import Form from "../../shared/Form";
+import { attributeTypes } from "../../types";
+import QRBox from "../../shared/QRBox";
+import QRTextField from "../../shared/QRTextField";
 import { InputAdornment } from "@mui/material";
-import QRButton from '../../shared/QRButton'
-import ForgotPasswordContainer from '../../container/forgotPassword.container'
-import FormContainer from '../../container/form.container'
+import QRButton from "../../shared/QRButton";
+import ForgotPasswordContainer from "../../container/forgotPassword.container";
+import FormContainer from "../../container/form.container";
 
 const ForgotPassword = () => {
-  const { handleChange, formData, error, validate, setError } = FormContainer({ attribute, defaultValues, formPath })
+  const { handleChange, formData, error, validate, setError } = FormContainer({
+    attribute,
+    defaultValues,
+    formPath,
+  });
   const { handleSubmit, loadingStatus } = ForgotPasswordContainer({
     formData,
     validate,
     setError,
     formPath,
-  })
+  });
 
   return (
     <>
@@ -31,7 +41,7 @@ const ForgotPassword = () => {
       </QRTypography>
       <Form onSubmit={handleSubmit}>
         {attribute?.map((att: attributeTypes, index: number) => {
-          const { label, name, endAdornment, type } = att
+          const { label, name, endAdornment, type } = att;
           return (
             <QRBox key={index}>
               <QRTextField
@@ -52,15 +62,14 @@ const ForgotPassword = () => {
                 }}
               />
             </QRBox>
-          )
-        })
-        }
-        <QRButton type="submit"
-          variant="contained"
-          isLoading={loadingStatus}>{submit}</QRButton>
+          );
+        })}
+        <QRButton type="submit" variant="contained" isLoading={loadingStatus}>
+          {submit}
+        </QRButton>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;

@@ -18,8 +18,8 @@ export const defaultValues: any = {
   email: "",
 };
 
-export const pageTitle = "Forgot Password"
+export const pageTitle = "Forgot Password";
 
-export const submit = "Submit"
+export const submit = "Submit";
 
 export const formPath = { parent: "forgot-password" };

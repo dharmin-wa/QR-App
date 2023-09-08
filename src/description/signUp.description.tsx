@@ -1,6 +1,6 @@
 import { attributeTypes } from "../types";
 import { email, password } from "../utils/constant";
-import EmailIcon from '@mui/icons-material/Email';
+import EmailIcon from "@mui/icons-material/Email";
 
 export const attribute: attributeTypes[] = [
   {
@@ -20,7 +20,7 @@ export const attribute: attributeTypes[] = [
     pattern: password,
     error: ["Password Required", ""],
   },
-]
+];
 
 export const defaultValues: any = {
   email: "",
@@ -31,7 +31,8 @@ export const signUp = "signup";
 
 export const signUpPageTitle = "Sign up";
 
-export const termAndConditions = "I agree to <a href='#'> terms and conditions</a>";
+export const termAndConditions =
+  "I agree to<a href='#'> terms and conditions</a>";
 
 export const createAccount = "Create an account";
 

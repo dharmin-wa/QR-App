@@ -1,45 +1,31 @@
-import { useSelector } from "react-redux"
-import { equal, keys } from "../utils/javascript"
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { keys } from "../utils/javascript";
+import { useState } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
 interface LoginContainerProps {
-  formData: any
+  formData: any;
   // eslint-disable-next-line no-unused-vars
-  validate: (name: string, value: any) => void
-  setError: any
-  formPath: any
-  attribute: any
+  validate: (name: string, value: any) => void;
+  setError: any;
+  formPath: any;
 }
 
-const LoginContainer = ({ formData, validate, setError, formPath, attribute }: LoginContainerProps) => {
+const LoginContainer = ({
+  formData,
+  validate,
+  setError,
+  formPath,
+}: LoginContainerProps) => {
   const [isPwdRemember, setIsPwdRemember] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [updatedAtt, setUpdatedAtt] = useState<Array<any>>(attribute)
 
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[formPath?.parent],
   );
 
   const { performRequest } = ApiContainer();
-
-  useEffect(() => {
-    setUpdatedAtt((attribute) =>
-      attribute.map((att) => {
-        const { name } = att;
-        const isPassword = equal(name, "password");
-
-        return {
-          ...att,
-          startAdornment: isPassword ? (showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />) : att.startAdornment,
-          type: isPassword ? (showPassword ? "text" : "password") : att.type,
-        };
-      })
-    );
-  }, [showPassword]);
 
   const handleCheck = () => {
     setIsPwdRemember(!isPwdRemember);
@@ -54,13 +40,12 @@ const LoginContainer = ({ formData, validate, setError, formPath, attribute }: L
       needLoader: true,
       parent: formPath.parent,
     });
-    console.log('response', response)
-
-  }
+    console.log("response", response);
+  };
 
   const toggleVisibility = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -75,12 +60,16 @@ const LoginContainer = ({ formData, validate, setError, formPath, attribute }: L
       setError(validationErrors);
       return;
     }
-    callApi()
-  }
+    callApi();
+  };
 
   return {
-    handleSubmit, loadingStatus, handleCheck, toggleVisibility, updatedAtt
-  }
-}
+    handleSubmit,
+    loadingStatus,
+    handleCheck,
+    toggleVisibility,
+    showPassword,
+  };
+};
 
-export default LoginContainer
+export default LoginContainer;

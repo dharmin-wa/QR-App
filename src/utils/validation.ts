@@ -1,9 +1,4 @@
-import {
-  alphabetOnly,
-  email,
-  notEmptyOrNull,
-  password,
-} from "./constant";
+import { alphabetOnly, email, notEmptyOrNull, password } from "./constant";
 import {
   emailValidation,
   notEmpty,

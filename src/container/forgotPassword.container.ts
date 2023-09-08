@@ -1,13 +1,13 @@
-import { useSelector, } from "react-redux";
+import { useSelector } from "react-redux";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { keys } from "../utils/javascript";
 
 interface ForgotPasswordContainerProps {
-  formData: any
-  validate: (name: string, value: any) => void
-  setError: any
-  formPath: any
+  formData: any;
+  validate: (name: string, value: any) => void;
+  setError: any;
+  formPath: any;
 }
 
 const ForgotPasswordContainer = ({

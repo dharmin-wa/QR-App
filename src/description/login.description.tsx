@@ -21,19 +21,19 @@ export const attribute: attributeTypes[] = [
     pattern: notEmptyOrNull,
     error: ["Password Required"],
   },
-]
+];
 
 export const defaultValues: any = {
   email: loadStateFn("rememberedEmail") || "",
   password: loadStateFn("rememberedPassword") || "",
 };
 
-export const login = "login";
+export const login = "Sign In";
 
-export const loginPageTitle = "Log In to Your Account";
+export const loginPageTitle = "Sign In";
 
 export const rememberMe = "Remember me";
 
-export const forgotPasswordLink = "Forgot Password";
+export const forgotPasswordLink = "Forgot Password?";
 
 export const formPath = { parent: "logIn" };

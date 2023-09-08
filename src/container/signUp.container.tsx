@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
-import { equal, keys } from '../utils/javascript';
-import { ApiContainer } from '../utils/api';
-import { apiEndPoints, method } from '../utils/constant';
-import { useSelector } from 'react-redux';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { keys } from "../utils/javascript";
+import { ApiContainer } from "../utils/api";
+import { apiEndPoints, method } from "../utils/constant";
+import { useSelector } from "react-redux";
 
 interface SignUpContainerProps {
-  formData: any
-  validate: (name: string, value: any) => void
-  setError: any
-  formPath: any
-  attribute: any
+  formData: any;
+  validate: (name: string, value: any) => void;
+  setError: any;
+  formPath: any;
+  attribute: any;
 }
 
-const SignUpContainer = ({ formData, validate, setError, formPath, attribute }: SignUpContainerProps) => {
+const SignUpContainer = ({
+  formData,
+  validate,
+  setError,
+  formPath,
+}: SignUpContainerProps) => {
   const [agreeTC, setAgreeTC] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [updatedAtt, setUpdatedAtt] = useState<Array<any>>(attribute)
   const [strength, setStrength] = useState(0);
 
   const { performRequest } = ApiContainer();
@@ -25,26 +27,10 @@ const SignUpContainer = ({ formData, validate, setError, formPath, attribute }: 
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[formPath?.parent],
   );
-  console.log('formData', formData)
-
-  useEffect(() => {
-    setUpdatedAtt((attribute) =>
-      attribute.map((att) => {
-        const { name } = att;
-        const isPassword = equal(name, "password");
-
-        return {
-          ...att,
-          startAdornment: isPassword ? (showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />) : att.startAdornment,
-          type: isPassword ? (showPassword ? "text" : "password") : att.type,
-        };
-      })
-    );
-  }, [showPassword]);
 
   useEffect(() => {
     calculateStrength(formData?.password);
-  }, [formData?.password])
+  }, [formData?.password]);
 
   const calculateStrength = (password: string) => {
     let newStrength = 0;
@@ -70,29 +56,27 @@ const SignUpContainer = ({ formData, validate, setError, formPath, attribute }: 
     }
 
     setStrength(newStrength);
-  }
-
+  };
 
   const handleCheck = () => {
     setAgreeTC(!agreeTC);
   };
 
   const toggleVisibility = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
   const callApi = async () => {
     const response = await performRequest({
-      endPoint: apiEndPoints?.login,
+      endPoint: apiEndPoints?.signup,
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
       needLoader: true,
       parent: formPath.parent,
     });
-    console.log('response', response)
-
-  }
+    console.log("response", response);
+  };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -107,12 +91,17 @@ const SignUpContainer = ({ formData, validate, setError, formPath, attribute }: 
       setError(validationErrors);
       return;
     }
-    callApi()
-  }
+    callApi();
+  };
 
   return {
-    handleSubmit, loadingStatus, handleCheck, toggleVisibility, updatedAtt, strength
-  }
-}
+    handleSubmit,
+    loadingStatus,
+    handleCheck,
+    toggleVisibility,
+    strength,
+    showPassword,
+  };
+};
 
-export default SignUpContainer
+export default SignUpContainer;

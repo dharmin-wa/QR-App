@@ -9,22 +9,24 @@ import { showToast } from "../utils/toastService";
 import { loadStateFn } from "./localStorage";
 
 interface performRequestProps {
-  endPoint?: string
-  method?: "post" | "get" | "put" | "patch" | string
-  data?: any
-  showToastMessage?: boolean
-  successToastMessage?: string | ""
-  errorToastMessage?: string | ""
-  responseType?: 'arraybuffer'
-  | 'blob'
-  | 'document'
-  | 'json'
-  | 'text'
-  | 'stream' | undefined,
-  needLoader?: boolean
-  parent?: string | ""
-  headerKey?: string
-  token?: string
+  endPoint?: string;
+  method?: "post" | "get" | "put" | "patch" | string;
+  data?: any;
+  showToastMessage?: boolean;
+  successToastMessage?: string | "";
+  errorToastMessage?: string | "";
+  responseType?:
+    | "arraybuffer"
+    | "blob"
+    | "document"
+    | "json"
+    | "text"
+    | "stream"
+    | undefined;
+  needLoader?: boolean;
+  parent?: string | "";
+  headerKey?: string;
+  token?: string;
 }
 
 export const ApiContainer = () => {

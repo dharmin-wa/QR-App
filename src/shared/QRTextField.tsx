@@ -1,9 +1,24 @@
-import { StandardTextFieldProps, FormLabel, TextField } from '@mui/material'
-import React from 'react'
+import { StandardTextFieldProps, FormLabel, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import React from "react";
 
 interface QRTextFieldProps extends StandardTextFieldProps {
-  formLabel?: string | number
+  formLabel?: string | number;
 }
+
+const StyledTextField = styled(TextField)(() => ({
+  "& .MuiInputBase-root": {
+    borderRadius: 8,
+    marginBottom: 23,
+    maxWidth: 285,
+  },
+  "& .MuiFormHelperText-root": {
+    marginLeft: 0,
+    position: "absolute",
+    top: 54,
+    left: 0,
+  },
+}));
 
 const QRTextField = ({ formLabel, ...rest }: QRTextFieldProps) => {
   return (
@@ -20,9 +35,9 @@ const QRTextField = ({ formLabel, ...rest }: QRTextFieldProps) => {
           {formLabel}
         </FormLabel>
       )}
-      <TextField {...rest} />
+      <StyledTextField {...rest} />
     </>
-  )
-}
+  );
+};
 
-export default QRTextField
+export default QRTextField;

@@ -5,19 +5,22 @@ import { useDispatch } from "react-redux";
 import { SET_FORM_DATA } from "../redux/constants";
 
 interface FormContainerTypes {
-  attribute: any,
-  defaultValues: any,
-  formPath: any
+  attribute: any;
+  defaultValues: any;
+  formPath: any;
 }
 
-const FormContainer = ({ attribute, defaultValues, formPath }: FormContainerTypes) => {
+const FormContainer = ({
+  attribute,
+  defaultValues,
+  formPath,
+}: FormContainerTypes) => {
   const [formData, setFormData] = useState(defaultValues);
   const [error, setError] = useState<any>({});
   const dispatch = useDispatch();
   const { parent } = formPath;
 
-
-  const handleChange = (e: { target: { name?: any; value?: any; }; }) => {
+  const handleChange = (e: { target: { name?: any; value?: any } }) => {
     const { name, value } = e.target;
     setError({
       ...error,
@@ -28,9 +31,7 @@ const FormContainer = ({ attribute, defaultValues, formPath }: FormContainerType
       type: SET_FORM_DATA,
       payload: { [parent]: { ...formData, [name]: value } },
     });
-
   };
-
 
   const validate = (name: string, value: any) => {
     const { isRequired, pattern, error } = getObject(attribute, name);

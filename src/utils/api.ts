@@ -16,13 +16,13 @@ interface performRequestProps {
   successToastMessage?: string | "";
   errorToastMessage?: string | "";
   responseType?:
-    | "arraybuffer"
-    | "blob"
-    | "document"
-    | "json"
-    | "text"
-    | "stream"
-    | undefined;
+  | "arraybuffer"
+  | "blob"
+  | "document"
+  | "json"
+  | "text"
+  | "stream"
+  | undefined;
   needLoader?: boolean;
   parent?: string | "";
   headerKey?: string;
@@ -94,13 +94,11 @@ export const ApiContainer = () => {
             logOutUser();
           }
           let errorMessage;
-          console.log("error", error?.response);
           if (
             error?.response?.data?.errors?.length &&
             isArray(error?.response?.data?.errors)
           ) {
             const firstError = error?.response?.data?.errors[0];
-            console.log("firstError", firstError);
             errorMessage = firstError.message;
           } else if (error?.response?.data?.error) {
             errorMessage = error.response.data.error;

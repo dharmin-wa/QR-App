@@ -32,7 +32,7 @@ const LoginContainer = ({
   };
 
   const callApi = async () => {
-    const response = await performRequest({
+    performRequest({
       endPoint: apiEndPoints?.login,
       method: method.post,
       data: { ...formData },
@@ -40,7 +40,6 @@ const LoginContainer = ({
       needLoader: true,
       parent: formPath.parent,
     });
-    console.log("response", response);
   };
 
   const toggleVisibility = () => {

@@ -37,7 +37,6 @@ const ForgotPasswordContainer = ({
     if (equal(res?.status, 200)) {
       navigate("/verify-otp");
     }
-    console.log("res", res);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {

@@ -1,7 +1,10 @@
-export const loadStateFn = (params = "token") => localStorage.getItem(params);
+export const loadStateFn = (params: string = "token") => {
+  const item = localStorage.getItem(params);
+  return item ? JSON.parse(item) : null;
+};
 
 export const saveStateFn = (key: any, value: any) =>
-  localStorage.setItem(key, value);
+  localStorage.setItem(key, JSON.stringify(value));
 
 export const clearStateFn = () => localStorage.clear();
 

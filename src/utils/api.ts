@@ -16,13 +16,13 @@ interface performRequestProps {
   successToastMessage?: string | "";
   errorToastMessage?: string | "";
   responseType?:
-  | "arraybuffer"
-  | "blob"
-  | "document"
-  | "json"
-  | "text"
-  | "stream"
-  | undefined;
+    | "arraybuffer"
+    | "blob"
+    | "document"
+    | "json"
+    | "text"
+    | "stream"
+    | undefined;
   needLoader?: boolean;
   parent?: string | "";
   headerKey?: string;

@@ -90,16 +90,17 @@ export const ApiContainer = () => {
           });
         })
         .catch((error) => {
-          console.log("error>>>", error);
           if (equal(error?.response?.status, 401)) {
             logOutUser();
           }
           let errorMessage;
+          console.log("error", error?.response);
           if (
-            error?.response?.data?.error?.length &&
-            isArray(error?.response?.data?.error)
+            error?.response?.data?.errors?.length &&
+            isArray(error?.response?.data?.errors)
           ) {
-            const firstError = error?.response?.data?.error[0];
+            const firstError = error?.response?.data?.errors[0];
+            console.log("firstError", firstError);
             errorMessage = firstError.message;
           } else if (error?.response?.data?.error) {
             errorMessage = error.response.data.error;

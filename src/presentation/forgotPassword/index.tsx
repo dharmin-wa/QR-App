@@ -4,17 +4,18 @@ import {
   attribute,
   pageTitle,
   formPath,
-  submit,
   defaultValues,
+  verifyEmail,
 } from "../../description/forgotPassword.description";
 import Form from "../../shared/Form";
-import { attributeTypes } from "../../types";
+import Mail from "../../assets/svg/mail.svg";
 import QRBox from "../../shared/QRBox";
 import QRTextField from "../../shared/QRTextField";
 import { InputAdornment } from "@mui/material";
 import QRButton from "../../shared/QRButton";
 import ForgotPasswordContainer from "../../container/forgotPassword.container";
 import FormContainer from "../../container/form.container";
+import RightArrow from "../../assets/svg/rightArrow.svg";
 
 const ForgotPassword = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({
@@ -30,45 +31,55 @@ const ForgotPassword = () => {
   });
 
   return (
-    <>
-      <QRTypography
-        variant="h2"
-        fontSize={{ md: 28, xs: 22 }}
-        fontWeight={500}
-        mb={3}
-      >
+    <QRBox
+      display="flex"
+      flexDirection="column"
+      borderRadius={3}
+      sx={{ background: "#fff" }}
+      width="380px"
+      margin="auto"
+      maxWidth="100%"
+      p={2}
+    >
+      <QRTypography variant="h4" fontWeight={700} pb={3}>
         {pageTitle}
       </QRTypography>
-      <Form onSubmit={handleSubmit}>
-        {attribute?.map((att: attributeTypes, index: number) => {
-          const { label, name, endAdornment, type } = att;
-          return (
-            <QRBox key={index}>
-              <QRTextField
-                error={!!error?.[name]}
-                id={`${name}-${index}`}
-                label={label}
-                name={name}
-                type={type}
-                defaultValue={defaultValues?.[name]}
-                helperText={error?.[name]}
-                onChange={handleChange}
-                InputProps={{
-                  endAdornment: endAdornment && (
-                    <InputAdornment position="end">
-                      {endAdornment}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </QRBox>
-          );
-        })}
-        <QRButton type="submit" variant="contained" isLoading={loadingStatus}>
-          {submit}
+      <QRTypography sx={{ fontSize: "14px", pb: 3, color: "#5B5858" }}>
+        Don’t worry ! It happens. Please enter the Email Id we will send the OTP
+        in this Email.
+      </QRTypography>
+      <Form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        <QRTextField
+          error={!!error?.email}
+          id="email"
+          type="text"
+          name="email"
+          defaultValue={defaultValues?.email}
+          placeholder="email address"
+          helperText={error?.email}
+          fullWidth
+          onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <img src={Mail} alt="Mail Icon" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <QRButton
+          type="submit"
+          variant="contained"
+          isLoading={loadingStatus}
+          endIcon={<img src={RightArrow} alt="Arrow Icon" />}
+        >
+          {verifyEmail}
         </QRButton>
       </Form>
-    </>
+    </QRBox>
   );
 };
 

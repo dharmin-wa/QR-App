@@ -10,7 +10,7 @@ export const locationPath = {
 export const apiEndPoints = {
   login: "api/auth/login",
   signup: "api/auth/signup",
-  forgotPassword: "auth/forgot-password",
+  forgotPassword: "api/auth/forgot-password",
   verifyEmail: "auth/verify",
   verifyPassword: "auth/forgot-password/verify",
   verifyOTP: "auth/verify-otp",

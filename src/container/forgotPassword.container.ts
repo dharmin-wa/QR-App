@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
-import { keys } from "../utils/javascript";
+import { equal, keys } from "../utils/javascript";
+import { useNavigate } from "react-router-dom";
 
 interface ForgotPasswordContainerProps {
   formData: any;
@@ -17,20 +18,26 @@ const ForgotPasswordContainer = ({
   formPath,
 }: ForgotPasswordContainerProps) => {
   const { performRequest } = ApiContainer();
+  const navigate = useNavigate();
 
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[formPath?.parent],
   );
 
   const apiCall = async () => {
-    performRequest({
+    const res: any = await performRequest({
       endPoint: apiEndPoints?.forgotPassword,
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
+      successToastMessage: "Mail sent successfully",
       needLoader: true,
       parent: formPath.parent,
     });
+    if (equal(res?.status, 200)) {
+      navigate("/verify-otp");
+    }
+    console.log("res", res);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {

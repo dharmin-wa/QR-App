@@ -17,14 +17,15 @@ import QRCheckbox from "../../shared/QRCheckbox";
 import { Link } from "react-router-dom";
 import { locationPath } from "../../utils/constant";
 import QRTypography from "../../shared/QRTypography";
-import { IconButton, InputAdornment } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
+import { Divider, IconButton, InputAdornment } from "@mui/material";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import EmailIcon from "@mui/icons-material/Email";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import RightArrow from "../../assets/svg/rightArrow.svg";
 import QRBox from "../../shared/QRBox";
+import GoogleIcon from "../../assets/svg/google.svg";
+import Mail from "../../assets/svg/mail.svg";
+import Lock from "../../assets/svg/lock.svg";
 
 interface LoginProps {}
 
@@ -49,86 +50,129 @@ const Login: React.FC<LoginProps> = () => {
   });
 
   return (
-    <>
-      <QRBox sx={{ background: "#fff" }}>
-        <QRTypography variant="h4" fontWeight={700} mb={3}>
-          {loginPageTitle}
-        </QRTypography>
-        <Form onSubmit={handleSubmit}>
-          <QRTextField
-            error={!!error?.email}
-            id="email"
-            type="text"
-            name="email"
-            defaultValue={defaultValues?.email}
-            placeholder="Email address"
-            helperText={error?.email}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EmailIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <QRTextField
-            error={!!error?.password}
-            id="password"
-            type={showPassword ? "text" : "password"}
-            name="password"
-            defaultValue={defaultValues?.password}
-            placeholder="Password"
-            helperText={error?.password}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={toggleVisibility}>
-                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+    <QRBox
+      display="flex"
+      alignItems="center"
+      flexDirection="column"
+      borderRadius="24px"
+      sx={{ background: "#fff" }}
+      width="380px"
+      margin="auto"
+      maxWidth="100%"
+      p={2}
+    >
+      <QRTypography variant="h4" fontWeight={700} p={3}>
+        {loginPageTitle}
+      </QRTypography>
+      <img src={GoogleIcon} alt="sign up with google" />
+      <Divider
+        sx={{ mt: 2, mb: 2, fontSize: ["12px", "16px", "16px", "16px"] }}
+      >
+        Or
+      </Divider>
+
+      <Form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <QRTextField
+          error={!!error?.email}
+          id="email"
+          type="text"
+          name="email"
+          defaultValue={defaultValues?.email}
+          placeholder="email address"
+          helperText={error?.email}
+          onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <img src={Mail} alt="Mail Icon" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <QRTextField
+          error={!!error?.password}
+          id="password"
+          type={showPassword ? "text" : "password"}
+          name="password"
+          defaultValue={defaultValues?.password}
+          placeholder="password"
+          helperText={error?.password}
+          onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <img src={Lock} alt="Lock Icon" />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={toggleVisibility}>
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <QRBox
+          sx={{
+            alignItems: "center",
+            // justifyContent: "center",
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            pb: { xs: 2, md: 2 },
+          }}
+        >
           <FormControlLabel
             control={<QRCheckbox name="rememberMe" onChange={handleCheck} />}
             label={
               <span
                 style={{
-                  fontSize: "13.39px",
+                  fontSize: 13.39,
                 }}
               >
                 {rememberMe}
               </span>
             }
           />
-          <Link
-            to={locationPath.forgotPassword}
-            style={{ fontSize: "13.39px" }}
-          >
+          <Link to={locationPath.forgotPassword} style={{ fontSize: 13.39 }}>
             {" "}
             {forgotPasswordLink}
           </Link>
-          <QRButton
-            type="submit"
-            variant="contained"
-            isLoading={loadingStatus}
-            endIcon={<ArrowCircleRightIcon />}
-          >
-            {login}
-          </QRButton>
-        </Form>
-        <QRTypography sx={{ fontSize: "13.39px" }}>
-          Don’t have an account? <Link to="/signup">Sign up </Link>{" "}
-        </QRTypography>
-      </QRBox>
-    </>
+        </QRBox>
+
+        <QRButton
+          type="submit"
+          variant="contained"
+          isLoading={loadingStatus}
+          endIcon={<img src={RightArrow} alt="Arrow Icon" />}
+        >
+          {login}
+        </QRButton>
+      </Form>
+      <QRTypography
+        sx={{
+          fontSize: 13.39,
+          alignItems: "center",
+          fontWeight: 700,
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          pb: { xs: 2 },
+        }}
+        p={2}
+      >
+        Don’t have an account?{" "}
+        <Link to="/signup" style={{ marginLeft: 1 }}>
+          Sign up{" "}
+        </Link>{" "}
+      </QRTypography>
+    </QRBox>
   );
 };
 

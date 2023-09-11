@@ -8,22 +8,22 @@ import {
 } from "../../description/signUp.description";
 import Form from "../../shared/Form";
 import QRTextField from "../../shared/QRTextField";
-import { IconButton, InputAdornment } from "@mui/material";
+import { Divider, IconButton, InputAdornment } from "@mui/material";
 import QRButton from "../../shared/QRButton";
 import SignUpContainer from "../../container/signUp.container";
 import FormContainer from "../../container/form.container";
 import QRCheckbox from "../../shared/QRCheckbox";
 import "./style.css";
-import EmailIcon from "@mui/icons-material/Email";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import QRBox from "../../shared/QRBox";
 import { equal } from "../../utils/javascript";
-import LockIcon from "@mui/icons-material/Lock";
 import GoogleIcon from "../../assets/svg/google.svg";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import RightArrow from "../../assets/svg/rightArrow.svg";
 import { Link } from "react-router-dom";
+import Mail from "../../assets/svg/mail.svg";
+import Lock from "../../assets/svg/lock.svg";
 
 const SignUp: React.FC = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({
@@ -48,32 +48,47 @@ const SignUp: React.FC = () => {
   });
 
   return (
-    <QRBox sx={{ background: "#fff" }}>
-      <QRTypography
-        variant="h4"
-        // fontSize={{ md: 28, xs: 40 }}
-        fontWeight={700}
-        // mb={4}
-        // mt={4}
-      >
+    <QRBox
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      borderRadius="24px"
+      sx={{ background: "#fff" }}
+      width="380px"
+      margin="auto"
+      maxWidth="100%"
+      p={2}
+    >
+      <QRTypography variant="h4" fontWeight={700} p={3}>
         {signUpPageTitle}
       </QRTypography>
       <img src={GoogleIcon} alt="sign up with google" />
-      <QRTypography sx={{ mt: 2, mb: 2 }}>Or</QRTypography>
-      <Form onSubmit={handleSubmit}>
+      <Divider
+        sx={{ mt: 2, mb: 2, fontSize: ["12px", "16px", "16px", "16px"] }}
+      >
+        Or
+      </Divider>
+      <Form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          // alignItems: "center"
+        }}
+      >
         <QRTextField
           error={!!error?.email}
           id="email"
           type="text"
           name="email"
           defaultValue={defaultValues?.email}
-          placeholder="Email address"
+          placeholder="email address"
           helperText={error?.email}
           onChange={handleChange}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <EmailIcon />
+                <img src={Mail} alt="Mail Icon" />
               </InputAdornment>
             ),
           }}
@@ -84,13 +99,13 @@ const SignUp: React.FC = () => {
           type={showPassword ? "text" : "password"}
           name="password"
           defaultValue={defaultValues?.password}
-          placeholder="Password"
+          placeholder="password"
           helperText={error?.password}
           onChange={handleChange}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <LockIcon />
+                <img src={Lock} alt="Lock Icon" />
               </InputAdornment>
             ),
             endAdornment: (
@@ -102,27 +117,25 @@ const SignUp: React.FC = () => {
             ),
           }}
         />
-        <QRBox sx={{}}>
-          <div className="strength-line">
-            <div
-              className={`strength-line-fill strength-line-fill-${strength}`}
-            ></div>
+        <div className="strength-line">
+          <div
+            className={`strength-line-fill strength-line-fill-${strength}`}
+          ></div>
+        </div>
+        {equal(strength, 1) && (
+          <div className="under-message">
+            Password must be at least 8 characters long.
           </div>
-          {/*  {equal(strength, 0) && (
-            <div className="under-message">
-              Password must be at least 8 characters long.
-            </div>
-          )} */}
-          {strength > 0 && strength <= 4 && (
-            <div className="under-message">
-              Not bad but you know you can do it better.
-            </div>
-          )}
-          {equal(strength, 5) && (
-            <div className="under-message">Strong password! Good job.</div>
-          )}
-        </QRBox>
-        <QRBox sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
+        )}
+        {strength > 1 && strength <= 4 && (
+          <div className="under-message">
+            Not bad but you know you can do it better.
+          </div>
+        )}
+        {equal(strength, 5) && (
+          <div className="under-message">Strong password! Good job.</div>
+        )}
+        <QRBox sx={{ mt: 1, mb: { xs: 1.5 } }}>
           <FormControlLabel
             control={
               <QRCheckbox name="termAndConditions" onChange={handleCheck} />
@@ -142,14 +155,28 @@ const SignUp: React.FC = () => {
           type="submit"
           variant="contained"
           isLoading={loadingStatus}
-          endIcon={<ArrowCircleRightIcon />}
+          endIcon={<img src={RightArrow} alt="Arrow Icon" />}
         >
           Sign up for free
         </QRButton>
       </Form>
 
-      <QRTypography sx={{ fontSize: "13.39px" }}>
-        Do you already have an account? <Link to="/login">Log in</Link>{" "}
+      <QRTypography
+        sx={{
+          fontSize: "13.39px",
+          alignItems: "center",
+          fontWeight: 700,
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          pb: { xs: 2 },
+        }}
+        p={2}
+      >
+        Do you already have an account?{" "}
+        <Link to="/login" style={{ marginLeft: 1 }}>
+          Log in
+        </Link>{" "}
       </QRTypography>
     </QRBox>
   );

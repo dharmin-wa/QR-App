@@ -10,7 +10,7 @@ const StyledTextField = styled(TextField)(() => ({
   "& .MuiInputBase-root": {
     borderRadius: 8,
     marginBottom: 23,
-    maxWidth: 285,
+    maxWidth: "100%",
   },
   "& .MuiFormHelperText-root": {
     marginLeft: 0,

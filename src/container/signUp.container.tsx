@@ -67,15 +67,15 @@ const SignUpContainer = ({
   };
 
   const callApi = async () => {
-    const response = await performRequest({
+    performRequest({
       endPoint: apiEndPoints?.signup,
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
+      successToastMessage: "Sign up successfully!",
       needLoader: true,
       parent: formPath.parent,
     });
-    console.log("response", response);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {

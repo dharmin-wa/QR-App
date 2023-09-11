@@ -7,12 +7,13 @@ interface QRButtonProps extends ButtonOwnProps {
   isDisable?: boolean;
   isLoading?: boolean;
   startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
   type?: "button" | "submit" | "reset";
 }
 
 const StyledButton = styled(Button)(() => ({
   "&.MuiButton-root": {
-    width: "68%",
+    width: "100%",
     borderRadius: 13,
     textTransform: "capitalize",
   },
@@ -23,16 +24,18 @@ const QRButton = ({
   isDisable,
   isLoading,
   startIcon,
+  endIcon,
   ...rest
 }: QRButtonProps) => {
   return (
     <StyledButton
       {...rest}
       disabled={isDisable || isLoading}
-      startIcon={isLoading ? <CircularProgress size={20} /> : startIcon}
+      startIcon={!isLoading && startIcon}
+      endIcon={!isLoading && endIcon}
       disableElevation
     >
-      {children}
+      {isLoading ? <CircularProgress size={20} /> : children}
     </StyledButton>
   );
 };

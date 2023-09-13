@@ -4,6 +4,8 @@ export const equal = (obj1: any, obj2: any = 0) => obj1 === obj2;
 
 export const lowerCase = (value: string) => value?.toLowerCase();
 
+export const upperCase = (value: string) => value?.toUpperCase();
+
 export const ternary = (bool: boolean, truthy: any, falsy: any) =>
   bool ? truthy : falsy;
 

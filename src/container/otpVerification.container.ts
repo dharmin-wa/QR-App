@@ -1,52 +1,82 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useRef } from "react";
-import { equal, typeOf } from "../utils/javascript";
+import { equal } from "../utils/javascript";
 import { loadStateFn, saveStateFn } from "../utils/localStorage";
-import { otpResendTime } from "../description/otpVerification.description";
+import {
+  numberOfInputField,
+  otpResendTime,
+} from "../description/otpVerification.description";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { isExpired } from "react-jwt";
 
 interface OtpVerificationContainerProps {
   formPath: any;
 }
 
-const OtpVerificationContainer = ({ formPath }: OtpVerificationContainerProps) => {
-  const [otp, setOtp] = useState();
+const OtpVerificationContainer = ({
+  formPath,
+}: OtpVerificationContainerProps) => {
+  const [otp, setOtp] = useState<string>();
   const [otpError, setOtpError] = useState(false);
   const { performRequest } = ApiContainer();
   const otpInputRef: any = useRef(null);
+  const navigate: any = useNavigate();
 
-  const emailVerify = (loadStateFn("email-verify"));
-  const [timer, setTimer] = useState(+loadStateFn("otp-time") || otpResendTime);
+  const emailVerify = loadStateFn("email-verify");
+  const initialTimerValue =
+    +loadStateFn("otp-timer") ||
+    (!isExpired(emailVerify?.token) ? otpResendTime : undefined);
+
+  const [timer, setTimer] = useState(initialTimerValue || 0);
+
+  const loadingStatusSubmit = useSelector(
+    (state: any) => state.api?.loader?.[formPath?.parent],
+  );
+  const loadingStatusResend = useSelector(
+    (state: any) => state.api?.loader?.[formPath?.child],
+  );
 
   useEffect(() => {
-    if (timer !== 0) {
-      setTimeout(() => {
+    verifyToken();
+  }, []);
+
+  useEffect(() => {
+    const intervalTimer = setInterval(() => {
+      if (timer !== 0) {
         setTimer((preTime) => {
-          saveStateFn("otp-time", preTime - 1);
-          return preTime - 1;
+          if (preTime > 0) {
+            saveStateFn("otp-timer", preTime - 1);
+            return preTime - 1;
+          }
+          return 0;
         });
-      }, 1000);
-    }
+      }
+    }, 1000);
+    return () => {
+      clearInterval(intervalTimer);
+    };
   }, [timer]);
 
-  /*  const handleInputChange = (value: any) => {
-     if (equal(value?.length, 6)) setOtpError(false);
-     setOtp(value);
-   }; */
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
 
-  const handleInputChange = (value: any) => {
-    console.log('value,typeof value', value, typeof value)
-    if (/^[0-9]+$/.test(value)) {
-      setOtp(value);
-    } else {
-      setOtpError(false)
+  const verifyToken = () => {
+    if (!emailVerify?.email) {
+      return navigate(-1, { replace: true });
     }
   };
 
+  const handleInputChange = (value: any) => {
+    if (equal(value?.length, 6)) setOtpError(false);
+    setOtp(value);
+  };
 
   const handleResendOTP = async () => {
-    const payload = { email: emailVerify?.email }
+    const { email } = emailVerify;
+    const payload = { email };
+
     const res: any = await performRequest({
       endPoint: apiEndPoints?.forgotPassword,
       method: method.post,
@@ -56,10 +86,57 @@ const OtpVerificationContainer = ({ formPath }: OtpVerificationContainerProps) =
       needLoader: true,
       parent: formPath.child,
     });
-    console.log('res', res)
-  }
+    if (equal(res?.status, 200)) {
+      setOtp("");
 
-  return { otp, otpError, handleInputChange, handleResendOTP, timer, email: emailVerify?.email, otpInputRef };
+      saveStateFn("email-verify", {
+        token: res?.data?.token,
+        email,
+      });
+      setTimer(otpResendTime);
+    }
+  };
+
+  const callApi = async () => {
+    const { token } = emailVerify;
+    const payload = {
+      otp,
+      token,
+    };
+
+    const response: any = await performRequest({
+      endPoint: apiEndPoints?.verifyOTP,
+      method: method.post,
+      data: payload,
+      token: emailVerify?.token,
+      showToastMessage: true,
+      parent: formPath?.parent,
+      needLoader: true,
+    });
+    if (equal(response?.status, 200)) {
+      navigate("/reset-password");
+    }
+  };
+
+  const handleSubmitOTP = () => {
+    if (!otp || otp?.length < numberOfInputField) return setOtpError(true);
+    callApi();
+  };
+
+  return {
+    otp,
+    otpError,
+    handleInputChange,
+    handleResendOTP,
+    timer,
+    email: emailVerify?.email,
+    otpInputRef,
+    loadingStatusSubmit,
+    loadingStatusResend,
+    handleSubmitOTP,
+    minutes,
+    seconds,
+  };
 };
 
 export default OtpVerificationContainer;

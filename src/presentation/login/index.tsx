@@ -5,11 +5,7 @@ import QRTextField from "../../shared/QRTextField";
 import {
   attribute,
   defaultValues,
-  forgotPasswordLink,
   formPath,
-  loginPageTitle,
-  login,
-  rememberMe,
 } from "../../description/login.description";
 import QRButton from "../../shared/QRButton";
 import FormContainer from "../../container/form.container";
@@ -26,6 +22,7 @@ import QRBox from "../../shared/QRBox";
 import GoogleIcon from "../../assets/svg/google.svg";
 import Mail from "../../assets/svg/mail.svg";
 import Lock from "../../assets/svg/lock.svg";
+import { useTranslation } from "react-i18next";
 
 interface LoginProps {}
 
@@ -35,6 +32,7 @@ const Login: React.FC<LoginProps> = () => {
     defaultValues,
     formPath,
   });
+  const { t } = useTranslation();
 
   const {
     handleSubmit,
@@ -62,13 +60,13 @@ const Login: React.FC<LoginProps> = () => {
       p={2}
     >
       <QRTypography variant="h4" fontWeight={700} p={3}>
-        {loginPageTitle}
+        {t("login")}
       </QRTypography>
       <img src={GoogleIcon} alt="sign up with google" />
       <Divider
         sx={{ mt: 2, mb: 2, fontSize: ["12px", "16px", "16px", "16px"] }}
       >
-        Or
+        {t("or")}
       </Divider>
 
       <Form
@@ -84,8 +82,8 @@ const Login: React.FC<LoginProps> = () => {
           type="text"
           name="email"
           defaultValue={defaultValues?.email}
-          placeholder="email address"
-          helperText={error?.email}
+          placeholder={t("emailAddress")}
+          helperText={t(error?.email)}
           onChange={handleChange}
           InputProps={{
             startAdornment: (
@@ -101,8 +99,8 @@ const Login: React.FC<LoginProps> = () => {
           type={showPassword ? "text" : "password"}
           name="password"
           defaultValue={defaultValues?.password}
-          placeholder="password"
-          helperText={error?.password}
+          placeholder={t("password")}
+          helperText={t(error?.password)}
           onChange={handleChange}
           InputProps={{
             startAdornment: (
@@ -136,13 +134,13 @@ const Login: React.FC<LoginProps> = () => {
                   fontSize: 13.39,
                 }}
               >
-                {rememberMe}
+                {t("rememberMe")}
               </span>
             }
           />
           <Link to={locationPath.forgotPassword} style={{ fontSize: 13.39 }}>
             {" "}
-            {forgotPasswordLink}
+            {t("forgotPasswordLink")}
           </Link>
         </QRBox>
 
@@ -152,7 +150,7 @@ const Login: React.FC<LoginProps> = () => {
           isLoading={loadingStatus}
           endIcon={<img src={RightArrow} alt="Arrow Icon" />}
         >
-          {login}
+          {t("login")}
         </QRButton>
       </Form>
       <QRTypography
@@ -167,9 +165,9 @@ const Login: React.FC<LoginProps> = () => {
         }}
         p={2}
       >
-        Don’t have an account?{" "}
+        {t("notHaveAccount")}
         <Link to="/signup" style={{ marginLeft: 1 }}>
-          Sign up{" "}
+          {t("signUp")}
         </Link>{" "}
       </QRTypography>
     </QRBox>

@@ -31,19 +31,16 @@ const ForgotPasswordContainer = ({
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
-      successToastMessage: "Mail sent successfully",
+      successToastMessage: "OTP sent successfully",
       needLoader: true,
       parent: formPath.parent,
     });
     if (equal(res?.status, 200)) {
-      saveStateFn(
-        "email-verify",
-        {
-          token: res?.data?.token,
-          email: formData?.email
-        },
-      );
-      saveStateFn("otp-time", 0);
+      saveStateFn("email-verify", {
+        token: res?.data?.token,
+        email: formData?.email,
+      });
+      saveStateFn("otp-timer", 0);
       navigate("/verify-otp");
     }
   };

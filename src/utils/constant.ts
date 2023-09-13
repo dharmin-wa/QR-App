@@ -11,9 +11,9 @@ export const apiEndPoints = {
   login: "api/auth/login",
   signup: "api/auth/signup",
   forgotPassword: "api/auth/forgot-password",
-  verifyEmail: "auth/verify",
+  verifyEmail: "api/email/verify",
   verifyPassword: "auth/forgot-password/verify",
-  verifyOTP: "auth/verify-otp",
+  verifyOTP: "api/auth/forgot-password/verify",
   resendOTP: "auth/resend-otp",
 };
 

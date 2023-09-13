@@ -2,7 +2,6 @@ import React from "react";
 import QRTypography from "../../shared/QRTypography";
 import {
   attribute,
-  signUpPageTitle,
   defaultValues,
   formPath,
 } from "../../description/signUp.description";
@@ -24,6 +23,7 @@ import RightArrow from "../../assets/svg/rightArrow.svg";
 import { Link } from "react-router-dom";
 import Mail from "../../assets/svg/mail.svg";
 import Lock from "../../assets/svg/lock.svg";
+import { useTranslation } from "react-i18next";
 
 const SignUp: React.FC = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({
@@ -31,6 +31,7 @@ const SignUp: React.FC = () => {
     defaultValues,
     formPath,
   });
+  const { t } = useTranslation();
 
   const {
     handleSubmit,
@@ -46,7 +47,6 @@ const SignUp: React.FC = () => {
     formPath,
     attribute,
   });
-
   return (
     <QRBox
       display="flex"
@@ -60,13 +60,13 @@ const SignUp: React.FC = () => {
       p={2}
     >
       <QRTypography variant="h4" fontWeight={700} p={3}>
-        {signUpPageTitle}
+        {t("signUp")}
       </QRTypography>
       <img src={GoogleIcon} alt="sign up with google" />
       <Divider
         sx={{ mt: 2, mb: 2, fontSize: ["12px", "16px", "16px", "16px"] }}
       >
-        Or
+        {t("or")}
       </Divider>
       <Form
         onSubmit={handleSubmit}
@@ -82,8 +82,8 @@ const SignUp: React.FC = () => {
           type="text"
           name="email"
           defaultValue={defaultValues?.email}
-          placeholder="email address"
-          helperText={error?.email}
+          placeholder={t("emailAddress")}
+          helperText={t(error?.email)}
           onChange={handleChange}
           InputProps={{
             startAdornment: (
@@ -99,8 +99,8 @@ const SignUp: React.FC = () => {
           type={showPassword ? "text" : "password"}
           name="password"
           defaultValue={defaultValues?.password}
-          placeholder="password"
-          helperText={error?.password}
+          placeholder={t("password")}
+          helperText={t(error?.password)}
           onChange={handleChange}
           InputProps={{
             startAdornment: (
@@ -123,17 +123,13 @@ const SignUp: React.FC = () => {
           ></div>
         </div>
         {equal(strength, 1) && (
-          <div className="under-message">
-            Password must be at least 8 characters long.
-          </div>
+          <div className="under-message">{t("pwdCharValidation")}</div>
         )}
         {strength > 1 && strength <= 4 && (
-          <div className="under-message">
-            Not bad but you know you can do it better.
-          </div>
+          <div className="under-message">{t("notBadPwd")}</div>
         )}
         {equal(strength, 5) && (
-          <div className="under-message">Strong password! Good job.</div>
+          <div className="under-message">{t("strongPwd")}</div>
         )}
         <QRBox sx={{ mt: 1, mb: { xs: 1.5 } }}>
           <FormControlLabel
@@ -146,7 +142,7 @@ const SignUp: React.FC = () => {
                   fontSize: "13.39px",
                 }}
               >
-                I agree to <Link to="">terms and conditions</Link>
+                {t("agreeTo")} <Link to="">{t("termCondition")}</Link>
               </span>
             }
           />
@@ -157,7 +153,7 @@ const SignUp: React.FC = () => {
           isLoading={loadingStatus}
           endIcon={<img src={RightArrow} alt="Arrow Icon" />}
         >
-          Sign up for free
+          {t("signUpFree")}
         </QRButton>
       </Form>
 
@@ -173,9 +169,9 @@ const SignUp: React.FC = () => {
         }}
         p={2}
       >
-        Do you already have an account?{" "}
+        {t("alreadyHaveAcc")}?
         <Link to="/login" style={{ marginLeft: 1 }}>
-          Log in
+          {t("login")}
         </Link>{" "}
       </QRTypography>
     </QRBox>

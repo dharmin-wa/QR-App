@@ -9,6 +9,7 @@ interface QRButtonProps extends ButtonOwnProps {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   type?: "button" | "submit" | "reset";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const StyledButton = styled(Button)(() => ({

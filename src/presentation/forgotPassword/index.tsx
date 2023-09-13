@@ -2,10 +2,8 @@ import React from "react";
 import QRTypography from "../../shared/QRTypography";
 import {
   attribute,
-  pageTitle,
   formPath,
   defaultValues,
-  verifyEmail,
 } from "../../description/forgotPassword.description";
 import Form from "../../shared/Form";
 import Mail from "../../assets/svg/mail.svg";
@@ -16,6 +14,7 @@ import QRButton from "../../shared/QRButton";
 import ForgotPasswordContainer from "../../container/forgotPassword.container";
 import FormContainer from "../../container/form.container";
 import RightArrow from "../../assets/svg/rightArrow.svg";
+import { useTranslation } from "react-i18next";
 
 const ForgotPassword = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({
@@ -29,6 +28,7 @@ const ForgotPassword = () => {
     setError,
     formPath,
   });
+  const { t } = useTranslation();
 
   return (
     <QRBox
@@ -42,11 +42,10 @@ const ForgotPassword = () => {
       p={2}
     >
       <QRTypography variant="h4" fontWeight={700} pb={3}>
-        {pageTitle}
+        {t("forgotPwd")}?
       </QRTypography>
       <QRTypography sx={{ fontSize: "14px", pb: 3, color: "#5B5858" }}>
-        Don’t worry ! It happens. Please enter the Email Id we will send the OTP
-        in this Email.
+        {t("sendOptMsg")}
       </QRTypography>
       <Form
         onSubmit={handleSubmit}
@@ -58,8 +57,8 @@ const ForgotPassword = () => {
           type="text"
           name="email"
           defaultValue={defaultValues?.email}
-          placeholder="email address"
-          helperText={error?.email}
+          placeholder={t("emailAddress")}
+          helperText={t(error?.email)}
           fullWidth
           onChange={handleChange}
           InputProps={{
@@ -76,7 +75,7 @@ const ForgotPassword = () => {
           isLoading={loadingStatus}
           endIcon={<img src={RightArrow} alt="Arrow Icon" />}
         >
-          {verifyEmail}
+          {t("verifyEmail")}
         </QRButton>
       </Form>
     </QRBox>

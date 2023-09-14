@@ -7,8 +7,11 @@ import { Grid } from "@mui/material";
 import AniImage from "../../assets/png/aniImage.png";
 import QRBox from "../../shared/QRBox";
 import Coupons from "../../assets/svg/coupons.svg";
+import { useTranslation } from "react-i18next";
 
 const AuthLayout: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <QRBox
       sx={{
@@ -23,7 +26,7 @@ const AuthLayout: React.FC = () => {
         <QRTypography
           sx={{ paddingLeft: 1, fontSize: ["12px", "16px", "16px", "16px"] }}
         >
-          Pricing plan
+          {t("pricingPlan")}
         </QRTypography>
         <QRTypography
           sx={{
@@ -35,7 +38,7 @@ const AuthLayout: React.FC = () => {
           15% off{" "}
           <Link to="" style={{ color: "#fff" }}>
             {" "}
-            % Grab Now %
+            % {t("grabNow")} %
           </Link>
         </QRTypography>
       </QRBoxContainer>
@@ -50,7 +53,7 @@ const AuthLayout: React.FC = () => {
               lineHeight: ["28px", "32px", "36px", "44.06px"],
             }}
           >
-            QR Code Generator
+            {t("QRgenerator")}
           </QRTypography>
         </QRContainer>
         <QRTypography
@@ -60,14 +63,15 @@ const AuthLayout: React.FC = () => {
             fontSize: ["11px", "13px", "13px", "16px"],
           }}
         >
-          Sign up now and try all features{" "}
+          {t("tryAllFeatures")}
           <Link
             to=""
             style={{
               color: "#4181E0",
+              paddingLeft: 5,
             }}
           >
-            free for 14 days
+            {t("freeDays")}
           </Link>
         </QRTypography>
       </AuthLayoutUpperContainer>

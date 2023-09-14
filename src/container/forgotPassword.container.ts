@@ -3,6 +3,7 @@ import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { equal, keys } from "../utils/javascript";
 import { useNavigate } from "react-router-dom";
+import { saveStateFn } from "../utils/localStorage";
 
 interface ForgotPasswordContainerProps {
   formData: any;
@@ -30,11 +31,16 @@ const ForgotPasswordContainer = ({
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
-      successToastMessage: "Mail sent successfully",
+      successToastMessage: "OTP sent successfully",
       needLoader: true,
       parent: formPath.parent,
     });
     if (equal(res?.status, 200)) {
+      saveStateFn("email-verify", {
+        token: res?.data?.token,
+        email: formData?.email,
+      });
+      saveStateFn("otp-timer", 0);
       navigate("/verify-otp");
     }
   };

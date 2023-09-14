@@ -3,6 +3,8 @@ import { keys } from "../utils/javascript";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { useSelector } from "react-redux";
+import { showToast } from "../utils/toastService";
+import { useTranslation } from "react-i18next";
 
 interface SignUpContainerProps {
   formData: any;
@@ -18,10 +20,10 @@ const SignUpContainer = ({
   setError,
   formPath,
 }: SignUpContainerProps) => {
-  const [agreeTC, setAgreeTC] = useState<boolean>(false);
+  const [agreeTC, setAgreeTC] = useState<boolean>();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [strength, setStrength] = useState(0);
-
+  const { t } = useTranslation();
   const { performRequest } = ApiContainer();
 
   const loadingStatus = useSelector(
@@ -67,10 +69,14 @@ const SignUpContainer = ({
   };
 
   const callApi = async () => {
+    if (!agreeTC) {
+      showToast(t("agreeTermAndCondition"));
+      return;
+    }
     performRequest({
       endPoint: apiEndPoints?.signup,
       method: method.post,
-      data: { ...formData },
+      data: { ...formData, termAndCondition: agreeTC },
       showToastMessage: true,
       successToastMessage: "Sign up successfully!",
       needLoader: true,

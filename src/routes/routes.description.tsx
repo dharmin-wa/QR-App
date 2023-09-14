@@ -7,10 +7,10 @@ import ForgotPassword from "../presentation/forgotPassword";
 import NotFound from "../presentation/NotFound";
 import SignUp from "../presentation/signup";
 import OtpVerification from "../presentation/otpVerification";
-import ResetPassword from "../presentation/resetPassword";
 import EmailVerification from "../presentation/emailVerification";
 import DashBoard from "../presentation/dashBoard";
 import ProtectedRoute from "../presentation/layout/ProtectedRoute";
+import PasswordRecoverySuccess from "../presentation/PasswordRecoverySuccess";
 
 const RedirectComponent = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const publicRoutes: RouteObject[] = [
         children: [{ index: true, element: <ForgotPassword /> }],
       },
       {
-        path: "/verify-otp",
+        path: "/reset-password",
         element: <AuthLayout />,
         children: [
           {
@@ -64,10 +64,14 @@ const publicRoutes: RouteObject[] = [
           },
         ],
       },
-      {
+      /* {
         path: "/reset-password",
         element: <AuthLayout />,
         children: [{ index: true, element: <ResetPassword /> }],
+      }, */
+      {
+        path: "/password-recovery-success",
+        element: <PasswordRecoverySuccess />,
       },
     ],
   },

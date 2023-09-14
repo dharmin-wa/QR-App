@@ -3,9 +3,10 @@ import { getObject, head, last } from "../utils/javascript";
 import validation from "../utils/validation";
 import { useDispatch } from "react-redux";
 import { SET_FORM_DATA } from "../redux/constants";
+import { attributeTypes } from "../types";
 
 interface FormContainerTypes {
-  attribute: any;
+  attribute: attributeTypes[];
   defaultValues: any;
   formPath: any;
 }
@@ -35,7 +36,8 @@ const FormContainer = ({
 
   const validate = (name: string, value: any) => {
     const { isRequired, pattern, error } = getObject(attribute, name);
-    const res = validation(pattern, value);
+    const res = validation(pattern, value, formData);
+
     if (isRequired) {
       if (!value) {
         return head(error);

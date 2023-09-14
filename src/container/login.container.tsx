@@ -1,12 +1,14 @@
-import { useSelector } from "react-redux";
-import { keys } from "../utils/javascript";
+import { useDispatch, useSelector } from "react-redux";
+import { keys, length } from "../utils/javascript";
 import { useState } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
+import { useNavigate } from "react-router-dom";
+import { removeStateFn, saveStateFn } from "../utils/localStorage";
+import { SET_APP_DATA } from "../redux/constants";
 
 interface LoginContainerProps {
   formData: any;
-  // eslint-disable-next-line no-unused-vars
   validate: (name: string, value: any) => void;
   setError: any;
   formPath: any;
@@ -20,7 +22,8 @@ const LoginContainer = ({
 }: LoginContainerProps) => {
   const [isPwdRemember, setIsPwdRemember] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[formPath?.parent],
   );
@@ -32,7 +35,7 @@ const LoginContainer = ({
   };
 
   const callApi = async () => {
-    performRequest({
+    const res: any = await performRequest({
       endPoint: apiEndPoints?.login,
       method: method.post,
       data: { ...formData },
@@ -40,6 +43,26 @@ const LoginContainer = ({
       needLoader: true,
       parent: formPath.parent,
     });
+    if (res?.status === 200) {
+      const { token, emailVerify } = res.data;
+      if (length(token)) {
+        saveStateFn("token", token);
+        saveStateFn("isAuthenticated", true);
+      }
+      if (isPwdRemember) {
+        saveStateFn("rememberedEmail", formData?.email);
+        saveStateFn("rememberedPassword", formData?.password);
+        saveStateFn("rememberMe", true);
+      } else {
+        removeStateFn("rememberedEmail");
+        removeStateFn("rememberedPassword");
+        removeStateFn("rememberMe");
+      }
+      dispatch({ type: SET_APP_DATA, payload: { isAuthenticated: true } });
+      if (emailVerify) {
+        navigate("/dashboard");
+      }
+    }
   };
 
   const toggleVisibility = () => {

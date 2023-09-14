@@ -4,7 +4,7 @@ import QRStack from "./QRStack";
 
 const OtpWrapper = styled(QRStack)(({ theme }: any) => ({
   "& > div": {
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
   "& input": {
     width: "58px !important",

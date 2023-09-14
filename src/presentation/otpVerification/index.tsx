@@ -5,18 +5,31 @@ import { Typography } from "@mui/material";
 import QROtpInput from "../../shared/QROtpInput";
 import OtpVerificationContainer from "../../container/otpVerification.container";
 
-import { ternary, upperCase } from "../../utils/javascript";
+import { ternary } from "../../utils/javascript";
 import QRButton from "../../shared/QRButton";
 import {
   numberOfInputField,
   formPath,
+  attribute,
+  defaultValues,
 } from "../../description/otpVerification.description";
-
 import RightArrow from "../../assets/svg/rightArrow.svg";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import FormContainer from "../../container/form.container";
+import QRTextField from "../../shared/QRTextField";
+import Lock from "../../assets/svg/lock.svg";
+import Form from "../../shared/Form";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const OtpVerification = () => {
+  const { handleChange, formData, error, validate, setError } = FormContainer({
+    attribute,
+    defaultValues,
+    formPath,
+  });
+
   const {
     otp,
     handleInputChange,
@@ -29,33 +42,29 @@ const OtpVerification = () => {
     handleSubmitOTP,
     minutes,
     seconds,
-  } = OtpVerificationContainer({ formPath });
+    toggleVisibility,
+    showPassword,
+  } = OtpVerificationContainer({
+    formData,
+    formPath,
+    validate,
+    setError,
+    attribute,
+  });
   const { t } = useTranslation();
 
   return (
     <QRBox
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
       sx={{ background: "#fff" }}
       borderRadius="24px"
-      width="450px"
+      width="528px"
       margin="auto"
       maxWidth="100%"
-      p={2}
+      p={3}
     >
-      <div
-        style={{
-          minWidth: "100%",
-          display: "flex",
-          justifyContent: "center",
-          justifyItems: "center",
-        }}
-      >
-        <Typography variant="h4" fontWeight={700}>
-          {upperCase(t("otpVerification"))}
-        </Typography>
-      </div>
+      <Typography variant="h4" fontWeight={700}>
+        {t("passwordVerification")}
+      </Typography>
       <QRTypography
         color={"#4E4D4D"}
         fontSize={["10px", "16px", "16px", "16px"]}
@@ -64,47 +73,127 @@ const OtpVerification = () => {
         {t("enterOtp")} -{" "}
         <span style={{ color: "#000000", fontWeight: 700 }}>{email || ""}</span>
       </QRTypography>
-      <QROtpInput
-        numInputs={numberOfInputField}
-        value={otp}
-        onChange={handleInputChange}
-        inputStyle={ternary(
-          otpError,
-          { color: "red", border: "0.5px solid red" },
-          {},
-        )}
-        renderInput={(props) => <input {...props} />}
-      />
-      <QRTypography lineHeight={3} fontWeight={500}>
-        {`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`} Sec
-      </QRTypography>
-      <QRTypography padding="30px 0 30px 0">
-        {t("notReceiveCode")} ?{" "}
-        <span
-          onClick={timer === 0 ? handleResendOTP : undefined}
-          style={{
-            color: timer === 0 ? "#000000" : "#4e4d4d6e",
-            fontWeight: 700,
-            cursor: "pointer",
-            justifyContent: "center",
-          }}
-        >
-          {" "}
-          {loadingStatusResend ? (
-            <CircularProgress size={20} />
-          ) : (
-            t("resendOtp")
-          )}
-        </span>
-      </QRTypography>
-      <QRButton
-        variant="contained"
-        endIcon={<img src={RightArrow} alt="Arrow Icon" />}
-        isLoading={loadingStatusSubmit}
-        onClick={handleSubmitOTP}
+      <Form
+        onSubmit={handleSubmitOTP}
+        style={{
+          minWidth: "100%",
+          flexDirection: "column",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        {t("submit")}
-      </QRButton>
+        <div style={{ width: "100%" }}>
+          <QROtpInput
+            numInputs={numberOfInputField}
+            value={otp}
+            onChange={handleInputChange}
+            inputStyle={ternary(
+              otpError,
+              { color: "red", border: "0.5px solid red" },
+              {},
+            )}
+            renderInput={(props) => <input {...props} />}
+          />
+        </div>
+
+        <QRTypography lineHeight={3} fontWeight={500}>
+          {`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`} Sec
+        </QRTypography>
+        <QRTypography
+          padding="20px 0 20px 0"
+          sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
+        >
+          {t("notReceiveCode")}?
+          <span
+            onClick={timer === 0 ? handleResendOTP : undefined}
+            style={{
+              color: timer === 0 ? "#000000" : "#4e4d4d6e",
+              fontWeight: 700,
+              cursor: "pointer",
+              textAlign: "center",
+            }}
+          >
+            {" "}
+            {loadingStatusResend ? (
+              <CircularProgress size={15} sx={{ mt: 0.5 }} />
+            ) : (
+              t("resendOtp")
+            )}
+          </span>
+        </QRTypography>
+        <QRBox sx={{ p: { lg: 2 } }}>
+          <QRTextField
+            error={!!error?.password}
+            id="password"
+            type={showPassword.password ? "text" : "password"}
+            name="password"
+            fullWidth
+            defaultValue={defaultValues?.password}
+            placeholder={t("setNewPassword")}
+            helperText={t(error?.password)}
+            onChange={handleChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <img src={Lock} alt="Lock Icon" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => toggleVisibility("password")}>
+                    {showPassword.password ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <QRTextField
+            error={!!error?.confirm_password}
+            id="confirm_password"
+            type={showPassword.confirm_password ? "text" : "password"}
+            name="confirm_password"
+            fullWidth
+            defaultValue={defaultValues?.confirm_password}
+            placeholder={t("confirmPassword")}
+            helperText={t(error?.confirm_password)}
+            onChange={handleChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <img src={Lock} alt="Lock Icon" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => toggleVisibility("confirm_password")}
+                  >
+                    {showPassword.confirm_password ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </QRBox>
+
+        <QRButton
+          type="submit"
+          variant="contained"
+          endIcon={<img src={RightArrow} alt="Arrow Icon" />}
+          isLoading={loadingStatusSubmit}
+        >
+          {t("submit")}
+        </QRButton>
+      </Form>
     </QRBox>
   );
 };

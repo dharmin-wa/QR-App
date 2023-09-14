@@ -32,5 +32,10 @@
   "notReceiveCode": "XX",
   "submit": "XX",
   "required": "XX",
-  "agreeTermAndCondition": "XX"
+  "agreeTermAndCondition": "XX",
+  "notMatch": "XX",
+  "passwordValidation": "XX",
+  "setNewPassword": "XX",
+  "confirmPassword": "XX",
+  "passwordVerification": "XXn"
 }

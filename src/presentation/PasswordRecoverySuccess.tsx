@@ -1,6 +1,6 @@
 import React from "react";
 import QRBox from "../shared/QRBox";
-import ThumsUp from ".././assets/svg/thumsUp.svg";
+import ThumsUp from ".././assets/png/thumsUp.png";
 import QRTypography from "../shared/QRTypography";
 import { useTranslation } from "react-i18next";
 import QRButton from "../shared/QRButton";

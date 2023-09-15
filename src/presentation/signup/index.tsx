@@ -170,7 +170,7 @@ const SignUp: React.FC = () => {
         p={2}
       >
         {t("alreadyHaveAcc")}?
-        <Link to="/login" style={{ marginLeft: 1 }}>
+        <Link to="/login" style={{ marginLeft: 4 }}>
           {t("login")}
         </Link>{" "}
       </QRTypography>

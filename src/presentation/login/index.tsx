@@ -24,7 +24,7 @@ import Mail from "../../assets/svg/mail.svg";
 import Lock from "../../assets/svg/lock.svg";
 import { useTranslation } from "react-i18next";
 
-interface LoginProps {}
+interface LoginProps { }
 
 const Login: React.FC<LoginProps> = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({
@@ -123,6 +123,7 @@ const Login: React.FC<LoginProps> = () => {
             // justifyContent: "center",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
             pb: { xs: 2, md: 2 },
           }}
         >
@@ -166,7 +167,7 @@ const Login: React.FC<LoginProps> = () => {
         p={2}
       >
         {t("notHaveAccount")}
-        <Link to="/signup" style={{ marginLeft: 1 }}>
+        <Link to="/signup" style={{ marginLeft: 3 }}>
           {t("signUp")}
         </Link>{" "}
       </QRTypography>

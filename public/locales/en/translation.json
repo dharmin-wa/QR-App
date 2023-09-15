@@ -31,5 +31,13 @@
   "enterOtp": "Enter the OTP sent to",
   "notReceiveCode": "Didn’t receive code",
   "submit": "Submit",
-  "agreeTermAndCondition": "Please Agree to the Terms and Conditions"
+  "agreeTermAndCondition": "Please Agree to the Terms and Conditions",
+  "notMatch": "Password not match!",
+  "passwordValidation": "8+ chars, mix case, nums, symbols.",
+  "setNewPassword": "Set new password",
+  "confirmPassword": "Confirm password",
+  "passwordVerification": "Password Verification",
+  "passwordRecoverySuccess": "Password Recovery Successful",
+  "returnToLoginScreen": "Return to the login screen to enter the application",
+  "returnToLogin": "Return to login"
 }

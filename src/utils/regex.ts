@@ -1,4 +1,4 @@
-import { lowerCase } from "./javascript";
+import { equal, lowerCase } from "./javascript";
 
 export const emailValidation = (email: string) => {
   const regex =
@@ -20,4 +20,11 @@ export const passwordValidation = (value: string) => {
 export const alphabetValidation = (value: string) => {
   const regex = /^[A-Za-z\s]+$/;
   return regex.test(value);
+};
+
+export const confirmPasswordValidation = (
+  value: string,
+  clonedPassword: string,
+) => {
+  return equal(value, clonedPassword);
 };

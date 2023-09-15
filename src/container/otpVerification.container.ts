@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useRef } from "react";
-import { equal } from "../utils/javascript";
+import { equal, keys } from "../utils/javascript";
 import { loadStateFn, saveStateFn } from "../utils/localStorage";
 import {
   numberOfInputField,
@@ -10,12 +11,20 @@ import { apiEndPoints, method } from "../utils/constant";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
+import { attributeTypes } from "../types";
 
 interface OtpVerificationContainerProps {
+  formData: any;
+  validate: (name: string, value: any) => void;
+  setError: any;
   formPath: any;
+  attribute: attributeTypes[];
 }
 
 const OtpVerificationContainer = ({
+  formData,
+  validate,
+  setError,
   formPath,
 }: OtpVerificationContainerProps) => {
   const [otp, setOtp] = useState<string>();
@@ -37,9 +46,14 @@ const OtpVerificationContainer = ({
   const loadingStatusResend = useSelector(
     (state: any) => state.api?.loader?.[formPath?.child],
   );
+  useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<any>({
+    password: false,
+    confirm_password: false,
+  });
 
   useEffect(() => {
-    verifyToken();
+    verifyEmail();
   }, []);
 
   useEffect(() => {
@@ -62,7 +76,7 @@ const OtpVerificationContainer = ({
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
 
-  const verifyToken = () => {
+  const verifyEmail = () => {
     if (!emailVerify?.email) {
       return navigate(-1, { replace: true });
     }
@@ -71,6 +85,10 @@ const OtpVerificationContainer = ({
   const handleInputChange = (value: any) => {
     if (equal(value?.length, 6)) setOtpError(false);
     setOtp(value);
+  };
+
+  const toggleVisibility = (name: string) => {
+    setShowPassword({ ...showPassword, [name]: !showPassword[name] });
   };
 
   const handleResendOTP = async () => {
@@ -102,10 +120,11 @@ const OtpVerificationContainer = ({
     const payload = {
       otp,
       token,
+      password: formData?.password,
     };
 
     const response: any = await performRequest({
-      endPoint: apiEndPoints?.verifyOTP,
+      endPoint: apiEndPoints?.resetPassword,
       method: method.post,
       data: payload,
       token: emailVerify?.token,
@@ -114,13 +133,32 @@ const OtpVerificationContainer = ({
       needLoader: true,
     });
     if (equal(response?.status, 200)) {
-      navigate("/reset-password");
+      navigate("/password-recovery-success");
     }
   };
 
-  const handleSubmitOTP = () => {
-    if (!otp || otp?.length < numberOfInputField) return setOtpError(true);
-    callApi();
+  const handleSubmitOTP = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    const validationErrors: any = {};
+    keys(formData).forEach((name) => {
+      const error: any = validate(name, formData[name]);
+      if (error && error.length > 0) {
+        validationErrors[name] = error;
+      }
+    });
+
+    const combinedErrors: any = { ...validationErrors };
+
+    if (!otp || otp?.length < numberOfInputField) {
+      combinedErrors.otpError = true;
+    }
+
+    setError(combinedErrors);
+    setOtpError(combinedErrors?.otpError);
+
+    if (keys(combinedErrors).length === 0) {
+      callApi();
+    }
   };
 
   return {
@@ -136,6 +174,8 @@ const OtpVerificationContainer = ({
     handleSubmitOTP,
     minutes,
     seconds,
+    toggleVisibility,
+    showPassword,
   };
 };
 

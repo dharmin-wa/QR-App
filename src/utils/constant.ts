@@ -15,6 +15,7 @@ export const apiEndPoints = {
   verifyPassword: "auth/forgot-password/verify",
   verifyOTP: "api/auth/forgot-password/verify",
   resendOTP: "auth/resend-otp",
+  resetPassword: "api/auth/reset-password",
 };
 
 export const method = {
@@ -31,3 +32,5 @@ export const notEmptyOrNull = "notEmptyOrNull";
 export const password = "password";
 
 export const alphabetOnly = "alphabetOnly";
+
+export const confirmPassword = "confirmPassword";

@@ -5,13 +5,14 @@ import { apiEndPoints, method } from "../utils/constant";
 import { useSelector } from "react-redux";
 import { showToast } from "../utils/toastService";
 import { useTranslation } from "react-i18next";
+import { attributeTypes } from "../types";
 
 interface SignUpContainerProps {
   formData: any;
   validate: (name: string, value: any) => void;
   setError: any;
   formPath: any;
-  attribute: any;
+  attribute: attributeTypes[];
 }
 
 const SignUpContainer = ({

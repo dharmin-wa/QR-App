@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ApiContainer } from "../utils/api";
 import { useNavigate } from "react-router-dom";
-// import { saveStateFn } from "../utils/localStorage";
 import { apiEndPoints, method } from "../utils/constant";
 import { equal } from "../utils/javascript";
 
@@ -20,8 +19,6 @@ const EmailVerifyContainer = ({ formPath }: EmailVerifyContainerProps) => {
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const token: any = urlSearchParams.get("token");
-    // saveStateFn("token", token);
-
     apiCall(token);
   }, []);
 
@@ -30,6 +27,7 @@ const EmailVerifyContainer = ({ formPath }: EmailVerifyContainerProps) => {
       endPoint: `${apiEndPoints?.verifyEmail}?token=${token}`,
       method: method.get,
       showToastMessage: true,
+      successToastMessage: "Account verified successfully!",
       needLoader: true,
       parent: formPath.parent,
     });

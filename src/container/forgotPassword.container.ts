@@ -41,7 +41,7 @@ const ForgotPasswordContainer = ({
         email: formData?.email,
       });
       saveStateFn("otp-timer", 0);
-      navigate("/verify-otp");
+      navigate("/reset-password");
     }
   };
 

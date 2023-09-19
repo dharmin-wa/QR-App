@@ -140,7 +140,6 @@ const Login: React.FC<LoginProps> = () => {
             }
           />
           <Link to={locationPath.forgotPassword} style={{ fontSize: 13.39 }}>
-            {" "}
             {t("forgotPasswordLink")}
           </Link>
         </QRBox>
@@ -169,7 +168,7 @@ const Login: React.FC<LoginProps> = () => {
         {t("notHaveAccount")}
         <Link to="/signup" style={{ marginLeft: 3 }}>
           {t("signUp")}
-        </Link>{" "}
+        </Link>
       </QRTypography>
     </QRBox>
   );

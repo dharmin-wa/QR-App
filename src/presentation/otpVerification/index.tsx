@@ -70,7 +70,7 @@ const OtpVerification = () => {
         fontSize={["10px", "16px", "16px", "16px"]}
         padding="30px 0 30px 0"
       >
-        {t("enterOtp")} -{" "}
+        {t("enterOtp")} -
         <span style={{ color: "#000000", fontWeight: 700 }}>{email || ""}</span>
       </QRTypography>
       <Form
@@ -114,7 +114,6 @@ const OtpVerification = () => {
               textAlign: "center",
             }}
           >
-            {" "}
             {loadingStatusResend ? (
               <CircularProgress size={15} sx={{ mt: 0.5 }} />
             ) : (

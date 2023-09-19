@@ -56,6 +56,7 @@ const ForgotPassword = () => {
           id="email"
           type="text"
           name="email"
+          sx={{ mb: 1.5 }}
           defaultValue={defaultValues?.email}
           placeholder={t("emailAddress")}
           helperText={t(error?.email)}

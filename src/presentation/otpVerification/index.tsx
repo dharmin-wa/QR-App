@@ -112,10 +112,10 @@ const OtpVerification = () => {
               fontWeight: 700,
               cursor: "pointer",
               textAlign: "center",
+              paddingLeft: 3
             }}
           >
-            {" "}
-            {loadingStatusResend ? (
+            {!loadingStatusResend ? (
               <CircularProgress size={15} sx={{ mt: 0.5 }} />
             ) : (
               t("resendOtp")

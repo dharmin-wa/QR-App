@@ -35,10 +35,11 @@ const AuthLayout: React.FC = () => {
             fontSize: ["12px", "16px", "16px", "16px"],
           }}
         >
-          15% off{" "}%{" "}
+          15% off %{" "}
           <Link to="" style={{ color: "#fff" }}>
             {t("grabNow")}
-          </Link>{" "}%
+          </Link>{" "}
+          %
         </QRTypography>
       </QRBoxContainer>
       <AuthLayoutUpperContainer>

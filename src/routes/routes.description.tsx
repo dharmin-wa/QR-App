@@ -11,6 +11,7 @@ import EmailVerification from "../presentation/emailVerification";
 import DashBoard from "../presentation/dashBoard";
 import ProtectedRoute from "../presentation/layout/ProtectedRoute";
 import PasswordRecoverySuccess from "../presentation/PasswordRecoverySuccess";
+import GenerateQR from "../presentation/generateQR";
 
 const RedirectComponent = () => {
   const navigate = useNavigate();
@@ -92,6 +93,15 @@ const privateRoutes: RouteObject[] = [
       {
         path: "/dashboard",
         children: [{ index: true, element: <DashBoard /> }],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/generate-qr",
+        children: [{ index: true, element: <GenerateQR /> }],
       },
     ],
   },

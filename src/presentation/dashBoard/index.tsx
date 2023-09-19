@@ -1,37 +1,60 @@
 import * as React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-// import ListItem from "@mui/material/ListItem";
-// import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemIcon from "@mui/material/ListItemIcon";
-// import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-// import { useTheme } from "@mui/styles";
-// import { drawerItems } from "../../../utils/data";
-// import Manford from "../../../assets/manfoard.png";
+import { sidebarAtt } from "../../description/dashboard.description";
+import QRTypography from "../../shared/QRTypography";
+import { upperCase } from "../../utils/javascript";
+import { useTranslation } from "react-i18next";
+import Logo from "../../assets/svg/qr.svg";
+import QRBox from "../../shared/QRBox";
+import { styled } from "@mui/material/styles";
+import ArrowRight from "../../assets/svg/arrowRight.svg";
 
-const drawerWidth = 240;
+const drawerWidth = 325;
+
+interface StyledListItemProps {
+  isActive: boolean;
+}
+
+const StyledListItem = styled(ListItem)<StyledListItemProps>(
+  ({ isActive }) => ({
+    backgroundColor: isActive ? "#356ABA" : "",
+    color: isActive ? "#fff" : "",
+    borderRadius: "29px",
+    maxWidth: "243px",
+    margin: 4,
+    border: isActive ? "1px solid #00CEDB" : "",
+    "& .MuiListItemSecondaryAction-root": {
+      marginRight: "25px",
+    },
+  }),
+);
 
 export default function ResponsiveDrawer(props: any) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { t } = useTranslation();
   // const location = useLocation();
   // const userName = localStorage.getItem("username")
 
   // const theme = useTheme();
   // console.log(location.pathname);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -52,44 +75,55 @@ export default function ResponsiveDrawer(props: any) {
 
   const drawer = (
     <div>
-      <Toolbar>
-        <img src="#" height="15%" width="15%" alt="LOGO" />
+      <Toolbar disableGutters={true}>
+        <img src={Logo} height="25%" width="25%" alt="LOGO" />
         <Typography
-          variant="h5"
           noWrap
+          fontWeight={700}
           component="div"
-          sx={{
-            marginLeft: 2,
-          }}
+          fontSize={"21.36px"}
         >
-          Manford
+          {t("QRgenerator")}
         </Typography>
       </Toolbar>
-      <List>
-        {/* {drawerItems.map((e) => (
-          <ListItem
-            className={location.pathname === e.redirectPath ? "active-tab" : ""}
-            key={e.label}
-            disablePadding
-          >
-            <ListItemButton
-              onClick={() => {
-                handleDrawerToggle();
-                navigate(e.redirectPath);
-              }}
+      {Object.entries(sidebarAtt)?.map(([k, v], index: number) => {
+        return (
+          <QRBox key={index} sx={{ mt: 4 }}>
+            <QRTypography
+              color="rgba(126, 164, 167, 1)"
+              variant="subtitle2"
+              sx={{ ml: 3, mb: 1 }}
             >
-              <ListItemIcon
-                sx={{
-                  color: location.pathname === e.redirectPath ? "#fff" : "",
-                }}
+              {upperCase(t(k))}
+            </QRTypography>
+            {v?.map((e: any) => (
+              <StyledListItem
+                key={e.label}
+                isActive={location.pathname === e.redirectPath}
+                disablePadding
+                disableGutters
+                secondaryAction={<img src={ArrowRight} />}
               >
-                {e.icon}
-              </ListItemIcon>
-              <ListItemText primary={e.label} />
-            </ListItemButton>
-          </ListItem>
-        ))} */}
-      </List>
+                <ListItemButton
+                  onClick={() => {
+                    // handleDrawerToggle();
+                    navigate(e.redirectPath);
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      color: location.pathname === e.redirectPath ? "#fff" : "",
+                    }}
+                  >
+                    <img src={e?.icon} alt="icon" />
+                  </ListItemIcon>
+                  <ListItemText primary={e?.label} />
+                </ListItemButton>
+              </StyledListItem>
+            ))}
+          </QRBox>
+        );
+      })}
     </div>
   );
 
@@ -202,7 +236,7 @@ export default function ResponsiveDrawer(props: any) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              // backgroundColor: theme.colors.secondary,
+              padding: 2,
             },
           }}
           open

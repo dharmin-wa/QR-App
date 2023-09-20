@@ -12,6 +12,9 @@ import DashBoard from "../presentation/dashBoard";
 import ProtectedRoute from "../presentation/layout/ProtectedRoute";
 import PasswordRecoverySuccess from "../presentation/PasswordRecoverySuccess";
 import GenerateQR from "../presentation/generateQR";
+import AllQR from "../presentation/allQR";
+import ActiveQR from "../presentation/activeQR";
+import DisableQR from "../presentation/disableQR";
 
 const RedirectComponent = () => {
   const navigate = useNavigate();
@@ -102,6 +105,33 @@ const privateRoutes: RouteObject[] = [
       {
         path: "/generate-qr",
         children: [{ index: true, element: <GenerateQR /> }],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/all-qr",
+        children: [{ index: true, element: <AllQR /> }],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/active-qr",
+        children: [{ index: true, element: <ActiveQR /> }],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/disable-qr",
+        children: [{ index: true, element: <DisableQR /> }],
       },
     ],
   },

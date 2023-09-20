@@ -41,5 +41,10 @@
   "returnToLoginScreen": "Return to the login screen to enter the application",
   "returnToLogin": "Return to login",
   "dashboardOverView": "Dashboard Overview",
-  "qrCode": "QR Code"
+  "qrCode": "QR Code",
+  "footerContent": "© copyright all rights reserved by",
+  "subscription": "Subscription",
+  "freeTrial": "Free Trial",
+  "packDuration": "Pack Duration: 15 days",
+  "upgradePlan": "Upgrade Plan"
 }

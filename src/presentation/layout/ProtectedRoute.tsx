@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
@@ -12,9 +13,12 @@ import {
   ListItemIcon,
   ListItemText,
   Menu,
+  List,
   MenuItem,
+  ListSubheader,
   Toolbar,
   Divider,
+  InputAdornment,
 } from "@mui/material";
 import QRTypography from "../../shared/QRTypography";
 import QRBox from "../../shared/QRBox";
@@ -35,6 +39,9 @@ import {
   DiamondStyle,
   InnerCircleStyle,
 } from "./style";
+import { ReactComponent as MobileMenu } from "../../assets/svg/menu.svg";
+import QRTextField from "../../shared/QRTextField";
+import SearchIcon from "@mui/icons-material/Search";
 
 const drawerWidth = 325;
 
@@ -60,6 +67,7 @@ export default function ProtectedRoute(props: { window?: any }) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -81,6 +89,10 @@ export default function ProtectedRoute(props: { window?: any }) {
     setAnchorEl(null);
   };
 
+  const handleMobileClose = () => {
+    setMobileAnchorEl(null);
+  };
+
   // const logoutUser = () => {
   //   localStorage.clear("token");
   //   navigate("/");
@@ -89,13 +101,15 @@ export default function ProtectedRoute(props: { window?: any }) {
   const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleMobileMenu = (event: any) => {
+    setMobileAnchorEl(event.currentTarget);
+  };
 
   const drawer = (
     <QRBox
       sx={{
-        minHeight: "100vh",
-        position: "relative",
         display: "flex",
+        height: "100%",
         flexDirection: "column",
       }}
     >
@@ -110,6 +124,7 @@ export default function ProtectedRoute(props: { window?: any }) {
           {t("QRgenerator")}
         </QRTypography>
       </Toolbar>
+
       {Object.entries(sidebarAtt)?.map(([k, v], index: number) => {
         return (
           <QRBox key={index} sx={{ mt: 4 }}>
@@ -143,7 +158,15 @@ export default function ProtectedRoute(props: { window?: any }) {
                             location.pathname === e.redirectPath ? "#fff" : "",
                         }}
                       >
-                        <Icon style={{ fill: "red" }} />
+                        <Icon
+                          style={{
+                            fill: `${
+                              location.pathname === e.redirectPath
+                                ? "#fff"
+                                : "#4181E0"
+                            }`,
+                          }}
+                        />
                       </ListItemIcon>
                       <ListItemText primary={e?.label} />
                     </ListItemButton>
@@ -155,7 +178,8 @@ export default function ProtectedRoute(props: { window?: any }) {
           </QRBox>
         );
       })}
-      <QRBox sx={{ pb: 1, bottom: 0 }}>
+
+      <QRBox sx={{ pb: 1, marginTop: "auto" }}>
         <QRTypography
           color="rgba(126, 164, 167, 1)"
           variant="subtitle2"
@@ -168,11 +192,21 @@ export default function ProtectedRoute(props: { window?: any }) {
           <InnerCircleStyle></InnerCircleStyle>
           <DiamondStyle></DiamondStyle>
           <CardContentStyle>
-            <h2>{t("freeTrial")}</h2>
-            <p>{t("packDuration")}</p>
+            <QRTypography fontSize={20} position="relative" top="-13px">
+              {t("freeTrial")}
+            </QRTypography>
+            <QRTypography fontSize={12} position="relative" top="-12px">
+              {t("packDuration")}
+            </QRTypography>
             <QRButton
               variant="contained"
-              sx={{ background: "#fff", color: theme.palette.primary.main }}
+              sx={{
+                background: "#fff",
+                color: theme.palette.primary.main,
+                "&:hover": {
+                  background: "#fff",
+                },
+              }}
             >
               {t("upgradePlan")}
             </QRButton>
@@ -187,7 +221,7 @@ export default function ProtectedRoute(props: { window?: any }) {
 
   return (
     <>
-      <QRBox>
+      <QRBox sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -196,15 +230,124 @@ export default function ProtectedRoute(props: { window?: any }) {
             ml: { md: `0px` },
             alignItems: "end",
             background: "#fff",
+            // boxShadow: "none"
           }}
         >
-          <Toolbar>
+          <Toolbar
+            sx={{
+              display: {
+                xs: "flex",
+                md: "none",
+              },
+            }}
+          >
+            <MobileMenu
+              aria-controls={"mobile-customized-menu"}
+              onClick={handleMobileMenu}
+              style={{ cursor: "pointer" }}
+            />
+            <Menu
+              id="mobile-customized-menu"
+              MenuListProps={{
+                "aria-labelledby": "mobile-customized-button",
+              }}
+              sx={{
+                display: {
+                  xs: "flex",
+                  md: "none",
+                  width: "100%",
+                  maxWidth: "380px !important",
+                },
+              }}
+              anchorEl={mobileAnchorEl}
+              open={Boolean(mobileAnchorEl)}
+              onClose={handleMobileClose}
+            >
+              {Object.entries(sidebarAtt)?.map(([k, v]: any, index: number) => {
+                return (
+                  <List
+                    key={index}
+                    sx={{
+                      bgcolor: "background.paper",
+                      "& .MuiListSubheader-root": { fontSize: "12px" },
+                    }}
+                    subheader={<ListSubheader>{upperCase(t(k))}</ListSubheader>}
+                  >
+                    {v?.map((subItem: any, index: number) => {
+                      const Icon = subItem?.icon;
+                      return (
+                        <StyledListItem
+                          key={index}
+                          onClick={() => {
+                            navigate(subItem?.redirectPath);
+                          }}
+                          isActive={location.pathname === subItem.redirectPath}
+                        >
+                          <ListItemIcon>
+                            <Icon
+                              height={25}
+                              width={25}
+                              style={{
+                                fill: `${
+                                  location.pathname === subItem.redirectPath
+                                    ? "#fff"
+                                    : "#4181E0"
+                                }`,
+                              }}
+                            />
+                          </ListItemIcon>
+                          <ListItemText
+                            id={`${k}-${subItem?.label}`}
+                            primary={subItem?.label}
+                            primaryTypographyProps={{
+                              align: "left",
+                              variant: "body1",
+                            }}
+                          />
+                        </StyledListItem>
+                      );
+                    })}
+                  </List>
+                );
+              })}
+            </Menu>
+          </Toolbar>
+          <Toolbar
+            sx={{
+              display: { xs: "none", md: "flex" },
+              width: `calc(100% - ${drawerWidth}px)`,
+              height: "90px",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <QRTextField
+              type="search"
+              id="search"
+              placeholder="Search QR"
+              sx={{
+                "& .MuiInputBase-root": {
+                  margin: "auto",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
             <QRButton
               aria-controls={"demo-customized-menu"}
               aria-haspopup="true"
               variant="outlined"
               sx={{
                 borderRadius: "24px !important",
+                "&.MuiButton-root": {
+                  width: "fit-content !important",
+                },
+                // display: { lg: "inline", md: "none" },
                 "& .MuiButton-startIcon>*:nth-of-type(1)": {
                   fontSize: "13px",
                 },
@@ -299,7 +442,7 @@ export default function ProtectedRoute(props: { window?: any }) {
           component="main"
           sx={{
             flexGrow: 1,
-            pt: { xs: 8, sm: 10, md: 10, lg: 10 },
+            pt: { xs: 10, sm: 12, md: 12, lg: 12 },
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >

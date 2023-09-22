@@ -15,8 +15,9 @@ const Footer = () => {
     <QRBox
       component="footer"
       sx={{
-        position: "fixed",
+        position: "absolute",
         bottom: 0,
+        marginTop: "auto",
         left: footerWidth,
         width: { md: `calc(100% - ${footerWidth}px)` },
         background: theme.palette.primary.main,

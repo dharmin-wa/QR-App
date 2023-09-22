@@ -135,10 +135,10 @@ export default function ProtectedRoute(props: { window?: any }) {
             >
               {upperCase(t(k))}
             </QRTypography>
-            {v?.map((e: any) => {
+            {v?.map((e: any, index: number) => {
               const Icon = e.icon;
               return (
-                <>
+                <React.Fragment key={index}>
                   <StyledListItem
                     key={e.label}
                     isActive={location.pathname === e.redirectPath}
@@ -172,7 +172,7 @@ export default function ProtectedRoute(props: { window?: any }) {
                     </ListItemButton>
                   </StyledListItem>
                   <Divider sx={{ borderStyle: "dashed", m: 1 }} />
-                </>
+                </React.Fragment>
               );
             })}
           </QRBox>
@@ -221,7 +221,7 @@ export default function ProtectedRoute(props: { window?: any }) {
 
   return (
     <>
-      <QRBox sx={{ display: "flex" }}>
+      <QRBox display="flex">
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -230,7 +230,8 @@ export default function ProtectedRoute(props: { window?: any }) {
             ml: { md: `0px` },
             alignItems: "end",
             background: "#fff",
-            // boxShadow: "none"
+            boxShadow:
+              "0px 0px 4px -1px rgba(0,0,0,0.2), -2px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
           }}
         >
           <Toolbar
@@ -255,8 +256,16 @@ export default function ProtectedRoute(props: { window?: any }) {
                 display: {
                   xs: "flex",
                   md: "none",
-                  width: "100%",
-                  maxWidth: "380px !important",
+                  maxWidth: "300px !important",
+                  "& .MuiMenu-paper": {
+                    width: "100%",
+                  },
+                },
+                "& .MuiList-root": {
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center !important",
+                  justifyContent: "center !important",
                 },
               }}
               anchorEl={mobileAnchorEl}
@@ -269,7 +278,10 @@ export default function ProtectedRoute(props: { window?: any }) {
                     key={index}
                     sx={{
                       bgcolor: "background.paper",
-                      "& .MuiListSubheader-root": { fontSize: "12px" },
+                      "& .MuiListSubheader-root": {
+                        fontSize: "12px",
+                        width: "100%",
+                      },
                     }}
                     subheader={<ListSubheader>{upperCase(t(k))}</ListSubheader>}
                   >
@@ -328,6 +340,7 @@ export default function ProtectedRoute(props: { window?: any }) {
               sx={{
                 "& .MuiInputBase-root": {
                   margin: "auto",
+                  border: "1px solid #00000017",
                 },
               }}
               InputProps={{
@@ -374,6 +387,7 @@ export default function ProtectedRoute(props: { window?: any }) {
               MenuListProps={{
                 "aria-labelledby": "demo-customized-button",
               }}
+              sx={{ display: { xs: "none", md: "flex" } }}
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleClose}
@@ -442,7 +456,9 @@ export default function ProtectedRoute(props: { window?: any }) {
           component="main"
           sx={{
             flexGrow: 1,
-            pt: { xs: 10, sm: 12, md: 12, lg: 12 },
+            // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
+            p: { xs: 10, sm: 12, md: 12, lg: "112px 14px 0 24px" },
+
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >

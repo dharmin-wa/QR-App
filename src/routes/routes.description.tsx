@@ -15,11 +15,19 @@ import GenerateQR from "../presentation/generateQR";
 import AllQR from "../presentation/allQR";
 import ActiveQR from "../presentation/activeQR";
 import DisableQR from "../presentation/disableQR";
+import { useSelector } from "react-redux";
+import { loadStateFn } from "../utils/localStorage";
 
 const RedirectComponent = () => {
+  const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
+  const token = loadStateFn();
   const navigate = useNavigate();
   useEffect(() => {
-    navigate("/login");
+    if (!isAuthenticated && !token) {
+      navigate("/login");
+    } else {
+      navigate("/dashboard");
+    }
   }, [navigate]);
   return null;
 };

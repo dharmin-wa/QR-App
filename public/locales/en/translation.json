@@ -46,5 +46,8 @@
   "subscription": "Subscription",
   "freeTrial": "Free Trial",
   "packDuration": "Pack Duration: 15 days",
-  "upgradePlan": "Upgrade Plan"
+  "upgradePlan": "Upgrade Plan",
+  "totalQRCode": "Total QR Code",
+  "totalActiveQR": "Total Active QR Code",
+  "totalDisableQR": "Total Disable QR Code"
 }

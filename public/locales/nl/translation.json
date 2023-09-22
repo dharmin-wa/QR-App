@@ -37,5 +37,18 @@
   "passwordValidation": "XX",
   "setNewPassword": "XX",
   "confirmPassword": "XX",
-  "passwordVerification": "XXn"
+  "passwordVerification": "XX",
+  "passwordRecoverySuccess": "XX",
+  "returnToLoginScreen": "XX",
+  "returnToLogin": "XX",
+  "dashboardOverView": "XX",
+  "qrCode": "XX",
+  "footerContent": "XX",
+  "subscription": "XX",
+  "freeTrial": "XX",
+  "packDuration": "XX",
+  "upgradePlan": "XX",
+  "totalQRCode": "XX",
+  "totalActiveQR": "XX",
+  "totalDisableQR": "XX"
 }

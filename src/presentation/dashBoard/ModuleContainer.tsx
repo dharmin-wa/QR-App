@@ -12,25 +12,32 @@ export interface ModuleContainerProps {
 
 const ModuleContainer = ({ Indicator, title, value }: ModuleContainerProps) => {
   const { t } = useTranslation();
+
+  const columnStyle: any = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "16px",
+  };
+
+  const titleValueStyle: any = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "end",
+    textAlign: "end",
+  };
+
   return (
-    <Paper elevation={0} sx={{ border: "1px solid #00000017" }}>
-      <Grid
-        container
-        style={{
-          maxWidth: "-webkit-fill-available",
-        }}
-      >
-        <Grid lg={6} item maxWidth="100%" margin="auto">
-          <Indicator />
-        </Grid>
-        <Grid lg={6} item display="flex" flexDirection="column" margin="auto">
+    <>
+      <div style={columnStyle}>
+        <Indicator />
+        <div style={titleValueStyle}>
           <QRTypography color="#7286B8">{t(title)}</QRTypography>
-          <QRTypography fontWeight={700} fontSize={30}>
-            {value}
-          </QRTypography>
-        </Grid>
-      </Grid>
-    </Paper>
+          <QRTypography variant="body1">{value}</QRTypography>
+        </div>
+      </div>
+    </>
   );
 };
 

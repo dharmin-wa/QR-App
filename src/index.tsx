@@ -9,18 +9,22 @@ import store from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./i18n/i18n";
+import ErrorBoundary from "./helpers/ErrorBoundary";
+import DefaultErrorView from "./helpers/DefaultErrorView";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-      <ToastContainer position="top-right" />
-    </Provider>
-  </BrowserRouter>,
+  <ErrorBoundary fallback={<DefaultErrorView />}>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+        <ToastContainer position="top-right" />
+      </Provider>
+    </BrowserRouter>
+  </ErrorBoundary>,
 );
 
 // If you want to start measuring performance in your app, pass a function

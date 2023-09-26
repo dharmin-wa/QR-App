@@ -129,9 +129,11 @@ const OtpVerificationContainer = ({
       data: payload,
       token: emailVerify?.token,
       showToastMessage: true,
+      successToastMessage: "Password updated successfully",
       parent: formPath?.parent,
       needLoader: true,
     });
+
     if (equal(response?.status, 200)) {
       navigate("/password-recovery-success");
     }

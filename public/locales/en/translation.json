@@ -49,5 +49,7 @@
   "upgradePlan": "Upgrade Plan",
   "totalQRCode": "Total QR Code",
   "totalActiveQR": "Total Active QR Code",
-  "totalDisableQR": "Total Disable QR Code"
+  "totalDisableQR": "Total Disable QR Code",
+  "recentlyCreatedQRCodes": "Recently Created QR Codes",
+  "createQRCode": "Create QR Code"
 }

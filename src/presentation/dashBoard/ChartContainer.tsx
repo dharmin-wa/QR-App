@@ -4,6 +4,7 @@ import React from "react";
 import QRTypography from "../../shared/QRTypography";
 import { useTranslation } from "react-i18next";
 import DoughnutChart from "../../shared/DoughnutChart";
+import { ReactComponent as KpiQR } from "../../assets/svg/kpiQR.svg";
 
 export interface ChartContainerProps {
   Indicator: React.FC;
@@ -12,38 +13,44 @@ export interface ChartContainerProps {
 }
 
 const data = {
-  labels: ["Blue", "white"],
+  labels: ["Active QR 70%", "Disable QR 70%"],
   datasets: [
     {
+      hoverOffset: 1,
       label: "# of Votes",
       data: [90, 10],
       backgroundColor: ["#356ABA", "#ECE9FF"],
-      cutout: 70,
+      cutout: 40,
       borderColor: ["#356ABA", "#ECE9FF"],
-      borderWidth: 2,
+      // borderWidth: 2,
     },
   ],
 };
 
-const ChartContainer = ({ Indicator, title, value }: ChartContainerProps) => {
-  const { t } = useTranslation();
+const titleValueStyle: any = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "end",
+  textAlign: "end",
+};
+
+const columnStyle: any = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "16px",
+};
+
+const ChartContainer = () => {
   return (
-    <Paper elevation={0} sx={{ border: "1px solid #00000017" }}>
-      <Grid
-        container
-        style={{
-          maxWidth: "-webkit-fill-available",
-        }}
-      >
-        <Grid maxWidth="100%">
-          <DoughnutChart data={data} />
-        </Grid>
-        {/* <Grid lg={6} display="flex" flexDirection="column" margin="auto">
-          <QRTypography color="#7286B8">{t(title)}</QRTypography>
-          <QRTypography fontWeight={700} fontSize={30}>{value}</QRTypography>
-        </Grid> */}
-      </Grid>
-    </Paper>
+    <div style={columnStyle}>
+      <DoughnutChart data={data} />
+      {/*  <div style={titleValueStyle}>
+        <QRTypography><div style={{ width: "30px", height: "10px", background: "#000" }}></div> Active QR 70%</QRTypography>
+        <QRTypography><div style={{ width: "30px", height: "10px", background: "#000" }}></div>Disable QR 70%</QRTypography>
+      </div> */}
+    </div>
   );
 };
 

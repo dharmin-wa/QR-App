@@ -63,7 +63,7 @@ const StyledListItem = styled(ListItem)<StyledListItemProps>(
   }),
 );
 
-export default function ProtectedRoute(props: { window?: any }) {
+export default function AppLayout(props: { window?: any }) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -225,13 +225,14 @@ export default function ProtectedRoute(props: { window?: any }) {
         <CssBaseline />
         <AppBar
           position="fixed"
+          elevation={0}
           sx={{
             // width: { md: `calc(100% - ${drawerWidth}px)` },
             ml: { md: `0px` },
             alignItems: "end",
             background: "#fff",
-            boxShadow:
-              "0px 0px 4px -1px rgba(0,0,0,0.2), -2px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
+            /*  boxShadow:
+               "0px 0px 4px -1px rgba(0,0,0,0.2), -2px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)", */
           }}
         >
           <Toolbar
@@ -331,6 +332,9 @@ export default function ProtectedRoute(props: { window?: any }) {
               height: "90px",
               justifyContent: "space-between",
               alignItems: "center",
+              borderRadius: "0 0px 20px 0",
+              boxShadow:
+                "0px 0px 0px -1px rgba(0,0,0,0.2), -2px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
             }}
           >
             <QRTextField
@@ -340,7 +344,13 @@ export default function ProtectedRoute(props: { window?: any }) {
               sx={{
                 "& .MuiInputBase-root": {
                   margin: "auto",
-                  border: "1px solid #00000017",
+                  border: "1px solid #E2E2E3",
+                  borderRadius: "15.5px",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: "none",
+                  },
                 },
               }}
               InputProps={{
@@ -439,12 +449,13 @@ export default function ProtectedRoute(props: { window?: any }) {
             sx={{
               display: { xs: "none", md: "block" },
               flexDirection: "column",
-
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
                 borderRadius: "0 20px 20px 0",
                 padding: 2,
+                boxShadow:
+                  "0px 0px 4px -1px rgba(0,0,0,0.2), 0px 0px 2px 0px rgba(0,0,0,0.14), 0px 0px 10px 0px rgba(0,0,0,0.12)",
               },
             }}
             open

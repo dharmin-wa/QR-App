@@ -9,7 +9,7 @@ import SignUp from "../presentation/signup";
 import OtpVerification from "../presentation/otpVerification";
 import EmailVerification from "../presentation/emailVerification";
 import DashBoard from "../presentation/dashBoard";
-import ProtectedRoute from "../presentation/layout/ProtectedRoute";
+import AppLayout from "../presentation/layout/AppLayout";
 import PasswordRecoverySuccess from "../presentation/PasswordRecoverySuccess";
 import GenerateQR from "../presentation/generateQR";
 import AllQR from "../presentation/allQR";
@@ -17,6 +17,7 @@ import ActiveQR from "../presentation/activeQR";
 import DisableQR from "../presentation/disableQR";
 import { useSelector } from "react-redux";
 import { loadStateFn } from "../utils/localStorage";
+import ProtectedRoute from "../presentation/auth/ProtectedRoute";
 
 const RedirectComponent = () => {
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
@@ -102,44 +103,49 @@ const privateRoutes: RouteObject[] = [
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/dashboard",
-        children: [{ index: true, element: <DashBoard /> }],
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/dashboard",
+            children: [{ index: true, element: <DashBoard /> }],
+          },
+        ],
       },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
       {
-        path: "/generate-qr",
-        children: [{ index: true, element: <GenerateQR /> }],
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/generate-qr",
+            children: [{ index: true, element: <GenerateQR /> }],
+          },
+        ],
       },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
       {
-        path: "/all-qr",
-        children: [{ index: true, element: <AllQR /> }],
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/all-qr",
+            children: [{ index: true, element: <AllQR /> }],
+          },
+        ],
       },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
       {
-        path: "/active-qr",
-        children: [{ index: true, element: <ActiveQR /> }],
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/active-qr",
+            children: [{ index: true, element: <ActiveQR /> }],
+          },
+        ],
       },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
       {
-        path: "/disable-qr",
-        children: [{ index: true, element: <DisableQR /> }],
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/disable-qr",
+            children: [{ index: true, element: <DisableQR /> }],
+          },
+        ],
       },
     ],
   },

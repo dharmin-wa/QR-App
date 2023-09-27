@@ -28,3 +28,13 @@ export const confirmPasswordValidation = (
 ) => {
   return equal(value, clonedPassword);
 };
+
+export const validPhoneNumber = (phoneNumber: any) => {
+  return /^\+?[0-9]+( [A-Za-z]+)?$/.test(phoneNumber);
+};
+
+export const urlValidation = (value: string) => {
+  const regex =
+    /^(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{3,256}\.[a-zA-Z0-9()]{2,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*))$|^((www\.)?[-a-zA-Z0-9@:%._+~#=]{3,256}\.[a-zA-Z0-9()]{2,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*))$/;
+  return regex.test(value);
+};

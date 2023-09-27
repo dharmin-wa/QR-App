@@ -16,8 +16,10 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "70%",
   maxWidth: "100%",
+  maxHeight: "100vh",
   bgcolor: "background.paper",
   boxShadow: 24,
+  overflowY: "auto",
   p: 4,
 };
 

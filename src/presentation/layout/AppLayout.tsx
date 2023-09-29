@@ -160,11 +160,10 @@ export default function AppLayout(props: { window?: any }) {
                       >
                         <Icon
                           style={{
-                            fill: `${
-                              location.pathname === e.redirectPath
-                                ? "#fff"
-                                : "#4181E0"
-                            }`,
+                            fill: `${location.pathname === e.redirectPath
+                              ? "#fff"
+                              : "#4181E0"
+                              }`,
                           }}
                         />
                       </ListItemIcon>
@@ -301,11 +300,10 @@ export default function AppLayout(props: { window?: any }) {
                               height={25}
                               width={25}
                               style={{
-                                fill: `${
-                                  location.pathname === subItem.redirectPath
-                                    ? "#fff"
-                                    : "#4181E0"
-                                }`,
+                                fill: `${location.pathname === subItem.redirectPath
+                                  ? "#fff"
+                                  : "#4181E0"
+                                  }`,
                               }}
                             />
                           </ListItemIcon>
@@ -468,8 +466,7 @@ export default function AppLayout(props: { window?: any }) {
           sx={{
             flexGrow: 1,
             // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
-            p: { xs: 10, sm: 12, md: 12, lg: "112px 14px 0 24px" },
-
+            p: { xs: "55px 10px", sm: 12, md: "99px 10px", lg: "112px 14px 0 24px" },
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >

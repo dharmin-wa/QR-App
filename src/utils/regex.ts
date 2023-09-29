@@ -1,4 +1,5 @@
 import { equal, lowerCase } from "./javascript";
+import { countryWisePhoneValidation } from "./phoneInputRegex";
 
 export const emailValidation = (email: string) => {
   const regex =
@@ -29,8 +30,8 @@ export const confirmPasswordValidation = (
   return equal(value, clonedPassword);
 };
 
-export const validPhoneNumber = (phoneNumber: any) => {
-  return /^\+?[0-9]+( [A-Za-z]+)?$/.test(phoneNumber);
+export const validPhoneNumber = (phoneNumber: any, countryCode: string) => {
+  return countryWisePhoneValidation[countryCode]?.test(phoneNumber);
 };
 
 export const urlValidation = (value: string) => {

@@ -18,6 +18,7 @@ import DisableQR from "../presentation/disableQR";
 import { useSelector } from "react-redux";
 import { loadStateFn } from "../utils/localStorage";
 import ProtectedRoute from "../presentation/auth/ProtectedRoute";
+import Test from "../Test";
 
 const RedirectComponent = () => {
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
@@ -144,6 +145,15 @@ const privateRoutes: RouteObject[] = [
           {
             path: "/disable-qr",
             children: [{ index: true, element: <DisableQR /> }],
+          },
+        ],
+      },
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/test",
+            children: [{ index: true, element: <Test /> }],
           },
         ],
       },

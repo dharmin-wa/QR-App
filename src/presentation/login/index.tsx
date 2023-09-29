@@ -24,7 +24,8 @@ import Mail from "../../assets/svg/mail.svg";
 import Lock from "../../assets/svg/lock.svg";
 import { useTranslation } from "react-i18next";
 
-interface LoginProps {}
+
+interface LoginProps { }
 
 const Login: React.FC<LoginProps> = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({

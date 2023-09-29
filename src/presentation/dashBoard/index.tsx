@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Paper, Modal } from "@mui/material";
-import { topModule } from "../../description/dashboard.description";
+import { formPath, topModule } from "../../description/dashboard.description";
 import QRBox from "../../shared/QRBox";
 import QRTypography from "../../shared/QRTypography";
 import { useTranslation } from "react-i18next";
@@ -70,7 +70,7 @@ const Dashboard = () => {
         aria-describedby="create-qr-code"
       >
         <QRBox sx={style}>
-          <CreateQRCode />
+          <CreateQRCode formPath={formPath} />
         </QRBox>
       </Modal>
     </>

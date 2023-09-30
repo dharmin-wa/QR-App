@@ -35,7 +35,7 @@ import QRButton from "../../shared/QRButton";
 import { useDispatch } from "react-redux";
 import { SET_FORM_DATA } from "../../redux/constants";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import { getContrastRatio } from "../../helpers/util";
 import { MIN_CONTRAST_RATIO } from "../../description/dashboard.description";
 
@@ -74,7 +74,7 @@ const initialValidationErrors = {
   [QRType.MultiAction]: {
     validationErrors: [],
   },
-}
+};
 const initialQrData = {
   type: QRType.Link,
   data: [""],
@@ -84,27 +84,28 @@ const initialQrData = {
     buttonTextColor: "#ffffff",
     eyeColor: "#000",
   },
-}
+};
 const CreateQRCode = ({ formPath }: any) => {
   const [qrData, setQRData] = useState<QRData>(initialQrData);
   const [logo, setLogo] = useState<any>(null);
   const [logoSize, setLogoSize] = useState({
     logoWidth: 30,
-    logoHeight: 30
-  })
-  const [countryCodeName, setCountryCodeName] = useState<string>("")
+    logoHeight: 30,
+  });
+  const [countryCodeName, setCountryCodeName] = useState<string>("");
   const [generatedQRCode, setGeneratedQRCode] = useState<string>("");
   const [contrastError, setContrastError] = useState<boolean>(false);
-  const [validationErrors, setValidationErrors] = useState<any>(initialValidationErrors);
+  const [validationErrors, setValidationErrors] = useState<any>(
+    initialValidationErrors,
+  );
 
   const dispatch = useDispatch();
   const { child } = formPath;
 
-
   const handleLogoSizeChange = (event: any) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     const newValue = parseInt(value, 10);
-    setLogoSize({ ...logoSize, [name]: newValue })
+    setLogoSize({ ...logoSize, [name]: newValue });
   };
 
   const handleChangeType = (event: any) => {
@@ -112,16 +113,16 @@ const CreateQRCode = ({ formPath }: any) => {
     setQRData({
       ...qrData,
       ...initialQrData,
-      type
+      type,
     });
     setGeneratedQRCode("");
     setLogo(null);
-    setValidationErrors(initialValidationErrors)
-    setContrastError(false)
+    setValidationErrors(initialValidationErrors);
+    setContrastError(false);
     setLogoSize({
       logoWidth: 30,
-      logoHeight: 30
-    })
+      logoHeight: 30,
+    });
   };
 
   const handleDataChange = (event: any, index: number) => {
@@ -178,7 +179,7 @@ const CreateQRCode = ({ formPath }: any) => {
       payload: { [child]: { ...qrData, [QRType[qrData.type]]: updatedData } },
     });
 
-    setCountryCodeName(countryCodeName)
+    setCountryCodeName(countryCodeName);
   };
 
   const handleNameChange = (e: { target: { value: string } }) => {
@@ -202,13 +203,24 @@ const CreateQRCode = ({ formPath }: any) => {
   const handleThemeChange = (property: string, value: string) => {
     const updatedTheme = { ...qrData.theme, [property]: value };
 
-    const contrastRatio1 = getContrastRatio(updatedTheme?.containerColor, updatedTheme?.buttonColor);
-    const contrastRatio2 = getContrastRatio(updatedTheme?.containerColor, updatedTheme?.eyeColor);
-    const contrastRatio3 = getContrastRatio(updatedTheme?.buttonColor, updatedTheme?.eyeColor);
+    const contrastRatio1 = getContrastRatio(
+      updatedTheme?.containerColor,
+      updatedTheme?.buttonColor,
+    );
+    const contrastRatio2 = getContrastRatio(
+      updatedTheme?.containerColor,
+      updatedTheme?.eyeColor,
+    );
+    const contrastRatio3 = getContrastRatio(
+      updatedTheme?.buttonColor,
+      updatedTheme?.eyeColor,
+    );
 
-    setContrastError(contrastRatio1 < MIN_CONTRAST_RATIO ||
-      contrastRatio2 < MIN_CONTRAST_RATIO ||
-      contrastRatio3 > MIN_CONTRAST_RATIO)
+    setContrastError(
+      contrastRatio1 < MIN_CONTRAST_RATIO ||
+        contrastRatio2 < MIN_CONTRAST_RATIO ||
+        contrastRatio3 > MIN_CONTRAST_RATIO,
+    );
 
     setQRData({ ...qrData, theme: { ...qrData?.theme, [property]: value } });
   };
@@ -274,7 +286,7 @@ const CreateQRCode = ({ formPath }: any) => {
         };
       });
     }
-    console.log('validationErrorsForLink', validationErrorsForLink)
+    console.log("validationErrorsForLink", validationErrorsForLink);
 
     setValidationErrors((prevErrors: any) => ({
       ...prevErrors,
@@ -288,7 +300,9 @@ const CreateQRCode = ({ formPath }: any) => {
     }));
 
     if (type === QRType.MultiAction) {
-      const validLinksCount: any = validationErrorsForLink?.every((link) => !link?.requiredError && !link?.validationError);
+      const validLinksCount: any = validationErrorsForLink?.every(
+        (link) => !link?.requiredError && !link?.validationError,
+      );
 
       if (validLinksCount && data?.length < 2) {
         showToast("Please add at least 2 valid links");
@@ -318,11 +332,15 @@ const CreateQRCode = ({ formPath }: any) => {
 
   const handleDeleteData = (index: number) => {
     const updatedData = qrData.data.filter((_, i) => i !== index);
-    console.log('validationErrors', validationErrors, index)
+    console.log("validationErrors", validationErrors, index);
     const clonedValidationErrorsForLink: any = [
       ...validationErrors[QRType.MultiAction].validationErrors,
     ]?.filter((_, i) => i !== index);
-    console.log('validationErrors>>', validationErrors, clonedValidationErrorsForLink)
+    console.log(
+      "validationErrors>>",
+      validationErrors,
+      clonedValidationErrorsForLink,
+    );
 
     setQRData({
       ...qrData,
@@ -331,7 +349,7 @@ const CreateQRCode = ({ formPath }: any) => {
 
     setValidationErrors((prevErrors: any) => ({
       ...prevErrors,
-      [QRType.MultiAction]: { validationErrors: clonedValidationErrorsForLink }
+      [QRType.MultiAction]: { validationErrors: clonedValidationErrorsForLink },
     }));
   };
 
@@ -389,9 +407,9 @@ const CreateQRCode = ({ formPath }: any) => {
                             ?.validationErrors[index]?.requiredError
                             ? "Field is required"
                             : validationErrors[QRType.MultiAction]
-                              ?.validationErrors[index]?.validationError
-                              ? "Please enter a valid URL"
-                              : ""
+                                ?.validationErrors[index]?.validationError
+                            ? "Please enter a valid URL"
+                            : ""
                         }
                         InputProps={{
                           endAdornment: (
@@ -434,8 +452,8 @@ const CreateQRCode = ({ formPath }: any) => {
                       validationErrors[qrData.type]?.requiredError
                         ? "Field is required"
                         : validationErrors[qrData.type]?.validationError
-                          ? getHelperText(qrData.type)
-                          : ""
+                        ? getHelperText(qrData.type)
+                        : ""
                     }
                   />
                 )
@@ -447,8 +465,12 @@ const CreateQRCode = ({ formPath }: any) => {
                     country={"us"}
                     value={qrData.data[0]}
                     enableSearch
-                    onChange={(value: string, country: { countryCode: string }) => {
-                      const countryCodeName = country?.countryCode?.toUpperCase();
+                    onChange={(
+                      value: string,
+                      country: { countryCode: string },
+                    ) => {
+                      const countryCodeName =
+                        country?.countryCode?.toUpperCase();
                       const updatedEvent = {
                         target: {
                           name: name,
@@ -480,8 +502,8 @@ const CreateQRCode = ({ formPath }: any) => {
                     {validationErrors[QRType.PhoneNumber]?.requiredError
                       ? "Field is required"
                       : validationErrors[QRType.PhoneNumber]?.validationError
-                        ? "Please enter a valid Number"
-                        : ""}
+                      ? "Please enter a valid Number"
+                      : ""}
                   </FormHelperText>
 
                   <QRTextField
@@ -517,7 +539,12 @@ const CreateQRCode = ({ formPath }: any) => {
                   logoWidth={logoSize?.logoWidth}
                   logoHeight={logoSize?.logoHeight}
                 />
-                {contrastError && <Alert severity="warning">Your colors have low contrast. Tune them to make your code easier to scan.</Alert>}
+                {contrastError && (
+                  <Alert severity="warning">
+                    Your colors have low contrast. Tune them to make your code
+                    easier to scan.
+                  </Alert>
+                )}
               </div>
 
               <Divider style={{ margin: "16px 0" }} />
@@ -584,11 +611,11 @@ const CreateQRCode = ({ formPath }: any) => {
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    setLogo(null)
+                    setLogo(null);
                     setLogoSize({
                       logoWidth: 30,
-                      logoHeight: 30
-                    })
+                      logoHeight: 30,
+                    });
                   }}
                   sx={{ margin: "0 16px" }}
                 >
@@ -629,7 +656,6 @@ const CreateQRCode = ({ formPath }: any) => {
         </Grid>
       </Box>
     </Container>
-
   );
 };
 

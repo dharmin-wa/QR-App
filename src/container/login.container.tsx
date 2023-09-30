@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { keys, length } from "../utils/javascript";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { useNavigate } from "react-router-dom";
-import { removeStateFn, saveStateFn } from "../utils/localStorage";
+import { loadStateFn, removeStateFn, saveStateFn } from "../utils/localStorage";
 import { SET_APP_DATA } from "../redux/constants";
 
 interface LoginContainerProps {
@@ -20,7 +20,10 @@ const LoginContainer = ({
   setError,
   formPath,
 }: LoginContainerProps) => {
-  const [isPwdRemember, setIsPwdRemember] = useState<boolean>(false);
+  const isRemember = loadStateFn("rememberMe");
+  const [isPwdRemember, setIsPwdRemember] = useState<boolean>(
+    isRemember || false,
+  );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,6 +32,10 @@ const LoginContainer = ({
   );
 
   const { performRequest } = ApiContainer();
+
+  useEffect(() => {
+    setIsPwdRemember(isRemember);
+  }, []);
 
   const handleCheck = () => {
     setIsPwdRemember(!isPwdRemember);
@@ -92,6 +99,7 @@ const LoginContainer = ({
     handleCheck,
     toggleVisibility,
     showPassword,
+    isPwdRemember,
   };
 };
 

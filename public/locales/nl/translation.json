@@ -50,5 +50,15 @@
   "upgradePlan": "XX",
   "totalQRCode": "XX",
   "totalActiveQR": "XX",
-  "totalDisableQR": "XX"
+  "totalDisableQR": "XX",
+  "recentlyCreatedQRCodes": "XX",
+  "createQRCode": "XX",
+  "enterValidURL": "XX",
+  "enterValidPhoneNumber.": "XX",
+  "enterValidEmailAddress.": "XX",
+  "QRCodeType": "XX",
+  "addLink": "XX",
+  "generateQRCode": "XX",
+  "QRCodePreview": "XX",
+  "colorContrastWarning": "XX"
 }

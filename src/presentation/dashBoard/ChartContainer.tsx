@@ -27,13 +27,6 @@ const data = {
   ],
 };
 
-const titleValueStyle: any = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "end",
-  textAlign: "end",
-};
-
 const columnStyle: any = {
   display: "flex",
   flexDirection: "row",
@@ -46,10 +39,6 @@ const ChartContainer = () => {
   return (
     <div style={columnStyle}>
       <DoughnutChart data={data} />
-      {/*  <div style={titleValueStyle}>
-        <QRTypography><div style={{ width: "30px", height: "10px", background: "#000" }}></div> Active QR 70%</QRTypography>
-        <QRTypography><div style={{ width: "30px", height: "10px", background: "#000" }}></div>Disable QR 70%</QRTypography>
-      </div> */}
     </div>
   );
 };

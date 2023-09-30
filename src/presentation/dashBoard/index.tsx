@@ -30,17 +30,15 @@ const Dashboard = () => {
   return (
     <>
       <Grid container spacing={2}>
-        {topModule?.map((v: any, index: number) => {
-          return (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Paper elevation={0} sx={{ border: "1px solid #00000017" }}>
-                {v}
-              </Paper>
-            </Grid>
-          );
-        })}
+        {topModule?.map((v, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Paper elevation={0} sx={{ border: "1px solid #00000017" }}>
+              {v}
+            </Paper>
+          </Grid>
+        ))}
       </Grid>
-      <QRBox display="flex" justifyContent="space-between" p={2}>
+      <QRBox display="flex" justifyContent="space-between">
         <div style={{ display: "flex", alignItems: "center" }}>
           <Timer />
           <QRTypography fontWeight={500} fontSize={20}>
@@ -54,8 +52,8 @@ const Dashboard = () => {
             "&.MuiButton-root": {
               width: "fit-content !important",
               borderRadius: "6px",
-              p: "11px 16px",
-              fontSize: "15px",
+              p: "1rem 1rem",
+              fontSize: "1rem",
             },
           }}
           onClick={() => setOpen(true)}

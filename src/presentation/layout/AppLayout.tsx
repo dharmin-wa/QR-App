@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
-import { loadStateFn } from "../../utils/localStorage";
+import { loadStateFn, removeStateFn } from "../../utils/localStorage";
 import {
   AppBar,
   Avatar,
@@ -42,6 +42,8 @@ import {
 import { ReactComponent as MobileMenu } from "../../assets/svg/menu.svg";
 import QRTextField from "../../shared/QRTextField";
 import SearchIcon from "@mui/icons-material/Search";
+import LanguageSelector from "../../shared/LanguageSelector";
+import { LOGOUT } from "../../redux/constants";
 
 const drawerWidth = 325;
 
@@ -70,6 +72,7 @@ export default function AppLayout(props: { window?: any }) {
   const [mobileAnchorEl, setMobileAnchorEl] = React.useState(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
   const token = loadStateFn();
@@ -87,6 +90,13 @@ export default function AppLayout(props: { window?: any }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    removeStateFn("token");
+    removeStateFn("isAuthenticated");
+    dispatch({ type: LOGOUT });
+    navigate("/login");
   };
 
   const handleMobileClose = () => {
@@ -160,10 +170,11 @@ export default function AppLayout(props: { window?: any }) {
                       >
                         <Icon
                           style={{
-                            fill: `${location.pathname === e.redirectPath
-                              ? "#fff"
-                              : "#4181E0"
-                              }`,
+                            fill: `${
+                              location.pathname === e.redirectPath
+                                ? "#fff"
+                                : "#4181E0"
+                            }`,
                           }}
                         />
                       </ListItemIcon>
@@ -220,7 +231,7 @@ export default function AppLayout(props: { window?: any }) {
 
   return (
     <>
-      <QRBox display="flex">
+      <QRBox display="flex" minHeight="100vh">
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -300,10 +311,11 @@ export default function AppLayout(props: { window?: any }) {
                               height={25}
                               width={25}
                               style={{
-                                fill: `${location.pathname === subItem.redirectPath
-                                  ? "#fff"
-                                  : "#4181E0"
-                                  }`,
+                                fill: `${
+                                  location.pathname === subItem.redirectPath
+                                    ? "#fff"
+                                    : "#4181E0"
+                                }`,
                               }}
                             />
                           </ListItemIcon>
@@ -345,10 +357,8 @@ export default function AppLayout(props: { window?: any }) {
                   border: "1px solid #E2E2E3",
                   borderRadius: "15.5px",
                 },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: "none",
-                  },
+                "& .MuiOutlinedInput-root fieldset": {
+                  border: "none",
                 },
               }}
               InputProps={{
@@ -359,37 +369,37 @@ export default function AppLayout(props: { window?: any }) {
                 ),
               }}
             />
-            <QRButton
-              aria-controls={"demo-customized-menu"}
-              aria-haspopup="true"
-              variant="outlined"
-              sx={{
-                borderRadius: "24px !important",
-                "&.MuiButton-root": {
+            <div>
+              <LanguageSelector />
+              <QRButton
+                aria-controls="demo-customized-menu"
+                aria-haspopup="true"
+                variant="outlined"
+                sx={{
+                  borderRadius: "24px !important",
                   width: "fit-content !important",
-                },
-                // display: { lg: "inline", md: "none" },
-                "& .MuiButton-startIcon>*:nth-of-type(1)": {
-                  fontSize: "13px",
-                },
-              }}
-              disableElevation
-              onClick={handleMenu}
-              startIcon={
-                <Avatar
-                  sx={{
-                    width: 24,
-                    height: 24,
-                    bgcolor: theme.palette.primary.main,
-                  }}
-                >
-                  {userName.charAt(0)}
-                </Avatar>
-              }
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              {userName}
-            </QRButton>
+                  "& .MuiButton-startIcon>*:nth-of-type(1)": {
+                    fontSize: "13px",
+                  },
+                }}
+                disableElevation
+                onClick={handleMenu}
+                startIcon={
+                  <Avatar
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      bgcolor: theme.palette.primary.main,
+                    }}
+                  >
+                    {userName.charAt(0)}
+                  </Avatar>
+                }
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                {userName}
+              </QRButton>
+            </div>
             <Menu
               id="demo-customized-menu"
               MenuListProps={{
@@ -401,16 +411,10 @@ export default function AppLayout(props: { window?: any }) {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose} disableRipple>
-                Edit
+                Profile
               </MenuItem>
-              <MenuItem onClick={handleClose} disableRipple>
-                Duplicate
-              </MenuItem>
-              <MenuItem onClick={handleClose} disableRipple>
-                Archive
-              </MenuItem>
-              <MenuItem onClick={handleClose} disableRipple>
-                More
+              <MenuItem onClick={handleLogout} disableRipple>
+                Logout
               </MenuItem>
             </Menu>
           </Toolbar>
@@ -466,7 +470,12 @@ export default function AppLayout(props: { window?: any }) {
           sx={{
             flexGrow: 1,
             // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
-            p: { xs: "55px 10px", sm: 12, md: "99px 10px", lg: "112px 14px 0 24px" },
+            p: {
+              xs: "55px 10px",
+              sm: 12,
+              md: "99px 10px",
+              lg: "112px 14px 0 24px",
+            },
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >

@@ -12,41 +12,28 @@ const Footer = () => {
   const theme: any = useTheme();
   const { t } = useTranslation();
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
+    <QRBox
+      component="footer"
+      sx={{
+        background: theme.palette.primary.main,
+        height: "32px",
+        display: { xs: "none", md: "flex" },
+        justifyContent: "center",
+        alignItems: "center",
+        flexShrink: 0, // Prevent footer from shrinking
       }}
     >
-      <div style={{ flex: 1 }}>
-        {/* Your main content goes here */}
-      </div>
-      <QRBox
-        component="footer"
-        sx={{
-          background: theme.palette.primary.main,
-          height: '32px',
-          display: { xs: 'none', md: 'flex' },
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexShrink: 0, // Prevent footer from shrinking
-        }}
+      <CssBaseline />
+      <QRTypography
+        variant="body1"
+        fontSize="14px"
+        color="#fff"
+        letterSpacing={0.5}
       >
-        <CssBaseline />
-        <QRTypography
-          variant="body1"
-          fontSize="14px"
-          color="#fff"
-          letterSpacing={0.5}
-        >
-          {upperCase(t('footerContent'))}
-          <span style={{ fontWeight: 700 }}>
-            {upperCase(t('QRgenerator'))}
-          </span>
-        </QRTypography>
-      </QRBox>
-    </div>
+        {upperCase(t("footerContent"))}
+        <span style={{ fontWeight: 700 }}>{" "}{upperCase(t("QRgenerator"))}</span>
+      </QRTypography>
+    </QRBox>
   );
 };
 

@@ -5,13 +5,15 @@ export function getContrastRatio(color1: string, color2: string) {
   const luminance1 = calculateLuminance(rgb1);
   const luminance2 = calculateLuminance(rgb2);
 
-  const ratio = (Math.max(luminance1, luminance2) + 0.05) / (Math.min(luminance1, luminance2) + 0.05);
+  const ratio =
+    (Math.max(luminance1, luminance2) + 0.05) /
+    (Math.min(luminance1, luminance2) + 0.05);
 
   return ratio;
 }
 
 function hexToRgb(hex: string) {
-  hex = hex.replace(/^#/, '');
+  hex = hex.replace(/^#/, "");
 
   const bigint = parseInt(hex, 16);
   const r = (bigint >> 16) & 255;
@@ -21,7 +23,7 @@ function hexToRgb(hex: string) {
   return { r, g, b };
 }
 
-function calculateLuminance(rgb: { r: any; g: any; b: any; }) {
+function calculateLuminance(rgb: { r: any; g: any; b: any }) {
   const { r, g, b } = rgb;
   const sRGB = [r / 255, g / 255, b / 255];
 
@@ -35,4 +37,3 @@ function calculateLuminance(rgb: { r: any; g: any; b: any; }) {
 
   return 0.2126 * sRGB[0] + 0.7152 * sRGB[1] + 0.0722 * sRGB[2];
 }
-

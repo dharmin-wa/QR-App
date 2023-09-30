@@ -24,8 +24,7 @@ import Mail from "../../assets/svg/mail.svg";
 import Lock from "../../assets/svg/lock.svg";
 import { useTranslation } from "react-i18next";
 
-
-interface LoginProps { }
+interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const { handleChange, formData, error, validate, setError } = FormContainer({
@@ -41,6 +40,7 @@ const Login: React.FC<LoginProps> = () => {
     handleCheck,
     toggleVisibility,
     showPassword,
+    isPwdRemember,
   } = LoginContainer({
     formData,
     validate,
@@ -129,7 +129,13 @@ const Login: React.FC<LoginProps> = () => {
           }}
         >
           <FormControlLabel
-            control={<QRCheckbox name="rememberMe" onChange={handleCheck} />}
+            control={
+              <QRCheckbox
+                name="rememberMe"
+                onChange={handleCheck}
+                checked={isPwdRemember}
+              />
+            }
             label={
               <span
                 style={{

@@ -16,6 +16,8 @@ export const apiEndPoints = {
   verifyOTP: "api/auth/forgot-password/verify",
   resendOTP: "auth/resend-otp",
   resetPassword: "api/auth/reset-password",
+  createQRs: "api/qrCode/addQrCode",
+  getAllQRs: "api/qrCode/listOfQrCode",
 };
 
 export const method = {

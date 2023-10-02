@@ -31,7 +31,7 @@ const Footer = () => {
         letterSpacing={0.5}
       >
         {upperCase(t("footerContent"))}
-        <span style={{ fontWeight: 700 }}>{" "}{upperCase(t("QRgenerator"))}</span>
+        <span style={{ fontWeight: 700 }}> {upperCase(t("QRgenerator"))}</span>
       </QRTypography>
     </QRBox>
   );

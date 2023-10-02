@@ -52,10 +52,11 @@ const LoginContainer = ({
       parent: formPath.parent,
     });
     if (res?.status === 200) {
-      const { token, emailVerify } = res.data;
+      const { token, emailVerify, _id } = res.data;
       if (length(token)) {
         saveStateFn("token", token);
         saveStateFn("isAuthenticated", true);
+        saveStateFn("id", _id);
       }
       if (isPwdRemember) {
         saveStateFn("rememberedEmail", formData?.email);
@@ -66,7 +67,10 @@ const LoginContainer = ({
         removeStateFn("rememberedPassword");
         removeStateFn("rememberMe");
       }
-      dispatch({ type: SET_APP_DATA, payload: { isAuthenticated: true } });
+      dispatch({
+        type: SET_APP_DATA,
+        payload: { isAuthenticated: true, id: _id },
+      });
       if (emailVerify) {
         navigate("/dashboard");
       }

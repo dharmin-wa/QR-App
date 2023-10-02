@@ -12,6 +12,10 @@ import {
 import { SET_FORM_DATA } from "../redux/constants";
 import { getContrastRatio } from "../helpers/util";
 import { showToast } from "../utils/toastService";
+import { ApiContainer } from "../utils/api";
+import { apiEndPoints, method } from "../utils/constant";
+import { loadStateFn } from "../utils/localStorage";
+import { lowerCase } from "../utils/javascript";
 
 enum QRType {
   Link,
@@ -73,7 +77,8 @@ const GenerateQRContainer = () => {
   const [validationErrors, setValidationErrors] = useState<any>(
     initialValidationErrors,
   );
-
+  const { performRequest } = ApiContainer();
+  const userId = loadStateFn("id");
   const dispatch = useDispatch();
 
   const { parent } = formPath;
@@ -283,7 +288,51 @@ const GenerateQRContainer = () => {
 
     if (!requiredError && !validationError && type !== QRType.MultiAction) {
       setGeneratedQRCode(qrData.data.join(","));
+      callApi();
     }
+  };
+  console.log("qrData>>>", qrData);
+  const callApi = async () => {
+    const getLabel = (key: any) => {
+      switch (key) {
+        case "email":
+          return "free_text";
+        case "phonenumber":
+          return "free_text";
+
+        default:
+          return "";
+      }
+    };
+    const payload = {
+      user_id: userId,
+      qr_type: QRType[qrData.type],
+      data: {
+        [getLabel(lowerCase(QRType[qrData.type]))]: qrData?.data[0],
+      },
+    };
+    console.log("payload", payload);
+    const res: any = await performRequest({
+      endPoint: apiEndPoints?.createQRs,
+      method: method.post,
+      data: payload,
+      showToastMessage: true,
+      successToastMessage: "QR code created successfully",
+      needLoader: true,
+      parent: formPath.parent,
+    });
+    if (res.status === 200) {
+      setQRData(initialQrData);
+      setGeneratedQRCode("");
+      setLogo(null);
+      setValidationErrors(initialValidationErrors);
+      setContrastError(false);
+      setLogoSize({
+        logoWidth: 30,
+        logoHeight: 30,
+      });
+    }
+    console.log("res", res);
   };
 
   const handleDeleteData = (index: number) => {

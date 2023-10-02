@@ -8,6 +8,9 @@ import { ReactComponent as Timer } from "../../assets/svg/timer.svg";
 import QRButton from "../../shared/QRButton";
 import { ReactComponent as CreateQR } from "../../assets/svg/createQR.svg";
 import CreateQRCode from "../QRCode/CreateQRCode";
+import DashboardContainer from "../../container/dashboard.container";
+import QRLoader from "../../shared/QRLoader";
+import QRFrame from "../QRCode/QRFrame";
 
 const style = {
   position: "absolute",
@@ -26,6 +29,11 @@ const style = {
 const Dashboard = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const { loadingStatus, qrCodesList } = DashboardContainer({ formPath });
+
+  if (loadingStatus) {
+    return <QRLoader variant="transParent" />;
+  }
 
   return (
     <>
@@ -40,7 +48,7 @@ const Dashboard = () => {
       </Grid>
       <QRBox display="flex" justifyContent="space-between">
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Timer />
+          <Timer fill="#366CBD" />
           <QRTypography fontWeight={500} fontSize={20}>
             {t("recentlyCreatedQRCodes")} (10)
           </QRTypography>
@@ -61,6 +69,7 @@ const Dashboard = () => {
           {t("createQRCode")}
         </QRButton>
       </QRBox>
+      {!loadingStatus && <QRFrame qrCodes={qrCodesList} />}
       <Modal
         open={open}
         onClose={() => setOpen(false)}

@@ -44,6 +44,7 @@ import QRTextField from "../../shared/QRTextField";
 import SearchIcon from "@mui/icons-material/Search";
 import LanguageSelector from "../../shared/LanguageSelector";
 import { LOGOUT } from "../../redux/constants";
+import { isExpired } from "react-jwt";
 
 const drawerWidth = 325;
 
@@ -79,7 +80,7 @@ export default function AppLayout(props: { window?: any }) {
   const userName = "XYZ";
 
   useEffect(() => {
-    if (!isAuthenticated && !token) {
+    if ((!isAuthenticated && !token) || isExpired(token)) {
       navigate("/login");
     }
   }, [pathname]);
@@ -471,8 +472,8 @@ export default function AppLayout(props: { window?: any }) {
             flexGrow: 1,
             // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
             p: {
-              xs: "55px 10px",
-              sm: 12,
+              xs: "64px 10px",
+              sm: "64px 10px",
               md: "99px 10px",
               lg: "112px 14px 0 24px",
             },

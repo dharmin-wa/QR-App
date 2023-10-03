@@ -344,8 +344,7 @@ export default function AppLayout(props: { window?: any }) {
               justifyContent: "space-between",
               alignItems: "center",
               borderRadius: "0 0px 20px 0",
-              boxShadow:
-                "0px 0px 0px -1px rgba(0,0,0,0.2), -2px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
+              boxShadow: "0 0 22px -5px rgba(0, 0, 0, 0.3)",
             }}
           >
             <QRTextField
@@ -379,8 +378,9 @@ export default function AppLayout(props: { window?: any }) {
                 sx={{
                   borderRadius: "24px !important",
                   width: "fit-content !important",
+                  marginLeft: "10px",
                   "& .MuiButton-startIcon>*:nth-of-type(1)": {
-                    fontSize: "13px",
+                    fontSize: "small",
                   },
                 }}
                 disableElevation

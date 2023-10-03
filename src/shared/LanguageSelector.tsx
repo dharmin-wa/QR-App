@@ -4,11 +4,20 @@ import QRStack from "./QRStack";
 import QRTypography from "./QRTypography";
 import { loadStateFn, saveStateFn } from "../utils/localStorage";
 import i18n from "../i18n/i18n";
+import styled from "@emotion/styled";
+import { ReactComponent as USFlag } from "../assets/svg/usFlag.svg";
+import { ReactComponent as NetherlandsFlag } from "../assets/svg/netherlandsFlag.svg";
 
 const countries = [
-  { label: "United States", value: "en", icon: "🇺🇸" },
-  { label: "Netherlands", value: "nl", icon: "🇳🇱" },
+  { /* label: "United States", */ value: "en", icon: USFlag },
+  { /* label: "Netherlands", */ value: "nl", icon: NetherlandsFlag },
 ];
+
+const StyledSelector = styled(Select)(() => ({
+  "& .MuiSelect-select": {
+    padding: "6px 10px",
+  },
+}));
 
 const LanguageSelector = () => {
   const [selectedOption, setSelectedOption] = useState(
@@ -35,26 +44,31 @@ const LanguageSelector = () => {
 
   return (
     <FormControl>
-      <Select
+      <StyledSelector
         value={defaultValue}
         onChange={handleOptionChange}
         displayEmpty
         fullWidth
         name="languageSelector"
       >
-        {countries?.map((option, index) => (
-          <MenuItem key={`${index}-${option?.value}`} value={option?.value}>
-            <QRStack direction="row" spacing={1}>
-              {option?.icon && (
-                <QRTypography component="span">{option?.icon}</QRTypography>
-              )}
-              <QRStack>
-                <QRTypography component="span">{option?.label}</QRTypography>
+        {countries?.map((option: any, index: number) => {
+          const Icon = option?.icon;
+          return (
+            <MenuItem key={`${index}-${option?.value}`} value={option?.value}>
+              <QRStack direction="row" spacing={1}>
+                <Icon />
+                {option?.label && (
+                  <QRStack>
+                    <QRTypography component="span">
+                      {option?.label}
+                    </QRTypography>
+                  </QRStack>
+                )}
               </QRStack>
-            </QRStack>
-          </MenuItem>
-        ))}
-      </Select>
+            </MenuItem>
+          );
+        })}
+      </StyledSelector>
     </FormControl>
   );
 };

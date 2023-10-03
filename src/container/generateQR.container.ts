@@ -34,6 +34,7 @@ interface QRData {
     eyeColor: string;
   };
   name?: string;
+  linkNames: string[];
 }
 
 const initialValidationErrors = {
@@ -53,6 +54,7 @@ const initialValidationErrors = {
     validationErrors: [],
   },
 };
+
 const initialQrData = {
   type: QRType.Link,
   data: [""],
@@ -62,6 +64,7 @@ const initialQrData = {
     buttonTextColor: "#ffffff",
     eyeColor: "#000",
   },
+  linkNames: [""],
 };
 
 const GenerateQRContainer = () => {
@@ -114,6 +117,9 @@ const GenerateQRContainer = () => {
     const validationErrorsForLink: any = [
       ...validationErrors[QRType.MultiAction].validationErrors,
     ];
+    const updatedLinkNames = [...qrData.linkNames];
+    updatedLinkNames[index] = qrData.linkNames[index] || "";
+
     let validationError = false;
     let requiredError = false;
 
@@ -153,6 +159,7 @@ const GenerateQRContainer = () => {
     setQRData({
       ...qrData,
       data: updatedData,
+      linkNames: updatedLinkNames,
     });
 
     dispatch({
@@ -161,6 +168,17 @@ const GenerateQRContainer = () => {
     });
 
     setCountryCodeName(countryCodeName);
+  };
+
+  const handleLinkNameChange = (event: any, index: number) => {
+    const { value } = event.target;
+    const updatedLinkNames = [...qrData.linkNames];
+    updatedLinkNames[index] = value;
+
+    setQRData({
+      ...qrData,
+      linkNames: updatedLinkNames,
+    });
   };
 
   const handleNameChange = (e: { target: { value: string } }) => {
@@ -283,6 +301,7 @@ const GenerateQRContainer = () => {
         return;
       } else if (validLinksCount) {
         setGeneratedQRCode(qrData.data.join(","));
+        callApi();
       }
     }
 
@@ -291,27 +310,38 @@ const GenerateQRContainer = () => {
       callApi();
     }
   };
-  console.log("qrData>>>", qrData);
   const callApi = async () => {
-    const getLabel = (key: any) => {
-      switch (key) {
-        case "email":
-          return "free_text";
-        case "phonenumber":
-          return "free_text";
-
-        default:
-          return "";
-      }
-    };
-    const payload = {
+    const payload: any = {
+      qr_type: "",
       user_id: userId,
-      qr_type: QRType[qrData.type],
-      data: {
-        [getLabel(lowerCase(QRType[qrData.type]))]: qrData?.data[0],
-      },
+      data: {},
     };
-    console.log("payload", payload);
+
+    switch (qrData.type) {
+      case QRType.Link:
+        // payload.qr_type = lowerCase(QRType[qrData.type]);
+        payload.data.link = qrData.data[0];
+        break;
+      case QRType.PhoneNumber:
+        // payload.qr_type = "normal";
+        payload.data.free_text = qrData.data[0];
+        break;
+      case QRType.Email:
+        // payload.qr_type = "normal";
+        payload.data.free_text = qrData.data[0];
+        break;
+      case QRType.MultiAction:
+        // payload.qr_type = "multi_action";
+        payload.data.action = qrData.data.map((link, index) => ({
+          url: link,
+          action_name: qrData.linkNames[index] || `Link ${index + 1}`,
+        }));
+        break;
+      default:
+        break;
+    }
+    payload.qr_type = lowerCase(QRType[qrData.type]);
+
     const res: any = await performRequest({
       endPoint: apiEndPoints?.createQRs,
       method: method.post,
@@ -321,6 +351,7 @@ const GenerateQRContainer = () => {
       needLoader: true,
       parent: formPath.parent,
     });
+
     if (res.status === 200) {
       setQRData(initialQrData);
       setGeneratedQRCode("");
@@ -332,11 +363,11 @@ const GenerateQRContainer = () => {
         logoHeight: 30,
       });
     }
-    console.log("res", res);
   };
 
   const handleDeleteData = (index: number) => {
-    const updatedData = qrData.data.filter((_, i) => i !== index);
+    const updatedData = qrData.data?.filter((_, i) => i !== index);
+    const linkNamesData = qrData.linkNames?.filter((_, i) => i !== index);
     const clonedValidationErrorsForLink: any = [
       ...validationErrors[QRType.MultiAction].validationErrors,
     ]?.filter((_, i) => i !== index);
@@ -344,6 +375,7 @@ const GenerateQRContainer = () => {
     setQRData({
       ...qrData,
       data: updatedData,
+      linkNames: linkNamesData,
     });
 
     setValidationErrors((prevErrors: any) => ({
@@ -385,6 +417,7 @@ const GenerateQRContainer = () => {
     setLogo,
     setLogoSize,
     handleLogoSizeChange,
+    handleLinkNameChange,
   };
 };
 

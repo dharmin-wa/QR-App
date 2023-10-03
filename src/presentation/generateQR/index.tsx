@@ -11,7 +11,7 @@ import {
   Slider,
   IconButton,
   Alert,
-  InputAdornment,
+  // InputAdornment,
   FormHelperText,
 } from "@mui/material";
 import { QRCode } from "react-qrcode-logo";
@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useTranslation } from "react-i18next";
 import GenerateQRContainer from "../../container/generateQR.container";
+import QRBox from "../../shared/QRBox";
 
 const GenerateQR = () => {
   const {
@@ -46,6 +47,7 @@ const GenerateQR = () => {
     setLogo,
     setLogoSize,
     handleLogoSizeChange,
+    handleLinkNameChange,
   } = GenerateQRContainer();
 
   const { t } = useTranslation();
@@ -75,7 +77,15 @@ const GenerateQR = () => {
             {qrData.type === QRType.MultiAction ? (
               <div>
                 {qrData.data.map((data, index) => (
-                  <div key={index} style={{ marginBottom: "16px" }}>
+                  <QRBox
+                    key={index}
+                    sx={{
+                      marginBottom: "16px",
+                      display: "flex",
+                      flexDirection: { md: "column", lg: "row" },
+                      gap: "5px",
+                    }}
+                  >
                     <QRTextField
                       fullWidth
                       value={data}
@@ -95,20 +105,21 @@ const GenerateQR = () => {
                           ? t("enterValidURL")
                           : ""
                       }
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => handleDeleteData(index)}
-                              disabled={index === 0}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
                     />
-                  </div>
+                    <QRTextField
+                      fullWidth
+                      value={qrData.linkNames[index]}
+                      name="linkName"
+                      onChange={(e) => handleLinkNameChange(e, index)}
+                      label={`Title ${index + 1}`}
+                    />
+                    <IconButton
+                      onClick={() => handleDeleteData(index)}
+                      disabled={index === 0}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </QRBox>
                 ))}
                 <QRButton
                   variant="contained"

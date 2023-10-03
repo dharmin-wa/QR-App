@@ -1,27 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_API_DATA } from "../redux/constants";
 
-interface DashboardContainerProps {
+interface AllQRContainerProps {
   formPath: any;
 }
 
-const DashboardContainer = ({ formPath }: DashboardContainerProps) => {
+const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
   const { parent } = formPath;
-  const loadingStatus = useSelector(
-    (state: any) => state.api?.loader?.[formPath?.parent],
-  );
-  const { performRequest } = ApiContainer();
   const qrCodesList = useSelector((state: any) => state?.api?.[parent]);
-  const dispatch = useDispatch();
+  const loadingStatus = useSelector(
+    (state: any) => state.api?.loader?.[parent],
+  );
+  const [checked, setChecked] = useState(true);
 
   useEffect(() => {
-    getAllQRs();
+    getAllQRCodes();
   }, []);
 
-  const getAllQRs = async () => {
+  const { performRequest } = ApiContainer();
+  const dispatch = useDispatch();
+
+  const getAllQRCodes = async () => {
     const res: any = await performRequest({
       endPoint: apiEndPoints?.getAllQRs,
       method: method?.get,
@@ -33,10 +35,16 @@ const DashboardContainer = ({ formPath }: DashboardContainerProps) => {
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
   return {
-    loadingStatus,
     qrCodesList,
+    loadingStatus,
+    checked,
+    handleChange,
   };
 };
 
-export default DashboardContainer;
+export default AllQRContainer;

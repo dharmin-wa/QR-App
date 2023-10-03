@@ -1,13 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "@emotion/styled";
-import {
-  Grid,
-  Paper,
-  Checkbox,
-  IconButton,
-  Divider,
-  Link as MuiLink,
-} from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import QRBox from "../../shared/QRBox";
 import QRButton from "../../shared/QRButton";
 
@@ -15,22 +7,40 @@ export const StyledPaper = styled(Paper)`
   border: 1px solid #ccc;
   border-radius: 12px;
   margin: auto;
-  padding: 20px 0;
+  padding: 10px 6px;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
   position: relative;
   justify-content: center;
-  flex-direction: column; /* Responsive layout */
+  flexgrow: 1;
 `;
+
+export const GridContainer = styled(Grid)(() => ({
+  display: "flex",
+  alignItems: "center",
+  textAlign: "center",
+  justifyContent: "center",
+  flex: 1,
+  padding: 5,
+  flexDirection: "column",
+}));
 
 export const StyledGridItem = styled(Grid)`
   display: flex;
   align-items: center;
   text-align: center;
   justify-content: center;
-  flex-direction: column; /* Responsive layout */
+  flex-direction: column;
 `;
+
+export const ItemContainer = styled(QRBox)(({ theme }: any) => ({
+  padding: theme.spacing(1),
+  textAlign: "center",
+  overflow: "hidden",
+  // whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+}));
 
 export const StyledDurationButton = styled(QRBox)(() => ({
   marginTop: "8px",
@@ -57,11 +67,6 @@ export const StyledDownloadButton = styled(QRButton)(() => ({
 }));
 
 export const StyledTextSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 16px;
-
   & > div > svg {
     margin-right: 8px;
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { Grid, Paper, Modal } from "@mui/material";
 import { formPath, topModule } from "../../description/dashboard.description";
@@ -11,6 +12,7 @@ import CreateQRCode from "../QRCode/CreateQRCode";
 import DashboardContainer from "../../container/dashboard.container";
 import QRLoader from "../../shared/QRLoader";
 import QRFrame from "../QRCode/QRFrame";
+import QRFrameSkeleton from "../QRCode/QRFrameSkeleton";
 
 const style = {
   position: "absolute",
@@ -31,25 +33,30 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const { loadingStatus, qrCodesList } = DashboardContainer({ formPath });
 
-  if (loadingStatus) {
-    return <QRLoader variant="transParent" />;
-  }
+  /*  if (loadingStatus) {
+     return <QRLoader variant="transParent" />;
+   } */
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} flexGrow={1}>
         {topModule?.map((v, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid item xs={12} md={6} lg={3} key={index}>
             <Paper elevation={0} sx={{ border: "1px solid #00000017" }}>
               {v}
             </Paper>
           </Grid>
         ))}
       </Grid>
-      <QRBox display="flex" justifyContent="space-between">
+      <QRBox display="flex" justifyContent="space-between" p="16px 0">
         <div style={{ display: "flex", alignItems: "center" }}>
           <Timer fill="#366CBD" />
-          <QRTypography fontWeight={500} fontSize={20}>
+          <QRTypography
+            fontWeight={500}
+            color="#1B294B"
+            fontSize={20}
+            p="0 5px"
+          >
             {t("recentlyCreatedQRCodes")} (10)
           </QRTypography>
         </div>
@@ -60,7 +67,6 @@ const Dashboard = () => {
             "&.MuiButton-root": {
               width: "fit-content !important",
               borderRadius: "6px",
-              p: "1rem 1rem",
               fontSize: "1rem",
             },
           }}
@@ -69,7 +75,12 @@ const Dashboard = () => {
           {t("createQRCode")}
         </QRButton>
       </QRBox>
-      {!loadingStatus && <QRFrame qrCodes={qrCodesList} />}
+
+      {!loadingStatus ? (
+        <QRFrame qrCodes={qrCodesList} />
+      ) : (
+        <QRFrameSkeleton numSkeletons={3} />
+      )}
       <Modal
         open={open}
         onClose={() => setOpen(false)}

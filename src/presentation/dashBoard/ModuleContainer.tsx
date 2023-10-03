@@ -33,7 +33,9 @@ const ModuleContainer = ({ Indicator, title, value }: ModuleContainerProps) => {
       <div style={columnStyle}>
         <Indicator />
         <div style={titleValueStyle}>
-          <QRTypography color="#7286B8">{t(title)}</QRTypography>
+          <QRTypography color="#7286B8" fontSize="small">
+            {t(title)}
+          </QRTypography>
           <QRTypography variant="body1">{value}</QRTypography>
         </div>
       </div>

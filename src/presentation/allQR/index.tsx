@@ -1,7 +1,32 @@
 import React from "react";
+import AllQRContainer from "../../container/allQR.container";
+import { formPath } from "../../description/allQR.description";
+import QRFrame from "../QRCode/QRFrame";
+import QRFrameSkeleton from "../QRCode/QRFrameSkeleton";
+import { Switch } from "@mui/material";
+import QRBox from "../../shared/QRBox";
 
 const AllQR = () => {
-  return <div>AllQR</div>;
+  const { qrCodesList, loadingStatus, checked, handleChange } = AllQRContainer({
+    formPath,
+  });
+
+  return (
+    <>
+      <QRBox sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Switch
+          checked={checked}
+          onChange={handleChange}
+          inputProps={{ "aria-label": "controlled" }}
+        />
+      </QRBox>
+      {!loadingStatus ? (
+        <QRFrame qrCodes={qrCodesList} />
+      ) : (
+        <QRFrameSkeleton numSkeletons={5} />
+      )}
+    </>
+  );
 };
 
 export default AllQR;

@@ -27,69 +27,107 @@ import {
   StyledDurationButton,
   StyledEditContainer,
   StyledEditQRText,
-  StyledGridItem,
+  GridContainer,
   StyledLocationText,
   StyledPaper,
   StyledTextSection,
+  ItemContainer,
 } from "./style";
 import { QRCode } from "react-qrcode-logo";
+import moment from "moment";
 
 const QRFrame = ({ qrCodes }: any) => {
+  const qrCodess = [
+    {
+      id: 1,
+      checked: false,
+      qrCode: "QR_CODE_IMAGE_URL_1",
+      link: "https://example.com",
+      companyName: "Company A",
+      date: "2023-09-15",
+      url: "https://example.com/qr1",
+      qrLink: "(https://webashlar.com)",
+      scans: 100,
+      location: "Ahmedabad",
+      ip: "192.451.3.323.1",
+    },
+    {
+      id: 2,
+      checked: false,
+      qrCode: "QR_CODE_IMAGE_URL_2",
+      link: "https://example.com",
+      companyName: "Company B",
+      date: "2023-09-16",
+      url: "https://example.com/qr2",
+      qrLink: "(https://webashlar.com)",
+      scans: 150,
+      location: "New York",
+      ip: "192.168.0.1",
+    },
+    // Add more QR codes as needed
+  ];
   return (
     <>
-      {qrCodes.map((qr: any, index: number) => (
-        <StyledPaper elevation={0} key={index}>
-          <Grid container spacing={2}>
+      {qrCodess.map((qr: any, index: number) => (
+        <StyledPaper elevation={0} sx={{ flexGrow: 1 }} key={index}>
+          <GridContainer
+            container
+            spacing={0}
+            sx={{
+              flexDirection: { md: "column", lg: "row" },
+              justifyContent: "start",
+            }}
+          >
             {/* First Section */}
-            <StyledGridItem item xs={12} sm={12} md={12} lg={5} key={qr.id}>
-              <QRBox
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  textAlign: { xs: "center", md: "start" },
-                  justifyContent: { xs: "center", lg: "start" },
-                  flexDirection: { xs: "column", md: "row" }, // Responsive layout
-                  borderRight: { lg: "1px dashed #ccc" }, // Conditional border
-                }}
-              >
-                <Checkbox checked={qr.checked} />
-                <QRCode value={"generatedQRCode"} size={130} />
-                <QRBox sx={{ p: "0 20px 0 10px" }}>
-                  <QRTypography color="#9FA1A5">Link</QRTypography>
-                  <QRTypography variant="subtitle1">
-                    <MuiLink
-                      href={qr.link}
-                      sx={{
-                        textDecoration: "none",
-                        color: "#1B294B",
-                        fontSize: "20px",
-                      }}
-                    >
-                      <FileIcon /> {qr.companyName}
-                    </MuiLink>
-                  </QRTypography>
-                  <QRTypography
-                    variant="body2"
-                    sx={{ color: "#1B294B", fontSize: "20px" }}
+            <GridContainer
+              item
+              xs={5}
+              sx={{ flexDirection: { xs: "row", md: "row" } }}
+            >
+              <Checkbox checked={qr.checked} />
+              <QRCode value={qr?.data?.[qr?.qr_type]} size={130} />
+              <QRBox sx={{ p: "0 20px 0 10px", textAlign: "start" }}>
+                <QRTypography color="#9FA1A5">{qr?.qr_type}</QRTypography>
+                <QRTypography variant="subtitle1">
+                  <MuiLink
+                    href={qr.link}
+                    sx={{
+                      textDecoration: "none",
+                      color: "#1B294B",
+                      fontSize: "20px",
+                    }}
                   >
-                    <QRDateIcon /> {qr.date}
-                  </QRTypography>
-                  <QRTypography variant="body2">
-                    <LinkIcon />{" "}
-                    <MuiLink href={qr.url} color="#0075FF">
-                      {qr.url}
-                    </MuiLink>{" "}
-                    <EditIcon />
-                  </QRTypography>
-                  <QRTypography variant="caption" color="textSecondary">
-                    {qr?.qrLink}
-                  </QRTypography>
-                </QRBox>
+                    <FileIcon /> {qr.companyName}
+                  </MuiLink>
+                </QRTypography>
+                <QRTypography
+                  variant="body2"
+                  sx={{ color: "#1B294B", fontSize: "20px" }}
+                >
+                  <QRDateIcon /> {moment(qr?.created_at).format("MMM D, YYYY")}
+                </QRTypography>
+                <QRTypography variant="body2">
+                  <LinkIcon />{" "}
+                  <MuiLink href={qr.url} color="#0075FF">
+                    {qr.url}
+                  </MuiLink>{" "}
+                  <EditIcon />
+                </QRTypography>
+                <QRTypography variant="caption" color="textSecondary">
+                  {qr?.qrLink}
+                </QRTypography>
               </QRBox>
-            </StyledGridItem>
+            </GridContainer>
             {/* Second Section */}
-            <StyledGridItem item xs={12} sm={12} md={12} lg={2} key={qr.id}>
-              <>
+            <GridContainer
+              item
+              xs={3}
+              sx={{
+                borderRight: { lg: "1px dashed #ccc" },
+                borderLeft: { lg: "1px dashed #ccc" },
+              }}
+            >
+              <ItemContainer>
                 <StyledTextSection>
                   <StyledLocationText>
                     <ScannerIcon />
@@ -100,11 +138,16 @@ const QRFrame = ({ qrCodes }: any) => {
                   <StyledLocationText
                     style={{
                       alignItems: "start",
-                      marginBottom: 5,
                     }}
                   >
                     <LocationIcon />
-                    <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "start",
+                        flexDirection: "column",
+                      }}
+                    >
                       <QRTypography variant="body2" fontSize={18}>
                         Locations:
                       </QRTypography>
@@ -116,18 +159,16 @@ const QRFrame = ({ qrCodes }: any) => {
                     +22 Locations <MuiLink href="#">View More</MuiLink>
                   </QRTypography>
                 </StyledTextSection>
-              </>
-            </StyledGridItem>
+              </ItemContainer>
+            </GridContainer>
             {/* Third Section */}
-            <StyledGridItem item xs={12} sm={12} md={12} lg={5} key={qr.id}>
-              <QRBox
+            <GridContainer item xs={4}>
+              <ItemContainer
                 sx={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   flexDirection: "column",
-                  paddingLeft: 4,
-                  borderLeft: { lg: "1px dashed #ccc" },
                 }}
               >
                 <StyledDownloadButton
@@ -153,9 +194,9 @@ const QRFrame = ({ qrCodes }: any) => {
                   />{" "}
                   Pack Duration: 15 days
                 </StyledDurationButton>
-              </QRBox>
-            </StyledGridItem>
-          </Grid>
+              </ItemContainer>
+            </GridContainer>
+          </GridContainer>
           <IconButton
             style={{ position: "absolute", top: "5px", right: "1px" }}
           >

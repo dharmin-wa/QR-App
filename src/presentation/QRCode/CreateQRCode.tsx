@@ -286,7 +286,6 @@ const CreateQRCode = ({ formPath }: any) => {
         };
       });
     }
-    console.log("validationErrorsForLink", validationErrorsForLink);
 
     setValidationErrors((prevErrors: any) => ({
       ...prevErrors,
@@ -332,15 +331,9 @@ const CreateQRCode = ({ formPath }: any) => {
 
   const handleDeleteData = (index: number) => {
     const updatedData = qrData.data.filter((_, i) => i !== index);
-    console.log("validationErrors", validationErrors, index);
     const clonedValidationErrorsForLink: any = [
       ...validationErrors[QRType.MultiAction].validationErrors,
     ]?.filter((_, i) => i !== index);
-    console.log(
-      "validationErrors>>",
-      validationErrors,
-      clonedValidationErrorsForLink,
-    );
 
     setQRData({
       ...qrData,

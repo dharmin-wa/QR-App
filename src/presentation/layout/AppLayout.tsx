@@ -343,8 +343,10 @@ export default function AppLayout(props: { window?: any }) {
               height: "90px",
               justifyContent: "space-between",
               alignItems: "center",
+              // border: "2px solid red",
               borderRadius: "0 0px 20px 0",
-              boxShadow: "0 0 22px -5px rgba(0, 0, 0, 0.3)",
+              // boxShadow: "0 0 22px -5px rgba(0, 0, 0, 0.3)",
+              boxShadow: "2px 0px 4px 0px #00000040",
             }}
           >
             <QRTextField

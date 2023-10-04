@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -32,6 +33,8 @@ interface QRData {
     buttonColor: string;
     buttonTextColor: string;
     eyeColor: string;
+    qrStyle: any;
+    eyeRadius: number;
   };
   name?: string;
   linkNames: string[];
@@ -63,6 +66,8 @@ const initialQrData = {
     buttonColor: "#000",
     buttonTextColor: "#ffffff",
     eyeColor: "#000",
+    qrStyle: "squares",
+    eyeRadius: 0,
   },
   linkNames: [""],
 };
@@ -138,7 +143,7 @@ const GenerateQRContainer = () => {
         break;
       case QRType.MultiAction:
         requiredError = qrData.data.some(isFieldEmpty);
-        validationError = !isValidMultiActionLinks(qrData.data);
+        // validationError = !isValidMultiActionLinks(qrData.data);
         break;
       default:
         break;
@@ -168,6 +173,28 @@ const GenerateQRContainer = () => {
     });
 
     setCountryCodeName(countryCodeName);
+
+    if (qrData.type === QRType.MultiAction) {
+      const validLinksCount: any = validationErrorsForLink?.every(
+        (link: { requiredError: any; validationError: any }) =>
+          !link?.requiredError && !link?.validationError,
+      );
+
+      if (validLinksCount && updatedData?.length < 2) {
+        showToast("Please add at least 2 valid links");
+        return;
+      } else if (validLinksCount) {
+        setGeneratedQRCode(updatedData.join(","));
+      }
+    }
+
+    if (
+      !requiredError &&
+      !validationError &&
+      qrData.type !== QRType.MultiAction
+    ) {
+      setGeneratedQRCode(updatedData.join(","));
+    }
   };
 
   const handleLinkNameChange = (event: any, index: number) => {
@@ -199,7 +226,7 @@ const GenerateQRContainer = () => {
     return links.length >= 2;
   };
 
-  const handleThemeChange = (property: string, value: string) => {
+  const handleThemeChange = (property: string, value: string | number) => {
     const updatedTheme = { ...qrData.theme, [property]: value };
 
     const contrastRatio1 = getContrastRatio(
@@ -334,7 +361,7 @@ const GenerateQRContainer = () => {
         // payload.qr_type = "multi_action";
         payload.data.action = qrData.data.map((link, index) => ({
           url: link,
-          action_name: qrData.linkNames[index] || `Link ${index + 1}`,
+          action_name: qrData.linkNames[index] || link,
         }));
         break;
       default:
@@ -382,6 +409,8 @@ const GenerateQRContainer = () => {
       ...prevErrors,
       [QRType.MultiAction]: { validationErrors: clonedValidationErrorsForLink },
     }));
+
+    setGeneratedQRCode(updatedData.join(","));
   };
 
   function getHelperText(type: QRType): string {

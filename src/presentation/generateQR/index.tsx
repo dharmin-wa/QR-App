@@ -25,6 +25,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useTranslation } from "react-i18next";
 import GenerateQRContainer from "../../container/generateQR.container";
 import QRBox from "../../shared/QRBox";
+import ViewCompactIcon from "@mui/icons-material/ViewCompact";
+import GrainIcon from "@mui/icons-material/Grain";
+import InputLabel from "@mui/material/InputLabel";
 
 const GenerateQR = () => {
   const {
@@ -60,13 +63,15 @@ const GenerateQR = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Paper elevation={3} style={{ padding: "24px" }}>
-            <QRTypography variant="h6">{t("QRCodeType")}</QRTypography>
+            <QRTypography variant="h6" textAlign="center" p={1}>
+              {t("QRCodeType")}
+            </QRTypography>
             <Select
               fullWidth
               value={qrData.type}
               onChange={handleChangeType}
               variant="outlined"
-              sx={{ marginBottom: "16px" }}
+              sx={{ marginBottom: "16px", borderRadius: "8px" }}
             >
               <MenuItem value={QRType.Link}>URL</MenuItem>
               <MenuItem value={QRType.Email}>Email</MenuItem>
@@ -176,9 +181,9 @@ const GenerateQR = () => {
                   }}
                   inputStyle={{
                     width: "100%",
-                    fontSize: "16px",
+                    fontSize: "small",
                     border: "1px solid #ccc",
-                    borderRadius: "4px",
+                    borderRadius: "8px",
                   }}
                   inputProps={{
                     error:
@@ -191,7 +196,7 @@ const GenerateQR = () => {
                     validationErrors[QRType.PhoneNumber]?.validationError ||
                     validationErrors[QRType.PhoneNumber]?.requiredError
                   }
-                  sx={{ marginBottom: "16px" }}
+                  sx={{ marginBottom: 1 }}
                 >
                   {validationErrors[QRType.PhoneNumber]?.requiredError
                     ? t("required")
@@ -213,16 +218,18 @@ const GenerateQR = () => {
               color="primary"
               onClick={handleGenerateQR}
               fullWidth
-              sx={{ marginTop: "16px" }}
+              sx={{ marginTop: 1 }}
             >
               {t("generateQRCode")}
             </QRButton>
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{ padding: "24px" }}>
-            <QRTypography variant="h6">{t("QRCodePreview")}</QRTypography>
-            <div style={{ textAlign: "center", marginBottom: "16px" }}>
+          <Paper elevation={3} style={{ padding: 24 }}>
+            <QRTypography variant="h6" textAlign="center" p={1}>
+              {t("QRCodePreview")}
+            </QRTypography>
+            <div style={{ textAlign: "center", marginBottom: 1 }}>
               <QRCode
                 value={generatedQRCode}
                 size={128}
@@ -230,8 +237,11 @@ const GenerateQR = () => {
                 bgColor={qrData?.theme?.containerColor}
                 eyeColor={qrData?.theme?.eyeColor}
                 logoImage={logo}
+                enableCORS={true}
                 logoWidth={logoSize?.logoWidth}
                 logoHeight={logoSize?.logoHeight}
+                eyeRadius={qrData?.theme?.eyeRadius}
+                qrStyle={qrData?.theme?.qrStyle}
               />
               {contrastError && (
                 <Alert severity="warning">{t("colorContrastWarning")}</Alert>
@@ -285,6 +295,47 @@ const GenerateQR = () => {
                   />
                 </FormControl>
               </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>QR style</InputLabel>
+                  <Select
+                    label="QR style"
+                    value={qrData?.theme?.qrStyle}
+                    onChange={(e) =>
+                      handleThemeChange("qrStyle", e.target.value as string)
+                    }
+                    sx={{
+                      "& .MuiSelect-select": {
+                        padding: "10px 10px",
+                      },
+                      borderRadius: "8px",
+                    }}
+                  >
+                    <MenuItem value="squares">
+                      <ViewCompactIcon fontSize="large" />
+                    </MenuItem>
+                    <MenuItem value="dots">
+                      <GrainIcon fontSize="large" />
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <QRTypography gutterBottom sx={{ marginTop: "16px" }}>
+                  Squares Radius: {qrData?.theme?.eyeRadius}
+                </QRTypography>
+                <Slider
+                  value={qrData?.theme?.eyeRadius}
+                  onChange={(e: any) =>
+                    handleThemeChange("eyeRadius", e?.target?.value as number)
+                  }
+                  min={1}
+                  max={50}
+                  valueLabelDisplay="auto"
+                  aria-labelledby="eye-radius-slider"
+                />
+              </Grid>
             </Grid>
             <input
               type="file"
@@ -316,7 +367,7 @@ const GenerateQR = () => {
 
             <div style={{ margin: "10px 0" }}>
               <QRTypography id="logoWidthSlider" gutterBottom>
-                Logo Width
+                Logo Width: {logoSize?.logoWidth}
               </QRTypography>
               <Slider
                 value={logoSize?.logoWidth}
@@ -324,14 +375,14 @@ const GenerateQR = () => {
                 onChange={handleLogoSizeChange}
                 min={30}
                 max={35}
-                valueLabelDisplay="on"
+                // valueLabelDisplay="on"
                 aria-labelledby="logoWidthSlider"
                 // sx={{ m: "25px 0 0 0" }}
               />
             </div>
             <div style={{ marginBottom: "16px" }}>
               <QRTypography id="logoHeightSlider" gutterBottom>
-                Logo Height
+                Logo Height: {logoSize?.logoHeight}
               </QRTypography>
               <Slider
                 value={logoSize?.logoHeight}
@@ -339,7 +390,7 @@ const GenerateQR = () => {
                 onChange={handleLogoSizeChange}
                 min={30}
                 max={35}
-                valueLabelDisplay="on"
+                // valueLabelDisplay="on"
                 aria-labelledby="logoHeightSlider"
                 // sx={{ m: "25px 0" }}
               />

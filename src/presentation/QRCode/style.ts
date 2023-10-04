@@ -4,11 +4,11 @@ import QRBox from "../../shared/QRBox";
 import QRButton from "../../shared/QRButton";
 
 export const StyledPaper = styled(Paper)`
-  border: 1px solid #ccc;
+  box-shadow: 0px 0px 4px 0px #00000040;
   border-radius: 12px;
   margin: auto;
   padding: 10px 6px;
-  margin-bottom: 20px;
+  margin: 10px 5px 10px 5px;
   display: flex;
   align-items: center;
   position: relative;
@@ -17,13 +17,13 @@ export const StyledPaper = styled(Paper)`
 `;
 
 export const GridContainer = styled(Grid)(() => ({
-  display: "flex",
-  alignItems: "center",
-  textAlign: "center",
-  justifyContent: "center",
-  flex: 1,
-  padding: 5,
-  flexDirection: "column",
+  // display: "flex",
+  // alignItems: "center",
+  // textAlign: "center",
+  // justifyContent: "space-between",
+  // flex: 1,
+  // padding: 5,
+  // flexDirection: "column",
 }));
 
 export const StyledGridItem = styled(Grid)`

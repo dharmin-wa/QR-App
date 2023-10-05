@@ -237,7 +237,6 @@ const GenerateQR = () => {
                 bgColor={qrData?.theme?.containerColor}
                 eyeColor={qrData?.theme?.eyeColor}
                 logoImage={logo}
-                enableCORS={true}
                 logoWidth={logoSize?.logoWidth}
                 logoHeight={logoSize?.logoHeight}
                 eyeRadius={qrData?.theme?.eyeRadius}

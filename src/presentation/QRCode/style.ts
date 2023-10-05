@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from "@emotion/styled";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Link } from "@mui/material";
 import QRBox from "../../shared/QRBox";
 import QRButton from "../../shared/QRButton";
+import QRTypography from "../../shared/QRTypography";
 
 export const StyledPaper = styled(Paper)`
   box-shadow: 0px 0px 4px 0px #00000040;
   border-radius: 12px;
   margin: auto;
-  padding: 10px 6px;
+  padding: 20px 0px;
   margin: 10px 5px 10px 5px;
   display: flex;
   align-items: center;
@@ -15,16 +17,6 @@ export const StyledPaper = styled(Paper)`
   justify-content: center;
   flexgrow: 1;
 `;
-
-export const GridContainer = styled(Grid)(() => ({
-  // display: "flex",
-  // alignItems: "center",
-  // textAlign: "center",
-  // justifyContent: "space-between",
-  // flex: 1,
-  // padding: 5,
-  // flexDirection: "column",
-}));
 
 export const StyledGridItem = styled(Grid)`
   display: flex;
@@ -35,7 +27,7 @@ export const StyledGridItem = styled(Grid)`
 `;
 
 export const ItemContainer = styled(QRBox)(({ theme }: any) => ({
-  padding: theme.spacing(1),
+  // padding: theme.spacing(1),
   textAlign: "center",
   overflow: "hidden",
   // whiteSpace: "nowrap",
@@ -60,23 +52,104 @@ export const StyledDownloadButton = styled(QRButton)(() => ({
   "&.MuiButton-root": {
     width: "fit-content !important",
     marginBottom: "8px",
-    padding: "7px 55px",
+    // padding: "7px 55px",
     color: "#37498A",
     border: "1px solid #37498A",
   },
 }));
 
-export const StyledTextSection = styled.div`
-  & > div > svg {
-    margin-right: 8px;
-  }
-`;
+export const StyledTypography = styled(QRTypography)(({ theme }: any) => ({
+  fontSize: "20px",
+  fontWeight: 500,
+  lineHeight: "35px",
+  letterSpacing: "0.01em",
+  color: "#9FA1A5",
+  [theme.breakpoints.down("1400")]: {
+    fontSize: "16px",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "18px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "16px",
+  },
+}));
 
-export const StyledLocationText = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-`;
+export const StyledText = styled(QRTypography)(({ theme }: any) => ({
+  fontSize: "20px",
+  fontWeight: 600,
+  lineHeight: "35px",
+  letterSpacing: "0.01em",
+  color: "#1B294B",
+  textDecoration: "none",
+  [theme.breakpoints.down("1400")]: {
+    fontSize: "16px",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "18px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "16px",
+  },
+}));
+
+export const StyledLink = styled(Link)(({ theme }: any) => ({
+  fontSize: "16px",
+  fontWeight: 600,
+  lineHeight: "19px",
+  letterSpacing: "0.01em",
+  color: "#0075FF",
+  textDecoration: "none",
+  [theme.breakpoints.down("1400")]: {
+    fontSize: "14px",
+  },
+}));
+
+export const StyledMiddleText = styled(QRTypography)(({ theme }: any) => ({
+  fontSize: "18px",
+  fontWeight: 600,
+  letterSpacing: "0.01em",
+  color: "#1B294B",
+  [theme.breakpoints.down("1400")]: {
+    fontSize: "16px",
+  },
+}));
+
+export const StyledLocation = styled(QRTypography)(({ theme }: any) => ({
+  fontSize: "13px",
+  fontWeight: 600,
+  lineHeight: "19px",
+  letterSpacing: "0.01em",
+  textAlign: "left",
+  color: "#1B294B",
+}));
+
+export const StyledIp = styled(QRTypography)(() => ({
+  fontSize: "13px",
+  fontWeight: 400,
+  lineHeight: "18px",
+  letterSpacing: "0.01em",
+  textAlign: "left",
+  color: "#1B294B",
+}));
+
+export const StyledLocationFont = styled(QRTypography)(() => ({
+  fontSize: "13px",
+  fontWeight: 400,
+  lineHeight: "35px",
+  letterSpacing: "0.01em",
+  textAlign: "left",
+  color: "#1B294B",
+}));
+
+export const StyledViewMore = styled(Link)(() => ({
+  fontSize: "13px",
+  fontWeight: 400,
+  lineHeight: "18px",
+  letterSpacing: "0.01em",
+  textAlign: "left",
+  fontStyle: "italic",
+}));
 
 export const StyledEditQRText = styled.span`
   margin-left: 8px;

@@ -52,7 +52,7 @@ const Dashboard = () => {
         <div style={{ display: "flex", alignItems: "center" }}>
           <Timer fill="#366CBD" />
           <QRTypography
-            fontWeight={500}
+            fontWeight={600}
             color="#1B294B"
             fontSize={20}
             p="0 5px"

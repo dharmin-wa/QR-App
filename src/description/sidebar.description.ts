@@ -20,7 +20,7 @@ export const sidebarAtt = {
     },
     {
       label: "All QR",
-      redirectPath: "/all-qr",
+      redirectPath: "/qr-codes",
       icon: AllQR,
     },
     /*  {

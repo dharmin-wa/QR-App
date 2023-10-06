@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { loadStateFn } from "../utils/localStorage";
 import ProtectedRoute from "../presentation/auth/ProtectedRoute";
 import Test from "../Test";
+import QRCodeDetails from "../presentation/QRCodeDetails";
 
 const RedirectComponent = () => {
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
@@ -125,7 +126,7 @@ const privateRoutes: RouteObject[] = [
         element: <AppLayout />,
         children: [
           {
-            path: "/all-qr",
+            path: "/qr-codes",
             children: [{ index: true, element: <AllQR /> }],
           },
         ],
@@ -145,6 +146,15 @@ const privateRoutes: RouteObject[] = [
           {
             path: "/disable-qr",
             children: [{ index: true, element: <DisableQR /> }],
+          },
+        ],
+      },
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/qr-codes/:qrCodeId",
+            children: [{ index: true, element: <QRCodeDetails /> }],
           },
         ],
       },

@@ -3,11 +3,20 @@ import AllQRContainer from "../../container/allQR.container";
 import { formPath } from "../../description/allQR.description";
 import QRFrame from "../QRCode/QRFrame";
 import QRFrameSkeleton from "../QRCode/QRFrameSkeleton";
-import { Switch } from "@mui/material";
+import { Switch, TablePagination } from "@mui/material";
 import QRBox from "../../shared/QRBox";
 
 const AllQR = () => {
-  const { qrCodesList, loadingStatus, checked, handleChange } = AllQRContainer({
+  const {
+    qrCodesList,
+    loadingStatus,
+    checked,
+    handleChange,
+    page,
+    handleChangePage,
+    rowsPerPage,
+    handleChangeRowsPerPage,
+  } = AllQRContainer({
     formPath,
   });
 
@@ -21,7 +30,17 @@ const AllQR = () => {
         />
       </QRBox>
       {!loadingStatus ? (
-        <QRFrame qrCodes={qrCodesList} />
+        <>
+          <QRFrame qrCodes={qrCodesList} formPath={formPath} />
+          <TablePagination
+            component="div"
+            count={100}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
       ) : (
         <QRFrameSkeleton numSkeletons={5} />
       )}

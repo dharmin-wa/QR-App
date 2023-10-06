@@ -18,6 +18,8 @@ export const apiEndPoints = {
   resetPassword: "api/auth/reset-password",
   createQRs: "api/qrCode/addQrCode",
   getAllQRs: "api/qrCode/listOfQrCode",
+  deleteQR: "api/qrCode/deleteQrCode",
+  viewQR: "api/qrCode/readQrCode",
 };
 
 export const method = {

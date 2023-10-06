@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
-import { Grid, Paper, Modal } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 import { formPath, topModule } from "../../description/dashboard.description";
 import QRBox from "../../shared/QRBox";
 import QRTypography from "../../shared/QRTypography";
@@ -8,34 +6,15 @@ import { useTranslation } from "react-i18next";
 import { ReactComponent as Timer } from "../../assets/svg/timer.svg";
 import QRButton from "../../shared/QRButton";
 import { ReactComponent as CreateQR } from "../../assets/svg/createQR.svg";
-import CreateQRCode from "../QRCode/CreateQRCode";
 import DashboardContainer from "../../container/dashboard.container";
-import QRLoader from "../../shared/QRLoader";
 import QRFrame from "../QRCode/QRFrame";
 import QRFrameSkeleton from "../QRCode/QRFrameSkeleton";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
-  maxWidth: "100%",
-  maxHeight: "100vh",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  overflowY: "auto",
-  p: 4,
-};
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
   const { loadingStatus, qrCodesList } = DashboardContainer({ formPath });
-
-  /*  if (loadingStatus) {
-     return <QRLoader variant="transParent" />;
-   } */
+  const navigate = useNavigate();
 
   return (
     <>
@@ -70,27 +49,17 @@ const Dashboard = () => {
               fontSize: "1rem",
             },
           }}
-          onClick={() => setOpen(true)}
+          onClick={() => navigate("/generate-qr")}
         >
           {t("createQRCode")}
         </QRButton>
       </QRBox>
 
       {!loadingStatus ? (
-        <QRFrame qrCodes={qrCodesList} />
+        <QRFrame qrCodes={qrCodesList} formPath={formPath} />
       ) : (
         <QRFrameSkeleton numSkeletons={3} />
       )}
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="create-qr-code"
-        aria-describedby="create-qr-code"
-      >
-        <QRBox sx={style}>
-          <CreateQRCode formPath={formPath} />
-        </QRBox>
-      </Modal>
     </>
   );
 };

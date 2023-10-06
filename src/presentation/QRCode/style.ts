@@ -78,11 +78,11 @@ export const StyledTypography = styled(QRTypography)(({ theme }: any) => ({
 export const StyledText = styled(QRTypography)(({ theme }: any) => ({
   fontSize: "20px",
   fontWeight: 600,
-  lineHeight: "35px",
+  // lineHeight: "35px",
   letterSpacing: "0.01em",
   color: "#1B294B",
   textDecoration: "none",
-  [theme.breakpoints.down("1400")]: {
+  [theme.breakpoints.down("1401")]: {
     fontSize: "16px",
   },
   [theme.breakpoints.down("md")]: {

@@ -15,17 +15,21 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     (state: any) => state.api?.loader?.[parent],
   );
   const [checked, setChecked] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     getAllQRCodes();
-  }, []);
+  }, [page, rowsPerPage]);
 
   const { performRequest } = ApiContainer();
   const dispatch = useDispatch();
 
   const getAllQRCodes = async () => {
     const res: any = await performRequest({
-      endPoint: apiEndPoints?.getAllQRs,
+      endPoint: `${apiEndPoints?.getAllQRs}?page=${
+        page + 1
+      }&size=${rowsPerPage}`,
       method: method?.get,
       needLoader: true,
       parent: formPath?.parent,
@@ -33,6 +37,20 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     if (res.status === 200) {
       dispatch({ type: SET_API_DATA, payload: { [parent]: res?.data } });
     }
+  };
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +62,10 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     loadingStatus,
     checked,
     handleChange,
+    page,
+    handleChangePage,
+    rowsPerPage,
+    handleChangeRowsPerPage,
   };
 };
 

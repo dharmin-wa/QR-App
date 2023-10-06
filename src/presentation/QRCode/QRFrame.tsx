@@ -7,6 +7,13 @@ import {
   IconButton,
   Divider,
   Link as MuiLink,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import QRButton from "../../shared/QRButton";
@@ -43,8 +50,14 @@ import { QRCode } from "react-qrcode-logo";
 import moment from "moment";
 import QRStack from "../../shared/QRStack";
 import Logo from "../../assets/png/webAshlar.png";
+import QrFrameContainer from "../../container/qrFrame.container";
 
-const QRFrame = ({ qrCodes }: any) => {
+interface QRFrameProps {
+  qrCodes: any;
+  formPath: any;
+}
+
+const QRFrame = ({ qrCodes, formPath }: QRFrameProps) => {
   const qrCodess = [
     {
       id: 1,
@@ -87,9 +100,24 @@ const QRFrame = ({ qrCodes }: any) => {
     },
     // Add more QR codes as needed
   ];
+  const {
+    qrCodeSize,
+    downloadQRCode,
+    open,
+    handleClick,
+    handleClose,
+    anchorEls,
+    handleDeleteQRCode,
+    handleOpenDeleteQRDialog,
+    openDialog,
+    handleCloseDeleteQRDialog,
+    loadingStatus,
+    handleViewQRCode,
+  } = QrFrameContainer({ formPath });
+
   return (
     <>
-      {qrCodess?.map((qr: any, index: number) => (
+      {qrCodes?.map((qr: any, index: number) => (
         <StyledPaper elevation={0} sx={{ flexGrow: 1 }} key={index}>
           <Grid container spacing={{ xs: 2, md: 2, xl: 0 }}>
             <Grid
@@ -119,13 +147,6 @@ const QRFrame = ({ qrCodes }: any) => {
                 spacing={{ xl: 5, md: 1, xs: 0 }}
                 sx={{
                   flexDirection: { xs: "column", md: "row" },
-                  justifyContent: {
-                    xl: "start",
-                    lg: "center",
-                    md: "center",
-                    sm: "center",
-                    xs: "center",
-                  },
                 }}
               >
                 <QRStack
@@ -136,102 +157,96 @@ const QRFrame = ({ qrCodes }: any) => {
                   <Checkbox checked={qr.checked} />
                   <QRCode
                     value={qr?.data?.[qr?.qr_type]}
-                    size={130}
+                    size={qrCodeSize}
                     eyeColor="#AD7A1E"
                     eyeRadius={4}
                     logoImage={Logo}
+                    enableCORS={true}
                     logoWidth={45}
                     logoHeight={45}
+                    id="QR"
                   />
                 </QRStack>
-                <QRBox
-                  sx={{
-                    textAlign: { xs: "center", md: "start", lg: "start" },
-                  }}
-                >
-                  <Grid container alignItems="center">
-                    <Grid xs={12}>
-                      <StyledTypography
-                      /*    sx={{
-                           fontSize: "20px",
-                           fontWeight: 500,
-                           lineHeight: "35px",
-                           letterSpacing: "0.01em",
-                           color: "#9FA1A5",
-                         }} */
-                      >
-                        Link
-                      </StyledTypography>
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={2}
-                      display="flex"
-                      justifyContent="space-around"
-                      alignItems="center"
+                <Grid container>
+                  <Grid item xs={12}>
+                    <StyledTypography
+                    /*    sx={{
+                         fontSize: "20px",
+                         fontWeight: 500,
+                         lineHeight: "35px",
+                         letterSpacing: "0.01em",
+                         color: "#9FA1A5",
+                       }} */
                     >
-                      <FileIcon />
-                    </Grid>
-                    <Grid xs={10}>
-                      {" "}
-                      <StyledText
-                      // href={qr.link}
-                      /*  sx={{
+                      Link
+                    </StyledTypography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={1}
+                    display="flex"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                  >
+                    <FileIcon />
+                  </Grid>
+                  <Grid item xs={11} display="flex">
+                    <StyledText
+                    // href={qr.link}
+                    /*  sx={{
+                     fontSize: "20px",
+                     fontWeight: 600,
+                     lineHeight: "35px",
+                     letterSpacing: "0.01em",
+                     color: "#1B294B",
+                     textDecoration: "none",
+                   }} */
+                    >
+                      {qr.companyName}
+                    </StyledText>
+                  </Grid>
+                  <Grid item xs={1} display="flex" justifyContent="flex-start">
+                    <QRDateIcon />
+                  </Grid>
+                  <Grid item xs={11} display="flex">
+                    <StyledText
+                    /*  variant="body2"
+                     sx={{
                        fontSize: "20px",
                        fontWeight: 600,
                        lineHeight: "35px",
                        letterSpacing: "0.01em",
                        color: "#1B294B",
-                       textDecoration: "none",
                      }} */
-                      >
-                        {qr.companyName}
-                      </StyledText>
-                    </Grid>
-                    <Grid xs={2} display="flex" justifyContent="space-around">
-                      <QRDateIcon />
-                    </Grid>
-                    <Grid xs={10}>
-                      <StyledText
-                      /*  variant="body2"
-                       sx={{
-                         fontSize: "20px",
-                         fontWeight: 600,
-                         lineHeight: "35px",
-                         letterSpacing: "0.01em",
-                         color: "#1B294B",
-                       }} */
-                      >
-                        {moment(qr?.created_at).format("MMM D, YYYY")}
-                      </StyledText>
-                    </Grid>
-                    <Grid xs={2} display="flex" justifyContent="space-around">
-                      <LinkIcon />
-                    </Grid>
-                    <Grid xs={10}>
-                      <QRStack direction="column">
-                        <span style={{ whiteSpace: "nowrap" }}>
-                          <StyledLink
-                            href={qr.url} /* sx={{
+                    >
+                      {moment(qr?.created_at).format("MMM D, YYYY")}
+                    </StyledText>
+                  </Grid>
+                  <Grid item xs={1} display="flex" justifyContent="flex-start">
+                    <LinkIcon />
+                  </Grid>
+                  <Grid item xs={11} display="flex">
+                    <QRStack direction="column">
+                      <span style={{ whiteSpace: "nowrap" }}>
+                        <StyledLink
+                          href={qr.url} /* sx={{
                           fontSize: '16px',
                           fontWeight: 600,
                           lineHeight: '19px',
                           letterSpacing: '0.01em',
                           color: "#0075FF"
                         }} */
-                          >
-                            <span>{qr.url}</span>
-                          </StyledLink>{" "}
-                          <EditIcon />
-                        </span>
-                        <QRTypography variant="caption" color="textSecondary">
-                          {qr?.qrLink}
-                        </QRTypography>
-                      </QRStack>
-                    </Grid>
+                        >
+                          <span>{qr.url}</span>
+                        </StyledLink>{" "}
+                        <EditIcon />
+                      </span>
+                      <QRTypography variant="caption" color="textSecondary">
+                        {qr?.qrLink}
+                      </QRTypography>
+                    </QRStack>
                   </Grid>
-                </QRBox>
+                </Grid>
               </QRStack>
             </Grid>
             {/* Second box */}
@@ -271,10 +286,15 @@ const QRFrame = ({ qrCodes }: any) => {
                       </span>
                     </StyledMiddleText>
                   </Grid>
-                  <Grid xs={2} display="flex" justifyContent="space-around">
+                  <Grid
+                    item
+                    xs={2}
+                    display="flex"
+                    justifyContent="space-around"
+                  >
                     <LocationIcon />
                   </Grid>
-                  <Grid xs={10}>
+                  <Grid item xs={10}>
                     <StyledMiddleText
                       sx={{
                         lineHeight: "22px",
@@ -308,41 +328,6 @@ const QRFrame = ({ qrCodes }: any) => {
                   </Grid>
                 </Grid>
               </QRStack>
-              {/*   <QRStack direction="row" gap={1} alignItems="start">
-                <LocationIcon />
-                <QRStack direction="column">
-                  <StyledMiddleText
-                    sx={{
-                      lineHeight: "22px",
-                      textAlign: "left",
-                    }}
-                  >
-                    Locations:
-                  </StyledMiddleText>
-                  <StyledLocation
-                  /* sx={{
-                    fontSize: "13px",
-                    fontWeight: 600,
-                    lineHeight: "19px",
-                    letterSpacing: "0.01em",
-                    textAlign: "left",
-                  }} * /
-                  >
-                    Ahmedabad
-                  </StyledLocation>
-                  <StyledIp
-                  /*  sx={{
-                     fontSize: "13px",
-                     fontWeight: 400,
-                     lineHeight: "18px",
-                     letterSpacing: "0.01em",
-                     textAlign: "left",
-                   }} * /
-                  >
-                    192.451.3.323.1
-                  </StyledIp>
-                </QRStack>
-              </QRStack> */}
               <QRStack
                 gap={1}
                 direction="row"
@@ -389,9 +374,10 @@ const QRFrame = ({ qrCodes }: any) => {
                 <StyledDownloadButton
                   variant="outlined"
                   sx={{
-                    padding: "7px 55px",
+                    padding: "7px 50px",
                   }}
                   startIcon={<DownloadQRIcon />}
+                  onClick={() => downloadQRCode()}
                 >
                   Download QR
                 </StyledDownloadButton>
@@ -417,11 +403,53 @@ const QRFrame = ({ qrCodes }: any) => {
           </Grid>
           <IconButton
             style={{ position: "absolute", top: "5px", right: "1px" }}
+            onClick={(e) => handleClick(e, index)}
           >
             <MoreVertIcon />
           </IconButton>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEls[index]}
+            open={Boolean(anchorEls[index])}
+            onClose={() => handleClose(index)}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+            sx={{
+              "& .MuiPaper-root": {
+                boxShadow: "1px 1px 1px 1px #ccc",
+              },
+            }}
+          >
+            <MenuItem onClick={() => handleViewQRCode(qr?._id)}>View </MenuItem>
+            <MenuItem>Edit</MenuItem>
+            <MenuItem onClick={() => handleOpenDeleteQRDialog(qr?._id)}>
+              Delete
+            </MenuItem>
+          </Menu>
         </StyledPaper>
       ))}
+      <Dialog open={openDialog} onClose={handleCloseDeleteQRDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this QR Code?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <QRButton onClick={handleCloseDeleteQRDialog} variant="outlined">
+            No
+          </QRButton>
+          <QRButton
+            onClick={handleDeleteQRCode}
+            variant="contained"
+            color="error"
+            isLoading={loadingStatus}
+          >
+            Yes
+          </QRButton>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

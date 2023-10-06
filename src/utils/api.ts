@@ -25,6 +25,7 @@ interface performRequestProps {
   parent?: string | "";
   headerKey?: string;
   token?: string;
+  responseSelector?: boolean;
 }
 
 export const ApiContainer = () => {
@@ -49,6 +50,7 @@ export const ApiContainer = () => {
     parent = "",
     headerKey = "Authorization",
     token = "",
+    responseSelector = false,
   }: performRequestProps) =>
     new Promise((resolve) => {
       const accessToken = loadStateFn("token");
@@ -82,7 +84,9 @@ export const ApiContainer = () => {
             dispatch({ type: LOADING_CHANGE, payload: { [parent]: false } });
           }
           return resolve({
-            data: response?.data?.data || response?.data,
+            data: responseSelector
+              ? response?.data
+              : response?.data?.data || response?.data,
             status: response?.status,
             headers: response?.headers,
           });

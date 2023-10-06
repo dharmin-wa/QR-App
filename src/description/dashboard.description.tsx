@@ -28,4 +28,4 @@ export const topModule: JSX.Element[] = [
 
 export const MIN_CONTRAST_RATIO = 4.5;
 
-export const formPath = { parent: "dashboard", child: "create-qr-codes" };
+export const formPath = { parent: "dashboard", child: "qrs-list" };

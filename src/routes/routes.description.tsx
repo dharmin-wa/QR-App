@@ -13,13 +13,12 @@ import AppLayout from "../presentation/layout/AppLayout";
 import PasswordRecoverySuccess from "../presentation/PasswordRecoverySuccess";
 import GenerateQR from "../presentation/generateQR";
 import AllQR from "../presentation/allQR";
-import ActiveQR from "../presentation/activeQR";
-import DisableQR from "../presentation/disableQR";
 import { useSelector } from "react-redux";
 import { loadStateFn } from "../utils/localStorage";
 import ProtectedRoute from "../presentation/auth/ProtectedRoute";
 import Test from "../Test";
 import QRCodeDetails from "../presentation/QRCodeDetails";
+import EditQRCode from "../presentation/QRCode/EditQRCode";
 
 const RedirectComponent = () => {
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
@@ -131,30 +130,39 @@ const privateRoutes: RouteObject[] = [
           },
         ],
       },
-      {
-        element: <AppLayout />,
-        children: [
-          {
-            path: "/active-qr",
-            children: [{ index: true, element: <ActiveQR /> }],
-          },
-        ],
-      },
-      {
-        element: <AppLayout />,
-        children: [
-          {
-            path: "/disable-qr",
-            children: [{ index: true, element: <DisableQR /> }],
-          },
-        ],
-      },
+      /*   {
+          element: <AppLayout />,
+          children: [
+            {
+              path: "/active-qr",
+              children: [{ index: true, element: <ActiveQR /> }],
+            },
+          ],
+        },
+        {
+          element: <AppLayout />,
+          children: [
+            {
+              path: "/disable-qr",
+              children: [{ index: true, element: <DisableQR /> }],
+            },
+          ],
+        }, */
       {
         element: <AppLayout />,
         children: [
           {
             path: "/qr-codes/:qrCodeId",
             children: [{ index: true, element: <QRCodeDetails /> }],
+          },
+        ],
+      },
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/edit-qr-code/:qrCodeId",
+            children: [{ index: true, element: <EditQRCode /> }],
           },
         ],
       },

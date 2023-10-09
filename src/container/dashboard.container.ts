@@ -29,13 +29,16 @@ const DashboardContainer = ({ formPath }: DashboardContainerProps) => {
       parent: formPath?.parent,
     });
     if (res.status === 200) {
-      dispatch({ type: SET_API_DATA, payload: { [parent]: res?.data } });
+      dispatch({
+        type: SET_API_DATA,
+        payload: { [parent]: { data: res?.data } },
+      });
     }
   };
 
   return {
     loadingStatus,
-    qrCodesList,
+    qrCodesList: qrCodesList?.data,
   };
 };
 

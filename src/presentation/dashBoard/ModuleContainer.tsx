@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Grid, Paper } from "@mui/material";
+import { useTheme, useMediaQuery } from "@mui/material";
 import React from "react";
 import QRTypography from "../../shared/QRTypography";
 import { useTranslation } from "react-i18next";
@@ -12,6 +11,8 @@ export interface ModuleContainerProps {
 
 const ModuleContainer = ({ Indicator, title, value }: ModuleContainerProps) => {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isSmScreen = useMediaQuery(theme.breakpoints.down("sm")); // Adjust breakpoint as needed
 
   const columnStyle: any = {
     display: "flex",
@@ -28,10 +29,14 @@ const ModuleContainer = ({ Indicator, title, value }: ModuleContainerProps) => {
     textAlign: "end",
   };
 
+  const indicatorSize: any = isSmScreen ? "small" : "large"; // Define your indicator size based on the breakpoint
+
   return (
     <>
       <div style={columnStyle}>
-        <Indicator />
+        <div style={{ width: indicatorSize, height: indicatorSize }}>
+          <Indicator />
+        </div>
         <div style={titleValueStyle}>
           <QRTypography color="#7286B8" fontSize="small">
             {t(title)}

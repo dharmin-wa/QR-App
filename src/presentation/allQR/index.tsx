@@ -9,6 +9,7 @@ import QRBox from "../../shared/QRBox";
 const AllQR = () => {
   const {
     qrCodesList,
+    totalQrCodes,
     loadingStatus,
     checked,
     handleChange,
@@ -22,24 +23,32 @@ const AllQR = () => {
 
   return (
     <>
-      <QRBox sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Switch
-          checked={checked}
-          onChange={handleChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
-      </QRBox>
+      {qrCodesList?.length ? (
+        <QRBox sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Switch
+            checked={checked}
+            onChange={handleChange}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </QRBox>
+      ) : null}
       {!loadingStatus ? (
         <>
-          <QRFrame qrCodes={qrCodesList} formPath={formPath} />
-          <TablePagination
-            component="div"
-            count={100}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+          <QRFrame
+            qrCodes={qrCodesList}
+            formPath={formPath}
+            responseSelector={true}
           />
+          {qrCodesList?.length ? (
+            <TablePagination
+              component="div"
+              count={totalQrCodes}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          ) : null}
         </>
       ) : (
         <QRFrameSkeleton numSkeletons={5} />

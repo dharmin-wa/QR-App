@@ -395,7 +395,7 @@ export default function AppLayout(props: { window?: any }) {
                       bgcolor: theme.palette.primary.main,
                     }}
                   >
-                    {userName.charAt(0)}
+                    {userName.trim().charAt(0)}
                   </Avatar>
                 }
                 endIcon={<KeyboardArrowDownIcon />}

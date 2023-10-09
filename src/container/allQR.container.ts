@@ -27,15 +27,18 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
 
   const getAllQRCodes = async () => {
     const res: any = await performRequest({
-      endPoint: `${apiEndPoints?.getAllQRs}?page=${
-        page + 1
-      }&size=${rowsPerPage}`,
+      endPoint: `${apiEndPoints?.getAllQRs}?page=${page + 1
+        }&size=${rowsPerPage}`,
       method: method?.get,
       needLoader: true,
       parent: formPath?.parent,
+      responseSelector: true,
     });
     if (res.status === 200) {
-      dispatch({ type: SET_API_DATA, payload: { [parent]: res?.data } });
+      dispatch({
+        type: SET_API_DATA,
+        payload: { [parent]: { data: res?.data } },
+      });
     }
   };
 
@@ -58,7 +61,8 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
   };
 
   return {
-    qrCodesList,
+    qrCodesList: qrCodesList?.data?.data,
+    totalQrCodes: qrCodesList?.data?.total,
     loadingStatus,
     checked,
     handleChange,

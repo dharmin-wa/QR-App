@@ -20,6 +20,7 @@ export const apiEndPoints = {
   getAllQRs: "api/qrCode/listOfQrCode",
   deleteQR: "api/qrCode/deleteQrCode",
   viewQR: "api/qrCode/readQrCode",
+  editQR: "api/qrCode/editQrCode",
 };
 
 export const method = {

@@ -60,5 +60,6 @@
   "addLink": "XX",
   "generateQRCode": "XX",
   "QRCodePreview": "XX",
-  "colorContrastWarning": "XX"
+  "colorContrastWarning": "XX",
+  "editQRCode": "XX"
 }

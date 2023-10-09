@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 interface QrFrameContainerProps {
   formPath: any;
+  responseSelector?: boolean;
 }
 
-const QrFrameContainer = ({ formPath }: QrFrameContainerProps) => {
+const QrFrameContainer = ({
+  formPath,
+  responseSelector = false,
+}: QrFrameContainerProps) => {
   const [qrCodeSize, setQRCodeSize] = useState<number>(130);
   const [anchorEls, setAnchorEls] = useState<any[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -58,7 +62,7 @@ const QrFrameContainer = ({ formPath }: QrFrameContainerProps) => {
         newSize = 80;
       } */ /* else if (screenWidth < 1315) {
         newSize = 130;
-      } */ else if (screenWidth < 1315) {
+      } */ else if (screenWidth < 1330) {
       newSize = 100;
     } else {
       newSize = 130;
@@ -104,19 +108,25 @@ const QrFrameContainer = ({ formPath }: QrFrameContainerProps) => {
         method: method?.get,
         needLoader: true,
         parent: formPath?.parent,
+        responseSelector,
       });
       if (res.status === 200) {
         dispatch({
           type: SET_API_DATA,
-          payload: { [formPath?.parent]: res?.data },
+          payload: { [formPath?.parent]: { data: res?.data } },
         });
       }
     }
   };
 
+  const handleEditQRCode = (id: string) => {
+    navigate(`/edit-qr-code/${id}`);
+  };
+
   const handleCloseDeleteQRDialog = () => {
     setOpenDialog(false);
     setDeleteQRId("");
+    setAnchorEls([]);
   };
 
   const handleViewQRCode = (id: string) => {
@@ -136,6 +146,7 @@ const QrFrameContainer = ({ formPath }: QrFrameContainerProps) => {
     handleCloseDeleteQRDialog,
     loadingStatus,
     handleViewQRCode,
+    handleEditQRCode,
   };
 };
 

@@ -1,68 +1,143 @@
 import React from "react";
+import { Container } from "@mui/material";
+import { QRCode } from "react-qrcode-logo";
+import moment from "moment";
+
 import QRCodeDetailsContainer from "../../container/qrCodeDetails.container";
 import { formPath } from "../../description/qrCodeDetails.description";
-// import QRBox from "../../shared/QRBox";
-import { Typography, Container, Box, CircularProgress } from "@mui/material";
-import { QRCode } from "react-qrcode-logo";
+import QRLoader from "../../shared/QRLoader";
+import { useNavigate } from "react-router-dom";
+import QRTypography from "../../shared/QRTypography";
+import QRBox from "../../shared/QRBox";
+import QRButton from "../../shared/QRButton";
 
-const QRCodeDetails = () => {
+interface QRCodeDetailsData {
+  qr_type: string;
+  data: {
+    link?: string;
+    free_text?: string;
+    action?: Array<{
+      url: string;
+      action_name: string;
+    }>;
+  };
+  created_at?: string;
+  updated_at?: string;
+  _id?: string;
+}
+
+const QRCodeDetails: React.FC = () => {
   const { qrCode, loadingStatus } = QRCodeDetailsContainer({ formPath });
+  const navigate = useNavigate();
 
-  const renderQRCode = (data: any) => {
+  const renderQRCode = (data: QRCodeDetailsData | null) => {
     if (!data) return null;
+
+    const renderQrType = () => {
+      switch (data.qr_type) {
+        case "Link":
+          return (
+            <div>
+              <QRCode value={data.data.link} />
+              <QRTypography variant="body1">
+                <strong>Link:</strong> {data.data.link}
+              </QRTypography>
+            </div>
+          );
+
+        case "Email":
+          return (
+            <div>
+              <QRCode value={`mailto:${data.data.free_text}`} />
+              <QRTypography variant="body1">
+                <strong>Email:</strong> {data.data.free_text}
+              </QRTypography>
+            </div>
+          );
+
+        case "PhoneNumber":
+          return (
+            <div>
+              <QRCode value={data.data.free_text} />
+              <QRTypography variant="body1">
+                <strong>Phone number:</strong> {data.data.free_text}
+              </QRTypography>
+            </div>
+          );
+
+        case "MultiAction":
+          return (
+            <div>
+              {data?.data?.action?.map((action, index) => (
+                <div key={index}>
+                  <QRCode value={action.url} />
+                  <QRTypography variant="body1">
+                    <strong>Action Name:</strong> {action.action_name}
+                  </QRTypography>
+                </div>
+              ))}
+            </div>
+          );
+
+        default:
+          return null;
+      }
+    };
 
     return (
       <div>
-        {data.qr_type === "link" && (
-          <div>
-            <QRCode value={data.data.link} />
-            <Typography variant="body1">QR Type: {data.qr_type}</Typography>
-            <Typography variant="body1">Link: {data.data.link}</Typography>
-          </div>
-        )}
-
-        {(data.qr_type === "email" || data.qr_type === "normal") && (
-          <div>
-            <QRCode value={`mailto:${data.data.free_text}`} />
-            <Typography variant="body1">QR Type: {data.qr_type}</Typography>
-            <Typography variant="body1">
-              Email: {data.data.free_text}
-            </Typography>
-          </div>
-        )}
-
-        {data.qr_type === "multiaction" && (
-          <div>
-            {data.data.action.map((action: any, index: number) => (
-              <div key={index}>
-                <QRCode value={action.url} />
-                <Typography variant="body1">QR Type: {data.qr_type}</Typography>
-                <Typography variant="body1">
-                  Action Name: {action.action_name}
-                </Typography>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <Typography variant="body1">Created At: {data.created_at}</Typography>
-        <Typography variant="body1">Updated At: {data.updated_at}</Typography>
+        {renderQrType()}
+        <QRTypography variant="body1" style={{ fontSize: "18px" }}>
+          <strong>QR Type:</strong> {data.qr_type}
+        </QRTypography>
+        <QRTypography variant="body1">
+          <strong>Created At:</strong>{" "}
+          {moment(data?.created_at).format("MMM D, YYYY")}
+        </QRTypography>
+        <QRTypography variant="body1">
+          <strong>Updated At:</strong>{" "}
+          {moment(data?.updated_at).format("MMM D, YYYY")}
+        </QRTypography>
+        <QRBox mt={3} display="flex" justifyContent="center" gap={2}>
+          <QRButton
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => {
+              navigate(`/edit-qr-code/${data?._id}`);
+            }}
+          >
+            Edit
+          </QRButton>
+          <QRButton
+            variant="contained"
+            color="error"
+            size="large"
+            onClick={handleDeleteClick}
+          >
+            Delete
+          </QRButton>
+        </QRBox>
       </div>
     );
   };
 
+  const handleDeleteClick = () => {
+    // Handle delete QRbuttonQRButton click here
+  };
+
   return (
-    <Container>
-      <Box
+    <Container maxWidth="md">
+      <QRBox
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        minHeight="80vh" // Adjust the height as needed
+        minHeight="80vh"
         p={2}
       >
-        {loadingStatus ? <CircularProgress /> : renderQRCode(qrCode)}
-      </Box>
+        {loadingStatus ? <QRLoader variant="fullPage" /> : renderQRCode(qrCode)}
+      </QRBox>
     </Container>
   );
 };

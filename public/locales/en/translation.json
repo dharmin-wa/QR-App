@@ -60,5 +60,6 @@
   "addLink": "Add Link",
   "generateQRCode": "Generate QR Code",
   "QRCodePreview": "QR Code Preview",
-  "colorContrastWarning": "Improve QR code scanability by increasing color contrast."
+  "colorContrastWarning": "Improve QR code scanability by increasing color contrast.",
+  "editQRCode": "Edit QR Code"
 }

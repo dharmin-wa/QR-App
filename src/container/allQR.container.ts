@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { values } from "./../utils/javascript";
 import { useEffect, useState } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
@@ -14,32 +16,49 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[parent],
   );
-  const [checked, setChecked] = useState(true);
+  const filterData = useSelector((state: any) => state.api?.[parent]?.filter);
+  const [checked, setChecked] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     getAllQRCodes();
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, filterData]);
 
   const { performRequest } = ApiContainer();
-  const dispatch = useDispatch();
+  const dispatch: any = useDispatch();
+  console.log("filteData", filterData);
 
   const getAllQRCodes = async () => {
     const res: any = await performRequest({
-      endPoint: `${apiEndPoints?.getAllQRs}?page=${page + 1
-        }&size=${rowsPerPage}`,
+      endPoint: `${apiEndPoints?.getAllQRs}?page=${
+        page + 1
+      }&size=${rowsPerPage}${
+        values(filterData)?.length && `&status=${checked ? "A" : "D"}`
+      }`,
       method: method?.get,
       needLoader: true,
       parent: formPath?.parent,
       responseSelector: true,
     });
     if (res.status === 200) {
-      dispatch({
+      /* dispatch({
         type: SET_API_DATA,
         payload: { [parent]: { data: res?.data } },
-      });
+      }); */
+      dispatch(setApiData(res?.data));
     }
+  };
+
+  const setApiData = (data: any) => {
+    return async (dispatch: any, getState: any) => {
+      const prevData = getState()?.api?.[parent];
+      console.log("getState", getState(), prevData);
+      dispatch({
+        type: SET_API_DATA,
+        payload: { [parent]: { ...prevData, data } },
+      });
+    };
   };
 
   const handleChangePage = (
@@ -56,8 +75,36 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     setPage(0);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, name } = event.target;
+    dispatch({
+      type: SET_API_DATA,
+      payload: {
+        [formPath?.parent]: {
+          ...qrCodesList,
+          filter: { [name]: checked },
+        },
+      },
+    });
+    setChecked(checked);
+  };
+
+  const handleRemoveFilter = (key: string, value: boolean) => {
+    const data = Object.entries(filterData)?.filter(([k, v]) => {
+      return k !== key;
+    });
+
+    console.log("data", { data, value }, Object.fromEntries(data));
+    setChecked(!!Object.fromEntries(data)?.active);
+    dispatch({
+      type: SET_API_DATA,
+      payload: {
+        [formPath?.parent]: {
+          ...qrCodesList,
+          filter: Object.fromEntries(data),
+        },
+      },
+    });
   };
 
   return {
@@ -65,11 +112,13 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     totalQrCodes: qrCodesList?.data?.total,
     loadingStatus,
     checked,
-    handleChange,
+    handleFilterChange,
     page,
     handleChangePage,
     rowsPerPage,
     handleChangeRowsPerPage,
+    handleRemoveFilter,
+    filterData,
   };
 };
 

@@ -17,6 +17,7 @@ import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { loadStateFn } from "../utils/localStorage";
 import { useNavigate } from "react-router-dom";
+import { countryWisePhoneValidation } from "../utils/phoneInputRegex";
 
 enum QRType {
   Link,
@@ -99,9 +100,21 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
   const { parent } = formPath;
 
+  const extractCountryCode = (phoneNumber: string) => {
+    for (const countryCode in countryWisePhoneValidation) {
+      const regexPattern = countryWisePhoneValidation[countryCode];
+      const match = phoneNumber.match(regexPattern);
+
+      if (match) {
+        return countryCode;
+      }
+    }
+    return "";
+  };
+
   useEffect(() => {
     if (qrCode) {
-      const qrType: string = qrCode.qr_type;
+      const qrType: string = qrCode.qr_type.trim();
       const typeMapping: any = {
         Link: QRType.Link,
         Email: QRType.Email,
@@ -109,7 +122,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
         MultiAction: QRType.MultiAction,
       };
 
-      if (typeMapping[qrType]) {
+      if (typeMapping[qrType] || qrType === "Link") {
         const initialData = {
           ...initialQrData,
           type: typeMapping[qrType],
@@ -129,8 +142,12 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
             ? qrCode?.data?.action?.map((action: any) => action?.url).join(",")
             : qrCode?.data?.free_text || qrCode?.data?.link;
 
+        console.log("initialData>>>", initialData);
         setQRData(initialData);
         setGeneratedQRCode(QRCodeData);
+        if (qrType === "PhoneNumber") {
+          setCountryCodeName(extractCountryCode(qrCode?.data?.free_text) || "");
+        }
       }
     }
   }, [qrCode]);
@@ -268,7 +285,6 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
   const handleThemeChange = (property: string, value: string | number) => {
     const updatedTheme = { ...qrData.theme, [property]: value };
-    console.log("updatedTheme>>", updatedTheme);
     const contrastRatio1 = getContrastRatio(
       updatedTheme?.containerColor,
       updatedTheme?.buttonColor,

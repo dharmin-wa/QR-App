@@ -38,3 +38,6 @@ export const getYear = (value: string | number) => {
 export const checkUndefined = (obj: any) => obj === undefined;
 
 export const typeOf = (val: any, type: any) => equal(typeof val, type);
+
+export const capitalizedString = (value: string) =>
+  value.charAt(0).toUpperCase() + value.slice(1);

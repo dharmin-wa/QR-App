@@ -173,14 +173,14 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       <Grid item xs={12}>
                         <StyledTypography
                         /*    sx={{
-                   fontSize: "20px",
-                   fontWeight: 500,
-                   lineHeight: "35px",
-                   letterSpacing: "0.01em",
-                   color: "#9FA1A5",
-                 }} */
+                 fontSize: "20px",
+                 fontWeight: 500,
+                 lineHeight: "35px",
+                 letterSpacing: "0.01em",
+                 color: "#9FA1A5",
+               }} */
                         >
-                          Link
+                          {qr?.qr_type}
                         </StyledTypography>
                       </Grid>
                       <Grid
@@ -196,13 +196,13 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         <StyledText
                         // href={qr.link}
                         /*  sx={{
-               fontSize: "20px",
-               fontWeight: 600,
-               lineHeight: "35px",
-               letterSpacing: "0.01em",
-               color: "#1B294B",
-               textDecoration: "none",
-             }} */
+             fontSize: "20px",
+             fontWeight: 600,
+             lineHeight: "35px",
+             letterSpacing: "0.01em",
+             color: "#1B294B",
+             textDecoration: "none",
+           }} */
                         >
                           {qr.companyName}
                         </StyledText>
@@ -218,13 +218,13 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       <Grid item xs={11} display="flex">
                         <StyledText
                         /*  variant="body2"
-               sx={{
-                 fontSize: "20px",
-                 fontWeight: 600,
-                 lineHeight: "35px",
-                 letterSpacing: "0.01em",
-                 color: "#1B294B",
-               }} */
+             sx={{
+               fontSize: "20px",
+               fontWeight: 600,
+               lineHeight: "35px",
+               letterSpacing: "0.01em",
+               color: "#1B294B",
+             }} */
                         >
                           {moment(qr?.created_at).format("MMM D, YYYY")}
                         </StyledText>
@@ -317,23 +317,23 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         </StyledMiddleText>
                         <StyledLocation
                         /* sx={{
-                fontSize: "13px",
-                fontWeight: 600,
-                lineHeight: "19px",
-                letterSpacing: "0.01em",
-                textAlign: "left",
-              }} */
+              fontSize: "13px",
+              fontWeight: 600,
+              lineHeight: "19px",
+              letterSpacing: "0.01em",
+              textAlign: "left",
+            }} */
                         >
                           Ahmedabad
                         </StyledLocation>
                         <StyledIp
                         /*  sx={{
-                 fontSize: "13px",
-                 fontWeight: 400,
-                 lineHeight: "18px",
-                 letterSpacing: "0.01em",
-                 textAlign: "left",
-               }} */
+               fontSize: "13px",
+               fontWeight: 400,
+               lineHeight: "18px",
+               letterSpacing: "0.01em",
+               textAlign: "left",
+             }} */
                         >
                           192.451.3.323.1
                         </StyledIp>
@@ -348,12 +348,12 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                   >
                     <StyledLocationFont
                     /*  sx={{
-             fontSize: "13px",
-             fontWeight: 400,
-             // lineHeight: "35px",
-             letterSpacing: "0.01em",
-             textAlign: "left",
-           }} */
+           fontSize: "13px",
+           fontWeight: 400,
+           // lineHeight: "35px",
+           letterSpacing: "0.01em",
+           textAlign: "left",
+         }} */
                     >
                       +22 Locations
                     </StyledLocationFont>

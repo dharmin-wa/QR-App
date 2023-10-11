@@ -53,21 +53,15 @@ const QrFrameContainer = ({
   };
 
   const updateQRCodeSize = () => {
-    const screenWidth = window.innerWidth;
-    let newSize;
+    const fontSizeInPixels = parseFloat(
+      getComputedStyle(document.documentElement).fontSize,
+    );
 
-    if (screenWidth < 1201) {
-      newSize = 130;
-    } /* else if (screenWidth > 1199 && screenWidth < 1315) {
-        newSize = 80;
-      } */ /* else if (screenWidth < 1315) {
-        newSize = 130;
-      } */ else if (screenWidth < 1330) {
-      newSize = 100;
-    } else {
-      newSize = 130;
-    }
-    setQRCodeSize(newSize);
+    const remValue = 7;
+
+    const pixelValue = remValue * fontSizeInPixels;
+
+    setQRCodeSize(pixelValue);
   };
 
   const downloadQRCode = () => {

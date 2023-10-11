@@ -10,7 +10,7 @@ export const StyledPaper = styled(Paper)`
   border-radius: 12px;
   margin: auto;
   padding: 20px 0px;
-  margin: 10px 5px 10px 5px;
+  margin: 0px 5px 10px 5px;
   display: flex;
   align-items: center;
   position: relative;
@@ -59,60 +59,60 @@ export const StyledDownloadButton = styled(QRButton)(() => ({
 }));
 
 export const StyledTypography = styled(QRTypography)(({ theme }: any) => ({
-  fontSize: "20px",
+  fontSize: "1rem",
   fontWeight: 500,
   lineHeight: "35px",
   letterSpacing: "0.01em",
   color: "#9FA1A5",
-  [theme.breakpoints.down("1400")]: {
-    fontSize: "16px",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "18px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "16px",
-  },
+  /*  [theme.breakpoints.down("1400")]: {
+     fontSize: "16px",
+   },
+   [theme.breakpoints.down("md")]: {
+     fontSize: "18px",
+   },
+   [theme.breakpoints.down("sm")]: {
+     fontSize: "16px",
+   }, */
 }));
 
 export const StyledText = styled(QRTypography)(({ theme }: any) => ({
-  fontSize: "20px",
+  fontSize: "1rem",
   fontWeight: 600,
   // lineHeight: "35px",
   letterSpacing: "0.01em",
   color: "#1B294B",
   textDecoration: "none",
-  [theme.breakpoints.down("1401")]: {
-    fontSize: "16px",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "18px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "16px",
-  },
+  /*   [theme.breakpoints.down("1401")]: {
+      fontSize: "16px",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "18px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "16px",
+    }, */
 }));
 
 export const StyledLink = styled(Link)(({ theme }: any) => ({
-  fontSize: "16px",
+  fontSize: "0.9rem",
   fontWeight: 600,
   lineHeight: "19px",
   letterSpacing: "0.01em",
   color: "#0075FF",
   textDecoration: "none",
-  [theme.breakpoints.down("1400")]: {
-    fontSize: "14px",
-  },
+  /*  [theme.breakpoints.down("1400")]: {
+     fontSize: "14px",
+   }, */
 }));
 
 export const StyledMiddleText = styled(QRTypography)(({ theme }: any) => ({
-  fontSize: "18px",
+  fontSize: "1rem",
   fontWeight: 600,
   letterSpacing: "0.01em",
   color: "#1B294B",
-  [theme.breakpoints.down("1400")]: {
+  /* [theme.breakpoints.down("1400")]: {
     fontSize: "16px",
-  },
+  }, */
 }));
 
 export const StyledLocation = styled(QRTypography)(({ theme }: any) => ({
@@ -162,5 +162,6 @@ display: flex;
 flex-direction: column;
 align-items: center;
 margin: 10px;
+cursor: pointer
 }}
 `;

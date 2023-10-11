@@ -16,9 +16,9 @@ import AllQR from "../presentation/allQR";
 import { useSelector } from "react-redux";
 import { loadStateFn } from "../utils/localStorage";
 import ProtectedRoute from "../presentation/auth/ProtectedRoute";
-import Test from "../Test";
 import QRCodeDetails from "../presentation/QRCodeDetails";
 import EditQRCode from "../presentation/QRCode/EditQRCode";
+import Test from "../presentation/Test";
 
 const RedirectComponent = () => {
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);

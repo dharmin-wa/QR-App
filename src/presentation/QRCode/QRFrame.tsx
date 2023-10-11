@@ -119,9 +119,9 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
   return (
     <>
       {qrCodes?.length
-        ? qrCodes?.map((qr: any, index: number) => (
+        ? qrCodess?.map((qr: any, index: number) => (
             <StyledPaper elevation={0} sx={{ flexGrow: 1 }} key={index}>
-              <Grid container spacing={{ xs: 2, md: 2, xl: 0 }}>
+              <Grid container>
                 <Grid
                   item
                   xs={12}
@@ -171,84 +171,29 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                     </QRStack>
                     <Grid container>
                       <Grid item xs={12}>
-                        <StyledTypography
-                        /*    sx={{
-                 fontSize: "20px",
-                 fontWeight: 500,
-                 lineHeight: "35px",
-                 letterSpacing: "0.01em",
-                 color: "#9FA1A5",
-               }} */
-                        >
-                          {qr?.qr_type}
-                        </StyledTypography>
+                        <StyledTypography>Link{qr?.qr_type}</StyledTypography>
                       </Grid>
-                      <Grid
-                        item
-                        xs={1}
-                        display="flex"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                      >
+                      <Grid item xs={1}>
                         <FileIcon />
                       </Grid>
-                      <Grid item xs={11} display="flex">
-                        <StyledText
-                        // href={qr.link}
-                        /*  sx={{
-             fontSize: "20px",
-             fontWeight: 600,
-             lineHeight: "35px",
-             letterSpacing: "0.01em",
-             color: "#1B294B",
-             textDecoration: "none",
-           }} */
-                        >
-                          {qr.companyName}
-                        </StyledText>
+                      <Grid item xs={11}>
+                        <StyledText>{qr.companyName}</StyledText>
                       </Grid>
-                      <Grid
-                        item
-                        xs={1}
-                        display="flex"
-                        justifyContent="flex-start"
-                      >
+                      <Grid item xs={1}>
                         <QRDateIcon />
                       </Grid>
-                      <Grid item xs={11} display="flex">
-                        <StyledText
-                        /*  variant="body2"
-             sx={{
-               fontSize: "20px",
-               fontWeight: 600,
-               lineHeight: "35px",
-               letterSpacing: "0.01em",
-               color: "#1B294B",
-             }} */
-                        >
+                      <Grid item xs={11}>
+                        <StyledText>
                           {moment(qr?.created_at).format("MMM D, YYYY")}
                         </StyledText>
                       </Grid>
-                      <Grid
-                        item
-                        xs={1}
-                        display="flex"
-                        justifyContent="flex-start"
-                      >
+                      <Grid item xs={1}>
                         <LinkIcon />
                       </Grid>
-                      <Grid item xs={11} display="flex">
+                      <Grid item xs={11}>
                         <QRStack direction="column">
                           <span style={{ whiteSpace: "nowrap" }}>
-                            <StyledLink
-                              href={qr.url} /* sx={{
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          lineHeight: '19px',
-                          letterSpacing: '0.01em',
-                          color: "#0075FF"
-                        }} */
-                            >
+                            <StyledLink href={qr.url}>
                               <span>{qr.url}</span>
                             </StyledLink>{" "}
                             <EditIcon />
@@ -272,7 +217,6 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                   sx={{
                     borderRight: { lg: "1px dashed #ccc" },
                     borderLeft: { lg: "1px dashed #ccc" },
-                    // alignItems: "start"
                   }}
                 >
                   <QRStack direction="row" gap={1} alignItems="center">
@@ -315,28 +259,8 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         >
                           Locations:
                         </StyledMiddleText>
-                        <StyledLocation
-                        /* sx={{
-              fontSize: "13px",
-              fontWeight: 600,
-              lineHeight: "19px",
-              letterSpacing: "0.01em",
-              textAlign: "left",
-            }} */
-                        >
-                          Ahmedabad
-                        </StyledLocation>
-                        <StyledIp
-                        /*  sx={{
-               fontSize: "13px",
-               fontWeight: 400,
-               lineHeight: "18px",
-               letterSpacing: "0.01em",
-               textAlign: "left",
-             }} */
-                        >
-                          192.451.3.323.1
-                        </StyledIp>
+                        <StyledLocation>Ahmedabad</StyledLocation>
+                        <StyledIp>192.451.3.323.1</StyledIp>
                       </Grid>
                     </Grid>
                   </QRStack>
@@ -346,31 +270,8 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                     alignItems="center"
                     flexWrap="nowrap"
                   >
-                    <StyledLocationFont
-                    /*  sx={{
-           fontSize: "13px",
-           fontWeight: 400,
-           // lineHeight: "35px",
-           letterSpacing: "0.01em",
-           textAlign: "left",
-         }} */
-                    >
-                      +22 Locations
-                    </StyledLocationFont>
-                    <StyledViewMore
-                      href="#"
-                      sx={
-                        {
-                          // fontSize: "13px",
-                          // fontStyle: "italic",
-                          // fontWeight: 400,
-                          // letterSpacing: "0.01em",
-                          // textAlign: "left",
-                        }
-                      }
-                    >
-                      View More
-                    </StyledViewMore>
+                    <StyledLocationFont>+22 Locations</StyledLocationFont>
+                    <StyledViewMore href="#">View More</StyledViewMore>
                   </QRStack>
                 </StyledGridItem>
                 {/* third box */}
@@ -393,7 +294,10 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                     >
                       Download QR
                     </StyledDownloadButton>
-                    <div style={{ display: "flex", alignItems: "flex-end" }}>
+                    <div
+                      style={{ display: "flex", alignItems: "flex-end" }}
+                      onClick={() => handleEditQRCode(qr?._id)}
+                    >
                       <StyledEditContainer>
                         <EditQRIcon />
                         <StyledEditQRText>Edit QR</StyledEditQRText>
@@ -438,7 +342,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                 }}
               >
                 <MenuItem onClick={() => handleViewQRCode(qr?._id)}>
-                  View{" "}
+                  View
                 </MenuItem>
                 <MenuItem onClick={() => handleEditQRCode(qr?._id)}>
                   Edit

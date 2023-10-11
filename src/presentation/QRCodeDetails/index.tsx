@@ -91,11 +91,11 @@ const QRCodeDetails: React.FC = () => {
           <strong>QR Type:</strong> {data.qr_type}
         </QRTypography>
         <QRTypography variant="body1">
-          <strong>Created At:</strong>{" "}
+          <strong>Created At:</strong>
           {moment(data?.created_at).format("MMM D, YYYY")}
         </QRTypography>
         <QRTypography variant="body1">
-          <strong>Updated At:</strong>{" "}
+          <strong>Updated At:</strong>
           {moment(data?.updated_at).format("MMM D, YYYY")}
         </QRTypography>
         <QRBox mt={3} display="flex" justifyContent="center" gap={2}>

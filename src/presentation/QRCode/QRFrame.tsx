@@ -119,7 +119,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
   return (
     <>
       {qrCodes?.length
-        ? qrCodess?.map((qr: any, index: number) => (
+        ? qrCodes?.map((qr: any, index: number) => (
             <StyledPaper elevation={0} sx={{ flexGrow: 1 }} key={index}>
               <Grid container>
                 <Grid

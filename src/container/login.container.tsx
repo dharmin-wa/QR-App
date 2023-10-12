@@ -47,6 +47,7 @@ const LoginContainer = ({
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
+      showErrorToastMessage: true,
       successToastMessage: "Login successful!",
       needLoader: true,
       parent: formPath.parent,

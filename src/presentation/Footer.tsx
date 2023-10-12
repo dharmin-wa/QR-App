@@ -6,8 +6,6 @@ import { useTheme } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import { upperCase } from "../utils/javascript";
 
-// const footerWidth = 300;
-
 const Footer = () => {
   const theme: any = useTheme();
   const { t } = useTranslation();
@@ -20,7 +18,7 @@ const Footer = () => {
         display: { xs: "none", md: "flex" },
         justifyContent: "center",
         alignItems: "center",
-        flexShrink: 0, // Prevent footer from shrinking
+        flexShrink: 0,
       }}
     >
       <CssBaseline />

@@ -79,6 +79,7 @@ const SignUpContainer = ({
       method: method.post,
       data: { ...formData, termAndCondition: agreeTC },
       showToastMessage: true,
+      showErrorToastMessage: true,
       successToastMessage: "Sign up successfully!",
       needLoader: true,
       parent: formPath.parent,

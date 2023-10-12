@@ -89,6 +89,7 @@ const QrFrameContainer = ({
       endPoint: `${apiEndPoints?.deleteQR}/${deleteQRId}`,
       method: method.delete,
       showToastMessage: true,
+      showErrorToastMessage: true,
       successToastMessage: "Successfully Deleted",
       needLoader: true,
       parent: formPath.child,

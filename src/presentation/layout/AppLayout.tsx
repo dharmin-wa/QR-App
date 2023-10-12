@@ -19,6 +19,8 @@ import {
   Toolbar,
   Divider,
   InputAdornment,
+  BottomNavigation,
+  BottomNavigationAction,
 } from "@mui/material";
 import QRTypography from "../../shared/QRTypography";
 import QRBox from "../../shared/QRBox";
@@ -38,6 +40,8 @@ import {
   CircleStyle,
   DiamondStyle,
   InnerCircleStyle,
+  StyledBottomNavigation,
+  StyledListItem,
 } from "./style";
 import { ReactComponent as MobileMenu } from "../../assets/svg/menu.svg";
 import QRTextField from "../../shared/QRTextField";
@@ -45,26 +49,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import LanguageSelector from "../../shared/LanguageSelector";
 import { LOGOUT } from "../../redux/constants";
 import { isExpired } from "react-jwt";
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
 
 const drawerWidth = 325;
-
-interface StyledListItemProps {
-  isActive: boolean;
-}
-
-const StyledListItem = styled(ListItem)<StyledListItemProps>(
-  ({ isActive }) => ({
-    backgroundColor: isActive ? "#356ABA" : "",
-    color: isActive ? "#fff" : "",
-    borderRadius: "29px",
-    maxWidth: "243px",
-    margin: 4,
-    border: isActive ? "1px solid #00CEDB" : "",
-    "& .MuiListItemSecondaryAction-root": {
-      marginRight: "25px",
-    },
-  }),
-);
 
 export default function AppLayout(props: { window?: any }) {
   const { window } = props;
@@ -159,7 +147,6 @@ export default function AppLayout(props: { window?: any }) {
                   >
                     <ListItemButton
                       onClick={() => {
-                        // handleDrawerToggle();
                         navigate(e.redirectPath);
                       }}
                     >
@@ -227,6 +214,65 @@ export default function AppLayout(props: { window?: any }) {
     </QRBox>
   );
 
+  const bottomNavigation = (
+    <StyledBottomNavigation showLabels>
+      {Object.entries(sidebarAtt)?.map(([k, v]: any, index: number) => {
+        return v?.map((subItem: any, index: number) => {
+          const Icon = subItem?.icon;
+          return (
+            subItem?.label !== "All QR" && (
+              <BottomNavigationAction
+                key={index}
+                // isActive={location.pathname === subItem.redirectPath}
+                onClick={() => {
+                  navigate(subItem?.redirectPath);
+                }}
+                label={subItem?.label}
+                icon={
+                  <Icon
+                    height={25}
+                    width={25}
+                    style={{
+                      fill: "#4181E0",
+                    }}
+                  />
+                }
+              />
+            )
+          );
+        });
+      })}
+      <BottomNavigationAction
+        label="Search QR"
+        // isActive={location.pathname === ""}
+        icon={
+          <SearchIcon
+            height={25}
+            width={25}
+            style={{
+              fill: `${location.pathname === "" ? "#fff" : "#4181E0"}`,
+            }}
+          />
+        }
+      />
+      <BottomNavigationAction
+        label={userName.trim()}
+        // isActive={location.pathname === ""}
+        icon={
+          <Avatar
+            sx={{
+              width: 24,
+              height: 24,
+              bgcolor: theme.palette.primary.main,
+            }}
+          >
+            {userName.trim().charAt(0)}
+          </Avatar>
+        }
+      />
+    </StyledBottomNavigation>
+  );
+
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -238,22 +284,27 @@ export default function AppLayout(props: { window?: any }) {
           position="fixed"
           elevation={0}
           sx={{
-            // width: { md: `calc(100% - ${drawerWidth}px)` },
             ml: { md: `0px` },
-            alignItems: "end",
             background: "#fff",
-            /*  boxShadow:
-               "0px 0px 4px -1px rgba(0,0,0,0.2), -2px -2px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)", */
           }}
         >
           <Toolbar
             sx={{
               display: {
-                xs: "flex",
+                sm: "flex",
                 md: "none",
               },
+              justifyContent: { xs: "end", sm: "space-between" },
             }}
           >
+            <IconButton
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { xs: "none", sm: "flex" } }}
+            >
+              <MenuIcon />
+            </IconButton>
             <MobileMenu
               aria-controls={"mobile-customized-menu"}
               onClick={handleMobileMenu}
@@ -268,7 +319,7 @@ export default function AppLayout(props: { window?: any }) {
                 display: {
                   xs: "flex",
                   md: "none",
-                  maxWidth: "300px !important",
+                  maxWidth: "150px !important",
                   "& .MuiMenu-paper": {
                     width: "100%",
                   },
@@ -284,68 +335,22 @@ export default function AppLayout(props: { window?: any }) {
               open={Boolean(mobileAnchorEl)}
               onClose={handleMobileClose}
             >
-              {Object.entries(sidebarAtt)?.map(([k, v]: any, index: number) => {
-                return (
-                  <List
-                    key={index}
-                    sx={{
-                      bgcolor: "background.paper",
-                      "& .MuiListSubheader-root": {
-                        fontSize: "12px",
-                        width: "100%",
-                      },
-                    }}
-                    subheader={<ListSubheader>{upperCase(t(k))}</ListSubheader>}
-                  >
-                    {v?.map((subItem: any, index: number) => {
-                      const Icon = subItem?.icon;
-                      return (
-                        <StyledListItem
-                          key={index}
-                          onClick={() => {
-                            navigate(subItem?.redirectPath);
-                          }}
-                          isActive={location.pathname === subItem.redirectPath}
-                        >
-                          <ListItemIcon>
-                            <Icon
-                              height={25}
-                              width={25}
-                              style={{
-                                fill: `${
-                                  location.pathname === subItem.redirectPath
-                                    ? "#fff"
-                                    : "#4181E0"
-                                }`,
-                              }}
-                            />
-                          </ListItemIcon>
-                          <ListItemText
-                            id={`${k}-${subItem?.label}`}
-                            primary={subItem?.label}
-                            primaryTypographyProps={{
-                              align: "left",
-                              variant: "body1",
-                            }}
-                          />
-                        </StyledListItem>
-                      );
-                    })}
-                  </List>
-                );
-              })}
+              <MenuItem onClick={handleClose} disableRipple>
+                Profile
+              </MenuItem>
+              <MenuItem onClick={handleLogout} disableRipple>
+                Logout
+              </MenuItem>
             </Menu>
           </Toolbar>
           <Toolbar
             sx={{
               display: { xs: "none", md: "flex" },
-              width: `calc(100% - ${drawerWidth}px)`,
+              // width: `calc(100% - ${drawerWidth}px)`,
               height: "90px",
               justifyContent: "space-between",
               alignItems: "center",
-              // border: "2px solid red",
               borderRadius: "0 0px 20px 0",
-              // boxShadow: "0 0 22px -5px rgba(0, 0, 0, 0.3)",
               boxShadow: "2px 0px 4px 0px #00000040",
             }}
           >
@@ -354,6 +359,7 @@ export default function AppLayout(props: { window?: any }) {
               id="search"
               placeholder="Search QR"
               sx={{
+                left: drawerWidth,
                 "& .MuiInputBase-root": {
                   margin: "auto",
                   border: "1px solid #E2E2E3",
@@ -474,15 +480,18 @@ export default function AppLayout(props: { window?: any }) {
             flexGrow: 1,
             // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
             p: {
-              xs: "64px 10px",
-              sm: "70px 10px",
-              md: "99px 10px",
+              xs: "64px 3% 0 3%",
+              sm: "70px 3% 0 3%",
+              md: "99px 1% 0 1%",
               lg: "112px 14px 0 24px",
             },
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
           <Outlet />
+          <QRBox display={{ lg: "none", md: "none", sm: "none", xs: "block" }}>
+            {bottomNavigation}
+          </QRBox>
         </QRBox>
       </QRBox>
       <Footer />

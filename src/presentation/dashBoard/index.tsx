@@ -30,8 +30,14 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
-      <QRBox display="flex" justifyContent="space-between" p="16px 0">
-        <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+      <QRBox
+        display="flex"
+        flexDirection={{ xs: "column", lg: "row", md: "row", sm: "row" }}
+        alignItems="center"
+        justifyContent="space-between"
+        p="16px 0"
+      >
+        <div style={{ display: "flex", gap: 3 }}>
           <Timer fill="#366CBD" />
           <QRTypography
             fontWeight={600}

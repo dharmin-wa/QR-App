@@ -1,6 +1,10 @@
 import { styled } from "@mui/material/styles";
 import QRBox from "../../shared/QRBox";
 import { ReactComponent as Diamond } from "../../assets/svg/diamond.svg";
+import { ListItem, BottomNavigation } from "@mui/material";
+interface StyledListItemProps {
+  isActive: boolean;
+}
 
 export const QRBoxContainer = styled(QRBox)(({ theme }) => ({
   height: 51,
@@ -76,4 +80,31 @@ export const CardContentStyle = styled(QRBox)(() => ({
   padding: "20px",
   color: "#fff",
   fontSize: "10px",
+}));
+
+export const StyledListItem = styled(ListItem)<StyledListItemProps>(
+  ({ isActive }) => ({
+    backgroundColor: isActive ? "#356ABA" : "",
+    color: isActive ? "#fff" : "",
+    borderRadius: "29px",
+    maxWidth: "243px",
+    margin: 4,
+    border: isActive ? "1px solid #00CEDB" : "",
+    "& .MuiListItemSecondaryAction-root": {
+      marginRight: "25px",
+    },
+  }),
+);
+
+export const StyledBottomNavigation = styled(BottomNavigation)(() => ({
+  boxShadow: "0px 0px 4px 0px #00000040",
+  background: "#fff",
+  position: "fixed",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  zIndex: 1,
+  m: "0 10px",
+  p: "3px 0",
+  borderRadius: "28px",
 }));

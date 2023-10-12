@@ -27,6 +27,7 @@ const EmailVerifyContainer = ({ formPath }: EmailVerifyContainerProps) => {
       endPoint: `${apiEndPoints?.verifyEmail}?token=${token}`,
       method: method.get,
       showToastMessage: true,
+      showErrorToastMessage: true,
       successToastMessage: "Account verified successfully!",
       needLoader: true,
       parent: formPath.parent,

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import QRTypography from "../../shared/QRTypography";
 import { useTranslation } from "react-i18next";

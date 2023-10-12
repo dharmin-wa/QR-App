@@ -28,7 +28,7 @@ const QRCodeDetailsContainer = ({ formPath }: QRCodeDetailsContainerProps) => {
     const res: any = await performRequest({
       endPoint: `${apiEndPoints?.viewQR}/${qrCodeId}`,
       method: method.get,
-      showToastMessage: false,
+      showErrorToastMessage: true,
       needLoader: true,
       parent: formPath.parent,
       responseSelector: true,

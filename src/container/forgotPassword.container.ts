@@ -31,6 +31,7 @@ const ForgotPasswordContainer = ({
       method: method.post,
       data: { ...formData },
       showToastMessage: true,
+      showErrorToastMessage: true,
       successToastMessage: "OTP sent successfully",
       needLoader: true,
       parent: formPath.parent,

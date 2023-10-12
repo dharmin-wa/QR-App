@@ -175,6 +175,10 @@ const privateRoutes: RouteObject[] = [
           },
         ],
       },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ],
   },
 ];

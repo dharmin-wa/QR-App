@@ -27,7 +27,7 @@ const data = {
     {
       hoverOffset: 1,
       label: "# of Votes",
-      data: [90, 10],
+      data: [70, 30],
       backgroundColor: ["#356ABA", "#ECE9FF"],
       cutout: 45,
       borderColor: ["#356ABA", "#ECE9FF"],

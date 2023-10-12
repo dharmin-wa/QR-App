@@ -109,22 +109,22 @@ const QRCodeDetails: React.FC = () => {
           >
             Edit
           </QRButton>
-          <QRButton
+          {/*  <QRButton
             variant="contained"
             color="error"
             size="large"
             onClick={handleDeleteClick}
           >
             Delete
-          </QRButton>
+          </QRButton> */}
         </QRBox>
       </div>
     );
   };
 
-  const handleDeleteClick = () => {
-    // Handle delete QRbuttonQRButton click here
-  };
+  /*  const handleDeleteClick = () => {
+     // Handle delete QRbuttonQRButton click here
+   }; */
 
   return (
     <Container maxWidth="md">

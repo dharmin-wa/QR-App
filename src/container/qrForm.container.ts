@@ -435,6 +435,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       method: editQR ? method.put : method.post,
       data: payload,
       showToastMessage: true,
+      showErrorToastMessage: true,
       successToastMessage: successMessage,
       needLoader: true,
       parent: formPath.parent,

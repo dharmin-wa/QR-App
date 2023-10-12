@@ -11,6 +11,7 @@ interface performRequestProps {
   method?: "post" | "get" | "put" | "patch" | string;
   data?: any;
   showToastMessage?: boolean;
+  showErrorToastMessage?: boolean;
   successToastMessage?: string | "";
   errorToastMessage?: string | "";
   responseType?:
@@ -43,6 +44,7 @@ export const ApiContainer = () => {
     method,
     data,
     showToastMessage = false,
+    showErrorToastMessage = false,
     successToastMessage = "",
     errorToastMessage = "",
     responseType = undefined,
@@ -112,7 +114,7 @@ export const ApiContainer = () => {
 
           const toastMessage = errorToastMessage || errorMessage;
 
-          if (showToastMessage) {
+          if (showErrorToastMessage) {
             showToast(toastMessage, "error");
           }
           if (needLoader) {

@@ -492,7 +492,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   }
 
   const handleStatusChange = () => {
-    const newStatus = qrData.status === "A" ? "D" : "A"; // Toggle between "A" and "D"
+    const newStatus = qrData.status === "A" ? "D" : "A";
     setQRData({
       ...qrData,
       status: newStatus,

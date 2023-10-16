@@ -21,10 +21,11 @@ import {
   InputAdornment,
   BottomNavigation,
   BottomNavigationAction,
+  useMediaQuery,
 } from "@mui/material";
 import QRTypography from "../../shared/QRTypography";
 import QRBox from "../../shared/QRBox";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { sidebarAtt } from "../../description/sidebar.description";
 import ArrowRight from "../../assets/svg/arrowRight.svg";
 import { upperCase } from "../../utils/javascript";
@@ -66,12 +67,19 @@ export default function AppLayout(props: { window?: any }) {
   const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
   const token = loadStateFn();
   const userName = "XYZ";
+  const theme = useTheme();
+  const isScreenMedium = useMediaQuery(theme.breakpoints.up("md"));
+  const isScreenSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     if ((!isAuthenticated && !token) || isExpired(token)) {
       navigate("/login");
     }
   }, [pathname]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [isScreenMedium, isScreenSmall]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -436,7 +444,7 @@ export default function AppLayout(props: { window?: any }) {
           }}
           aria-label="mailbox folders"
         >
-          <Drawer
+          {/*  <Drawer
             container={container}
             variant="temporary"
             open={mobileOpen}
@@ -454,9 +462,28 @@ export default function AppLayout(props: { window?: any }) {
             }}
           >
             {drawer}
+          </Drawer> */}
+          <Drawer
+            variant={mobileOpen ? "temporary" : undefined}
+            onClose={handleDrawerToggle}
+            sx={{
+              display: { xs: "block", lg: "none" },
+              flexDirection: "column",
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+                borderRadius: "0 20px 20px 0",
+                padding: 2,
+                boxShadow:
+                  "0px 0px 4px -1px rgba(0,0,0,0.2), 0px 0px 2px 0px rgba(0,0,0,0.14), 0px 0px 10px 0px rgba(0,0,0,0.12)",
+              },
+            }}
+            open={mobileOpen}
+          >
+            {drawer}
           </Drawer>
           <Drawer
-            variant="permanent"
+            variant={mobileOpen ? undefined : "permanent"}
             sx={{
               display: { xs: "none", md: "block" },
               flexDirection: "column",

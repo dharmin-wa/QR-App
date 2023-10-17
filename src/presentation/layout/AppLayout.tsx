@@ -30,7 +30,8 @@ import { sidebarAtt } from "../../description/sidebar.description";
 import ArrowRight from "../../assets/svg/arrowRight.svg";
 import { upperCase } from "../../utils/javascript";
 import { useTranslation } from "react-i18next";
-import { ReactComponent as Logo } from "../../assets/svg/qr.svg";
+import Logo from "../../assets/png/logo.png";
+import MbLogo from "../../assets/png/mb-logo.png";
 import Footer from "../Footer";
 import QRButton from "../../shared/QRButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -53,7 +54,7 @@ import { isExpired } from "react-jwt";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 
-const drawerWidth = 325;
+const drawerWidth = 305;
 
 export default function AppLayout(props: { window?: any }) {
   const { window } = props;
@@ -70,6 +71,7 @@ export default function AppLayout(props: { window?: any }) {
   const theme = useTheme();
   const isScreenMedium = useMediaQuery(theme.breakpoints.up("md"));
   const isScreenSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const hidden = useMediaQuery(theme.breakpoints.up(900));
 
   useEffect(() => {
     if ((!isAuthenticated && !token) || isExpired(token)) {
@@ -120,16 +122,21 @@ export default function AppLayout(props: { window?: any }) {
         flexDirection: "column",
       }}
     >
-      <Toolbar disableGutters={true}>
-        <Logo />
-        <QRTypography
+      <Toolbar
+        sx={{ minHeight: "auto !important", justifyContent: "center" }}
+        disableGutters={true}
+      >
+        {/* <Logo /> */}
+        <img width={"75%"} src={Logo} alt="QR" />
+
+        {/* <QRTypography
           noWrap
           fontWeight={700}
           component="div"
           fontSize={"21.36px"}
         >
           {t("QRgenerator")}
-        </QRTypography>
+        </QRTypography> */}
       </Toolbar>
 
       {Object.entries(sidebarAtt)?.map(([k, v], index: number) => {
@@ -142,45 +149,50 @@ export default function AppLayout(props: { window?: any }) {
             >
               {upperCase(t(k))}
             </QRTypography>
-            {v?.map((e: any, index: number) => {
-              const Icon = e.icon;
-              return (
-                <React.Fragment key={index}>
-                  <StyledListItem
-                    key={e.label}
-                    isActive={location.pathname === e.redirectPath}
-                    disablePadding
-                    disableGutters
-                    secondaryAction={<img src={ArrowRight} />}
-                  >
-                    <ListItemButton
-                      onClick={() => {
-                        navigate(e.redirectPath);
-                      }}
+            <List>
+              {v?.map((e: any, index: number) => {
+                const Icon = e.icon;
+                return (
+                  <React.Fragment key={index}>
+                    <StyledListItem
+                      key={e.label}
+                      isActive={location.pathname === e.redirectPath}
+                      disablePadding
+                      disableGutters
+                      secondaryAction={<img src={ArrowRight} />}
                     >
-                      <ListItemIcon
-                        sx={{
-                          color:
-                            location.pathname === e.redirectPath ? "#fff" : "",
+                      <ListItemButton
+                        onClick={() => {
+                          navigate(e.redirectPath);
+                          setMobileOpen(false);
                         }}
                       >
-                        <Icon
-                          style={{
-                            fill: `${
+                        <ListItemIcon
+                          sx={{
+                            color:
                               location.pathname === e.redirectPath
                                 ? "#fff"
-                                : "#4181E0"
-                            }`,
+                                : "",
                           }}
-                        />
-                      </ListItemIcon>
-                      <ListItemText primary={e?.label} />
-                    </ListItemButton>
-                  </StyledListItem>
-                  <Divider sx={{ borderStyle: "dashed", m: 1 }} />
-                </React.Fragment>
-              );
-            })}
+                        >
+                          <Icon
+                            style={{
+                              fill: `${
+                                location.pathname === e.redirectPath
+                                  ? "#fff"
+                                  : "#4181E0"
+                              }`,
+                            }}
+                          />
+                        </ListItemIcon>
+                        <ListItemText primary={e?.label} />
+                      </ListItemButton>
+                    </StyledListItem>
+                    <Divider sx={{ borderStyle: "dashed", m: 1 }} />
+                  </React.Fragment>
+                );
+              })}
+            </List>
           </QRBox>
         );
       })}
@@ -264,6 +276,7 @@ export default function AppLayout(props: { window?: any }) {
         }
       />
       <BottomNavigationAction
+        // onClick={ }
         label={userName.trim()}
         // isActive={location.pathname === ""}
         icon={
@@ -292,8 +305,9 @@ export default function AppLayout(props: { window?: any }) {
           position="fixed"
           elevation={0}
           sx={{
-            ml: { md: `0px` },
+            ml: { md: `0px`, lg: `auto` },
             background: "#fff",
+            width: { md: `calc(100% - ${drawerWidth}px)` },
           }}
         >
           <Toolbar
@@ -302,54 +316,77 @@ export default function AppLayout(props: { window?: any }) {
                 sm: "flex",
                 md: "none",
               },
-              justifyContent: { xs: "end", sm: "space-between" },
+              justifyContent: { xs: "space-between" },
+              border: "1px solid #EDE2E2",
+              borderRadius: "14px",
+              m: "3%",
+              px: "9px",
+              py: "5px",
             }}
           >
-            <IconButton
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { xs: "none", sm: "flex" } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <MobileMenu
-              aria-controls={"mobile-customized-menu"}
-              onClick={handleMobileMenu}
-              style={{ cursor: "pointer" }}
-            />
-            <Menu
-              id="mobile-customized-menu"
-              MenuListProps={{
-                "aria-labelledby": "mobile-customized-button",
-              }}
+            <QRBox display="flex" alignItems="center">
+              {/* <Logo /> */}
+              <img src={MbLogo} alt="QR" />
+            </QRBox>
+            <QRBox
               sx={{
-                display: {
-                  xs: "flex",
-                  md: "none",
-                  maxWidth: "150px !important",
-                  "& .MuiMenu-paper": {
-                    width: "100%",
-                  },
-                },
-                "& .MuiList-root": {
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center !important",
-                  justifyContent: "center !important",
-                },
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
-              anchorEl={mobileAnchorEl}
-              open={Boolean(mobileAnchorEl)}
-              onClose={handleMobileClose}
+              onClick={handleDrawerToggle}
             >
-              <MenuItem onClick={handleClose} disableRipple>
-                Profile
-              </MenuItem>
-              <MenuItem onClick={handleLogout} disableRipple>
-                Logout
-              </MenuItem>
-            </Menu>
+              <MobileMenu
+                aria-controls={"mobile-customized-menu"}
+                // onClick={handleDrawerToggle}
+                style={{ cursor: "pointer" }}
+              />
+              <Menu
+                id="mobile-customized-menu"
+                MenuListProps={{
+                  "aria-labelledby": "mobile-customized-button",
+                }}
+                sx={{
+                  display: {
+                    xs: "flex",
+                    md: "none",
+                    maxWidth: "150px !important",
+                    "& .MuiMenu-paper": {
+                      width: "100%",
+                    },
+                  },
+                  "& .MuiList-root": {
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center !important",
+                    justifyContent: "center !important",
+                  },
+                }}
+                anchorEl={mobileAnchorEl}
+                open={Boolean(mobileAnchorEl)}
+                onClose={handleMobileClose}
+              >
+                <MenuItem onClick={handleClose} disableRipple>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout} disableRipple>
+                  Logout
+                </MenuItem>
+              </Menu>
+              <QRTypography
+                sx={{
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  lineHeight: "12px",
+                  letterSpacing: "0.245em",
+                  textTransform: "uppercase",
+                  color: "#1B294B",
+                  pt: 1,
+                }}
+              >
+                menu
+              </QRTypography>
+            </QRBox>
           </Toolbar>
           <Toolbar
             sx={{
@@ -367,7 +404,7 @@ export default function AppLayout(props: { window?: any }) {
               id="search"
               placeholder="Search QR"
               sx={{
-                left: drawerWidth,
+                // left: drawerWidth,
                 "& .MuiInputBase-root": {
                   margin: "auto",
                   border: "1px solid #E2E2E3",
@@ -437,12 +474,12 @@ export default function AppLayout(props: { window?: any }) {
           </Toolbar>
         </AppBar>
         <QRBox
-          component="nav"
+          // component="nav"
           sx={{
             width: { md: drawerWidth },
             flexShrink: { md: 0 },
           }}
-          aria-label="mailbox folders"
+          // aria-label="mailbox folders"
         >
           {/*  <Drawer
             container={container}
@@ -453,7 +490,7 @@ export default function AppLayout(props: { window?: any }) {
               keepMounted: true,
             }}
             sx={{
-              display: { xs: "block", lg: "none" },
+              display: { sm: "block", lg: "none" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
@@ -488,9 +525,9 @@ export default function AppLayout(props: { window?: any }) {
               display: { xs: "none", md: "block" },
               flexDirection: "column",
               "& .MuiDrawer-paper": {
+                // width: drawerWidth,
                 boxSizing: "border-box",
-                width: drawerWidth,
-                borderRadius: "0 20px 20px 0",
+                borderRadius: "0 20px 0px 0",
                 padding: 2,
                 boxShadow:
                   "0px 0px 4px -1px rgba(0,0,0,0.2), 0px 0px 2px 0px rgba(0,0,0,0.14), 0px 0px 10px 0px rgba(0,0,0,0.12)",
@@ -506,22 +543,25 @@ export default function AppLayout(props: { window?: any }) {
           sx={{
             flexGrow: 1,
             // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
-            p: {
-              xs: "64px 3% 0 3%",
-              sm: "70px 3% 0 3%",
-              md: "99px 1% 0 1%",
-              lg: "112px 14px 0 24px",
-            },
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            /*  p: {
+               xs: "113px 4% 69px 4%",
+               sm: "130px 3% 71px 3%",
+               md: "99px 1% 0 1%",
+               lg: "112px 14px 0 14px",
+             }, */
+            // width: { sm: `calc(100% - ${drawerWidth}px)` },
+            // p: 3
+            pt: { xs: 3, md: 3 },
+            px: { xs: 2, md: 2 },
+            pb: { xs: 7, md: 3 },
           }}
         >
+          <Toolbar sx={{ height: "90px" }} />
           <Outlet />
-          <QRBox display={{ lg: "none", md: "none", sm: "none", xs: "block" }}>
-            {bottomNavigation}
-          </QRBox>
+          {hidden ? null : <QRBox>{bottomNavigation}</QRBox>}
         </QRBox>
       </QRBox>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

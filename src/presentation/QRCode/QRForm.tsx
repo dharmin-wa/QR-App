@@ -71,7 +71,7 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
       </QRTypography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{ padding: "24px" }}>
+          <Paper variant="outlined" style={{ padding: "24px" }}>
             <QRTypography variant="h6" textAlign="center" p={1}>
               {t("QRCodeType")}
             </QRTypography>
@@ -234,7 +234,7 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{ padding: 24 }}>
+          <Paper variant="outlined" style={{ padding: 24 }}>
             <QRBox sx={{ textAlign: "end" }}>
               <FormControlLabel
                 control={

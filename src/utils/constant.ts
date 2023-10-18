@@ -21,6 +21,7 @@ export const apiEndPoints = {
   deleteQR: "api/qrCode/deleteQrCode",
   viewQR: "api/qrCode/readQrCode",
   editQR: "api/qrCode/editQrCode",
+  countList: "api/qrCode/CountListQrCode",
 };
 
 export const method = {

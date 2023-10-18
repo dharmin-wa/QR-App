@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 import { apiEndPoints, method } from "../utils/constant";
 import { ApiContainer } from "../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_API_DATA } from "../redux/constants";
 import { useNavigate } from "react-router-dom";
+import { QRCode } from "react-qrcode-logo";
 
 interface QrFrameContainerProps {
   formPath: any;
@@ -18,6 +20,17 @@ const QrFrameContainer = ({
   const [anchorEls, setAnchorEls] = useState<any[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteQRId, setDeleteQRId] = useState<string>("");
+
+  const [sizeMenuAnchor, setSizeMenuAnchor] = useState(null);
+
+  const handleOpenSizeMenu = (event: any) => {
+    setSizeMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseSizeMenu = () => {
+    setSizeMenuAnchor(null);
+  };
+
   const { performRequest } = ApiContainer();
 
   const loadingStatus = useSelector(
@@ -64,19 +77,24 @@ const QrFrameContainer = ({
     setQRCodeSize(pixelValue);
   };
 
-  const downloadQRCode = () => {
+  const downloadQRCode = (selectedSize: string, qr?: any) => {
     const canvas: any = document.getElementById("QR");
-    if (canvas) {
-      const pngUrl = canvas
-        .toDataURL("image/png")
-        .replace("image/png", "image/octet-stream");
-      const downloadLink = document.createElement("a");
-      downloadLink.href = pngUrl;
-      downloadLink.download = `QR.png`;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    }
+    const qrCodeSize = parseFloat(selectedSize);
+    canvas.width = 50;
+    canvas.height = 50;
+
+    console.log("canvas", canvas);
+
+    const pngUrl = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+
+    const downloadLink = document.createElement("a");
+    downloadLink.href = pngUrl;
+    downloadLink.download = `QR_${selectedSize}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   };
 
   const handleOpenDeleteQRDialog = (id: string) => {
@@ -142,6 +160,9 @@ const QrFrameContainer = ({
     loadingStatus,
     handleViewQRCode,
     handleEditQRCode,
+    handleOpenSizeMenu,
+    handleCloseSizeMenu,
+    sizeMenuAnchor,
   };
 };
 

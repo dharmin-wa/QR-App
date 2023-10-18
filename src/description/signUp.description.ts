@@ -1,7 +1,21 @@
 import { attributeTypes } from "../types";
-import { email, password } from "../utils/constant";
+import { email, notEmptyOrNull, password } from "../utils/constant";
 
 export const attribute: attributeTypes[] = [
+  {
+    name: "firstName",
+    type: "text",
+    isRequired: true,
+    pattern: notEmptyOrNull,
+    error: ["required", "blankSpaceNotAllowed"],
+  },
+  {
+    name: "lastName",
+    type: "text",
+    isRequired: true,
+    pattern: notEmptyOrNull,
+    error: ["required", "blankSpaceNotAllowed"],
+  },
   {
     name: "email",
     type: "email",
@@ -21,6 +35,8 @@ export const attribute: attributeTypes[] = [
 export const defaultValues: any = {
   email: "",
   password: "",
+  firstName: "",
+  lastName: "",
 };
 
 export const formPath = { parent: "signUp" };

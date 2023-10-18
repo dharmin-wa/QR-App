@@ -61,7 +61,7 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
     handleLinkNameChange,
     handleStatusChange,
   } = QRFormContainer({ qrCode, editQR });
-  console.log("qrData", qrData);
+
   const { t } = useTranslation();
 
   return (

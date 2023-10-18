@@ -123,11 +123,18 @@ export default function AppLayout(props: { window?: any }) {
       }}
     >
       <Toolbar
-        sx={{ minHeight: "auto !important", justifyContent: "center" }}
+        sx={{
+          minHeight: "auto !important",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}
         disableGutters={true}
+        onClick={() => {
+          navigate("/dashboard");
+        }}
       >
         {/* <Logo /> */}
-        <img width={"75%"} src={Logo} alt="QR" />
+        <img width="80%" src={Logo} alt="QR" />
 
         {/* <QRTypography
           noWrap
@@ -324,7 +331,13 @@ export default function AppLayout(props: { window?: any }) {
               py: "5px",
             }}
           >
-            <QRBox display="flex" alignItems="center">
+            <QRBox
+              display="flex"
+              alignItems="center"
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+            >
               {/* <Logo /> */}
               <img src={MbLogo} alt="QR" />
             </QRBox>
@@ -542,18 +555,9 @@ export default function AppLayout(props: { window?: any }) {
           component="main"
           sx={{
             flexGrow: 1,
-            // pt: { xs: 10, sm: 12, md: 12, lg: 12 },
-            /*  p: {
-               xs: "113px 4% 69px 4%",
-               sm: "130px 3% 71px 3%",
-               md: "99px 1% 0 1%",
-               lg: "112px 14px 0 14px",
-             }, */
-            // width: { sm: `calc(100% - ${drawerWidth}px)` },
-            // p: 3
-            pt: { xs: 3, md: 3 },
+            pt: { xs: 2, sm: 4, md: 3 },
             px: { xs: 2, md: 2 },
-            pb: { xs: 7, md: 3 },
+            pb: { xs: 9, md: 3 },
           }}
         >
           <Toolbar sx={{ height: "90px" }} />

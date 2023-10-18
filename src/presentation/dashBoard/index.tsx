@@ -1,5 +1,5 @@
-import { Grid, Paper } from "@mui/material";
-import { formPath, topModule } from "../../description/dashboard.description";
+import { Grid, Paper, Skeleton } from "@mui/material";
+import { formPath } from "../../description/dashboard.description";
 import QRBox from "../../shared/QRBox";
 import QRTypography from "../../shared/QRTypography";
 import { useTranslation } from "react-i18next";
@@ -10,25 +10,47 @@ import DashboardContainer from "../../container/dashboard.container";
 import QRFrame from "../QRCode/QRFrame";
 import QRFrameSkeleton from "../QRCode/QRFrameSkeleton";
 import { useNavigate } from "react-router-dom";
+import { ReactNode, Key } from "react";
+import { JSX } from "react/jsx-runtime";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const { loadingStatus, qrCodesList } = DashboardContainer({ formPath });
+  const { loadingStatus, qrCodesList, loadingStatusForCountList, topModule } =
+    DashboardContainer({ formPath });
   const navigate = useNavigate();
+
+  const renderGridItem = (
+    content:
+      | string
+      | number
+      | boolean
+      | JSX.Element
+      | Iterable<ReactNode>
+      | null
+      | undefined,
+    index: Key | null | undefined,
+  ) => (
+    <Grid item xs={12} md={6} lg={3} key={index}>
+      <Paper elevation={0} sx={{ boxShadow: "0px 0px 4px 0px #00000040" }}>
+        {content}
+      </Paper>
+    </Grid>
+  );
+
+  const generateSkeletonGridItems = () =>
+    [1, 2, 3, 4].map((index) =>
+      renderGridItem(<Skeleton variant="rectangular" height={118} />, index),
+    );
+
+  const generateTopModuleGridItems = () =>
+    topModule?.map((v: any, index: any) => renderGridItem(v, index));
 
   return (
     <>
       <Grid container spacing={2} flexGrow={1}>
-        {topModule?.map((v, index) => (
-          <Grid item xs={12} md={6} lg={3} key={index}>
-            <Paper
-              elevation={0}
-              sx={{ boxShadow: "0px 0px 4px 0px #00000040" }}
-            >
-              {v}
-            </Paper>
-          </Grid>
-        ))}
+        {loadingStatusForCountList
+          ? generateSkeletonGridItems()
+          : generateTopModuleGridItems()}
       </Grid>
       <QRBox
         display="flex"
@@ -43,10 +65,7 @@ const Dashboard = () => {
             fontWeight={600}
             color="#1B294B"
             fontSize={"1rem"}
-            sx={{
-              // lineHeight: '24px',
-              letterSpacing: "0.01em",
-            }}
+            letterSpacing="0.01em"
           >
             {t("recentlyCreatedQRCodes")} (10)
           </QRTypography>
@@ -66,7 +85,6 @@ const Dashboard = () => {
           {t("createQRCode")}
         </QRButton>
       </QRBox>
-
       {!loadingStatus ? (
         <QRFrame qrCodes={qrCodesList} formPath={formPath} />
       ) : (

@@ -1,40 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Grid, Paper } from "@mui/material";
-import React, { useState } from "react";
-import QRTypography from "../../shared/QRTypography";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from "react";
 import DoughnutChart from "../../shared/DoughnutChart";
 import { ReactComponent as KpiQR } from "../../assets/svg/kpiQR.svg";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
-import QRBox from "../../shared/QRBox";
+import { List, ListItem, ListItemText } from "@mui/material";
 
 export interface ChartContainerProps {
-  Indicator: React.FC;
-  title: string;
-  value: number;
+  activeQrs: number;
+  disableQrs: number;
+  totalQrs: number;
 }
 
-const data = {
-  labels: ["Active QR <strong>70%<strong>", "Disable QR <strong>30%</strong>"],
-  datasets: [
-    {
-      hoverOffset: 1,
-      label: "# of Votes",
-      data: [70, 30],
-      backgroundColor: ["#356ABA", "#ECE9FF"],
-      cutout: 45,
-      borderColor: ["#356ABA", "#ECE9FF"],
-      // borderWidth: 2,
-    },
-  ],
-};
+interface ChartData {
+  labels: string[];
+  datasets: {
+    hoverOffset: number;
+    label: string;
+    data: number[];
+    backgroundColor: string[];
+    cutout: number;
+    borderColor: string[];
+  }[];
+}
 
 const options: any = {
   responsive: true,
@@ -46,7 +31,7 @@ const options: any = {
   },
 };
 
-const columnStyle: any = {
+const columnStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
@@ -54,31 +39,55 @@ const columnStyle: any = {
   padding: "5px 8px",
 };
 
-const ChartContainer = () => {
-  const [selectedLabels, setSelectedLabels] = useState<any>([]);
+const ChartContainer: React.FC<ChartContainerProps> = ({
+  activeQrs,
+  disableQrs,
+  totalQrs,
+}) => {
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
+  const [data, setData] = useState<ChartData | null>(null);
+
+  useEffect(() => {
+    setData({
+      labels: [
+        `Active QR <strong>${(activeQrs / totalQrs) * 100}%</strong>`,
+        `Disable QR <strong>${(disableQrs / totalQrs) * 100}%</strong>`,
+      ],
+      datasets: [
+        {
+          hoverOffset: 1,
+          label: "# of Votes",
+          data: [activeQrs, disableQrs],
+          backgroundColor: ["#356ABA", "#ECE9FF"],
+          cutout: 45,
+          borderColor: ["#356ABA", "#ECE9FF"],
+        },
+      ],
+    });
+  }, [activeQrs, disableQrs, totalQrs]);
 
   const handleLabelClick = (label: string) => {
     if (selectedLabels.includes(label)) {
-      setSelectedLabels(
-        selectedLabels.filter((selectedLabel: any) => selectedLabel !== label),
+      setSelectedLabels((prevSelectedLabels) =>
+        prevSelectedLabels.filter((selectedLabel) => selectedLabel !== label),
       );
     } else {
-      setSelectedLabels([...selectedLabels, label]);
+      setSelectedLabels((prevSelectedLabels) => [...prevSelectedLabels, label]);
     }
   };
 
-  const filteredData = {
-    labels: data.labels.filter((label) => !selectedLabels.includes(label)),
+  const filteredData: any = {
+    labels: data?.labels.filter((label) => !selectedLabels.includes(label)),
     datasets: [
       {
-        data: data.datasets[0].data.filter(
-          (_, index) => !selectedLabels.includes(data.labels[index]),
+        data: data?.datasets[0].data.filter(
+          (_, index) => !selectedLabels.includes(data?.labels[index]),
         ),
-        backgroundColor: data.labels
+        backgroundColor: data?.labels
           .filter((label) => !selectedLabels.includes(label))
           .map((label) => {
-            const labelIndex = data.labels.indexOf(label);
-            return data.datasets[0].backgroundColor[labelIndex];
+            const labelIndex = data?.labels.indexOf(label);
+            return data?.datasets[0].backgroundColor[labelIndex];
           }),
         cutout: "70%",
       },
@@ -108,7 +117,7 @@ const ChartContainer = () => {
         />
       </div>
       <List>
-        {data?.labels?.map((label, index) => (
+        {data?.labels.map((label, index) => (
           <ListItem
             key={index}
             disablePadding

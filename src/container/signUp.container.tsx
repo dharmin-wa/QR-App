@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { showToast } from "../utils/toastService";
 import { useTranslation } from "react-i18next";
 import { attributeTypes } from "../types";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpContainerProps {
   formData: any;
@@ -26,6 +27,7 @@ const SignUpContainer = ({
   const [strength, setStrength] = useState(0);
   const { t } = useTranslation();
   const { performRequest } = ApiContainer();
+  const navigate = useNavigate();
 
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[formPath?.parent],
@@ -74,16 +76,21 @@ const SignUpContainer = ({
       showToast(t("agreeTermAndCondition"));
       return;
     }
-    performRequest({
+    const res: any = await performRequest({
       endPoint: apiEndPoints?.signup,
       method: method.post,
       data: { ...formData, termAndCondition: agreeTC },
       showToastMessage: true,
       showErrorToastMessage: true,
-      successToastMessage: "Sign up successfully!",
+      successToastMessage: "Please verify your email before logging in",
       needLoader: true,
       parent: formPath.parent,
     });
+    if (res?.status === 200) {
+      setTimeout(function () {
+        navigate("/login");
+      }, 5000);
+    }
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {

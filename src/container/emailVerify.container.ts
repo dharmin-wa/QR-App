@@ -4,6 +4,7 @@ import { ApiContainer } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { apiEndPoints, method } from "../utils/constant";
 import { equal } from "../utils/javascript";
+import { clearStateFn } from "../utils/localStorage";
 
 interface EmailVerifyContainerProps {
   formPath: any;
@@ -33,6 +34,7 @@ const EmailVerifyContainer = ({ formPath }: EmailVerifyContainerProps) => {
       parent: formPath.parent,
     });
     if (equal(res.status, 200)) {
+      clearStateFn();
       navigate("/login");
     }
   };

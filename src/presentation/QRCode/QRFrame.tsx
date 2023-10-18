@@ -51,6 +51,7 @@ import moment from "moment";
 import QRStack from "../../shared/QRStack";
 import Logo from "../../assets/png/webAshlar.png";
 import QrFrameContainer from "../../container/qrFrame.container";
+import { useTranslation } from "react-i18next";
 
 interface QRFrameProps {
   qrCodes: any;
@@ -59,48 +60,8 @@ interface QRFrameProps {
 }
 
 const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
-  const qrCodess = [
-    {
-      id: 1,
-      checked: false,
-      qrCode: "QR_CODE_IMAGE_URL_1",
-      link: "https://example.com",
-      companyName: "Company A",
-      date: "2023-09-15",
-      url: "qrco.ew/bgBrewfdgdg",
-      qrLink: "(https://webashlar.com)",
-      scans: 100,
-      location: "Ahmedabad",
-      ip: "192.451.3.323.1",
-    },
-    {
-      id: 2,
-      checked: false,
-      qrCode: "QR_CODE_IMAGE_URL_2",
-      link: "https://example.com",
-      companyName: "Company B",
-      date: "2023-09-16",
-      url: "qrco.ew/bgBrewfgdg",
-      qrLink: "(https://webashlar.com)",
-      scans: 150,
-      location: "New York",
-      ip: "192.168.0.1",
-    },
-    {
-      id: 2,
-      checked: false,
-      qrCode: "QR_CODE_IMAGE_URL_2",
-      link: "https://example.com",
-      companyName: "Company B",
-      date: "2023-09-16",
-      url: "qrco.ew/bgBrewfgdg",
-      qrLink: "(https://webashlar.com)",
-      scans: 150,
-      location: "New York",
-      ip: "192.168.0.1",
-    },
-    // Add more QR codes as needed
-  ];
+  const { t } = useTranslation();
+
   const {
     qrCodeSize,
     downloadQRCode,
@@ -114,8 +75,12 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
     handleCloseDeleteQRDialog,
     loadingStatus,
     handleViewQRCode,
+    handleOpenSizeMenu,
     handleEditQRCode,
+    handleCloseSizeMenu,
+    sizeMenuAnchor,
   } = QrFrameContainer({ formPath, responseSelector });
+
   return (
     <>
       {qrCodes?.length
@@ -124,7 +89,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
               elevation={0}
               sx={{
                 flexGrow: 1,
-                border: { sm: "1px solid #356ABA", lg: "none" },
+                border: { xs: "1px solid #356ABA", lg: "none" },
               }}
               key={index}
             >
@@ -139,12 +104,12 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
               >
                 {/* first section */}
                 <Grid
-                  sm={12}
+                  xs={12}
                   md={12}
                   lg={5}
                   sx={{
                     display: "flex",
-                    justifyContent: { sm: "center", md: "start" },
+                    justifyContent: { xs: "center", lg: "start" },
                     paddingBottom: { sm: "10px", lg: "0px" },
                   }}
                 >
@@ -163,10 +128,11 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       <Checkbox checked={qr.checked} />
                       <QRCode
                         value={qr?.data?.[qr?.qr_type]}
+                        fgColor={qr?.buttonColor}
+                        bgColor={qr?.containerColor}
                         size={qrCodeSize}
-                        // size={10 * 10}
-                        eyeColor="#AD7A1E"
-                        eyeRadius={4}
+                        eyeColor={qr?.eyeColor}
+                        eyeRadius={qr?.eyeRadius}
                         logoImage={Logo}
                         enableCORS={true}
                         logoWidth={45}
@@ -180,11 +146,12 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         display: "flex",
                         flexDirection: "column",
                         gap: "3px",
-                        justifyContent: "center",
+                        justifyContent: { sm: "end", md: "center" },
+                        alignItems: { xs: "center", sm: "start" },
                       }}
                     >
                       <Grid item>
-                        <StyledTypography>Link{qr?.qr_type}</StyledTypography>
+                        <StyledTypography>{qr?.qr_type}</StyledTypography>
                       </Grid>
 
                       <Grid
@@ -196,7 +163,9 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         }}
                       >
                         <FileIcon style={{ width: "20px" }} />
-                        <StyledText>{qr.companyName}</StyledText>
+                        <StyledText>
+                          {qr.companyName || t("notAvailable")}
+                        </StyledText>
                       </Grid>
 
                       <Grid
@@ -225,12 +194,12 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         <QRStack direction="column">
                           <span style={{ whiteSpace: "nowrap" }}>
                             <StyledLink href={qr.url}>
-                              <span>{qr.url}</span>
+                              <span>{qr.url || t("notAvailable")}</span>
                             </StyledLink>{" "}
                             <EditIcon />
                           </span>
                           <QRTypography variant="caption" color="textSecondary">
-                            {qr?.qrLink}
+                            {qr?.qrLink || t("notAvailable")}
                           </QRTypography>
                         </QRStack>
                       </Grid>
@@ -239,7 +208,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                 </Grid>
                 {/* second section */}
                 <Grid
-                  sm={12}
+                  xs={12}
                   md={6}
                   lg={3}
                   sx={{
@@ -252,47 +221,60 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                   }}
                 >
                   <QRStack direction="row" gap={1} alignItems="center">
-                    <Grid container>
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "3px",
+                        justifyContent: "center",
+                        alignItems: { xs: "center", sm: "start" },
+                      }}
+                    >
                       <Grid
                         item
-                        xs={2}
-                        display="flex"
-                        justifyContent="space-around"
-                        alignItems="center"
+                        sx={{
+                          display: "flex",
+                          gap: "10px",
+                          alignItems: "center",
+                        }}
                       >
-                        <ScannerIcon />
-                      </Grid>
-                      <Grid item xs={10} display="flex">
+                        <ScannerIcon style={{ width: "20px" }} />
                         <StyledMiddleText
                           sx={{
                             lineHeight: "35px",
                           }}
                         >
-                          Scans:{" "}
+                          Scans:
                           <span className="fs" style={{ fontWeight: 700 }}>
-                            {qr?.scans}
+                            {qr?.scans || t("notAvailable")}
                           </span>
                         </StyledMiddleText>
                       </Grid>
+
                       <Grid
                         item
-                        xs={2}
-                        display="flex"
-                        justifyContent="space-around"
+                        sx={{
+                          display: "flex",
+                          gap: "10px",
+                          alignItems: "start",
+                        }}
                       >
-                        <LocationIcon />
-                      </Grid>
-                      <Grid item xs={10}>
-                        <StyledMiddleText
-                          sx={{
-                            lineHeight: "22px",
-                            textAlign: "left",
-                          }}
-                        >
-                          Locations:
-                        </StyledMiddleText>
-                        <StyledLocation>Ahmedabad</StyledLocation>
-                        <StyledIp>192.451.3.323.1</StyledIp>
+                        <LocationIcon style={{ width: "20px" }} />
+                        <QRBox>
+                          <StyledMiddleText
+                            sx={{
+                              lineHeight: "22px",
+                              textAlign: "left",
+                            }}
+                          >
+                            Locations:
+                          </StyledMiddleText>
+                          <StyledLocation>
+                            {qr?.location || t("notAvailable")}
+                          </StyledLocation>
+                          <StyledIp>{qr?.ip || t("notAvailable")}</StyledIp>
+                        </QRBox>
                       </Grid>
                     </Grid>
                   </QRStack>
@@ -302,7 +284,9 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                     alignItems="center"
                     flexWrap="nowrap"
                   >
-                    <StyledLocationFont>+22 Locations</StyledLocationFont>
+                    <StyledLocationFont>
+                      {qr?.no || t("notAvailable")}
+                    </StyledLocationFont>
                     <StyledViewMore href="#">View More</StyledViewMore>
                   </QRStack>
                 </Grid>
@@ -322,10 +306,23 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                         padding: "7px 50px",
                       }}
                       startIcon={<DownloadQRIcon />}
-                      onClick={() => downloadQRCode()}
+                      onClick={handleOpenSizeMenu}
                     >
                       Download QR
                     </StyledDownloadButton>
+                    <Menu
+                      anchorEl={sizeMenuAnchor}
+                      open={Boolean(sizeMenuAnchor)}
+                      onClose={handleCloseSizeMenu}
+                    >
+                      <MenuItem onClick={() => downloadQRCode("130", qr)}>
+                        Size 130
+                      </MenuItem>
+                      <MenuItem onClick={() => downloadQRCode("2100", qr)}>
+                        Size 200
+                      </MenuItem>
+                      {/* Add more size options here */}
+                    </Menu>
                     <div
                       style={{ display: "flex", alignItems: "flex-end" }}
                       onClick={() => handleEditQRCode(qr?._id)}

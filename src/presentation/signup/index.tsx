@@ -23,6 +23,7 @@ import RightArrow from "../../assets/svg/rightArrow.svg";
 import { Link } from "react-router-dom";
 import Mail from "../../assets/svg/mail.svg";
 import Lock from "../../assets/svg/lock.svg";
+import UserName from "../../assets/svg/userName.svg";
 import { useTranslation } from "react-i18next";
 
 const SignUp: React.FC = () => {
@@ -76,6 +77,40 @@ const SignUp: React.FC = () => {
           // alignItems: "center"
         }}
       >
+        <QRTextField
+          error={!!error?.firstName}
+          id="firstName"
+          type="text"
+          name="firstName"
+          defaultValue={defaultValues?.firstName}
+          placeholder={t("firstName")}
+          helperText={t(error?.firstName)}
+          onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <img src={UserName} alt="User Icon" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <QRTextField
+          error={!!error?.lastName}
+          id="lastName"
+          type="text"
+          name="lastName"
+          defaultValue={defaultValues?.lastName}
+          placeholder={t("lastName")}
+          helperText={t(error?.lastName)}
+          onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <img src={UserName} alt="User Icon" />
+              </InputAdornment>
+            ),
+          }}
+        />
         <QRTextField
           error={!!error?.email}
           id="email"

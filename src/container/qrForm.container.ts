@@ -121,10 +121,18 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
         PhoneNumber: QRType.PhoneNumber,
         MultiAction: QRType.MultiAction,
       };
-
+      console.log("qrCode>>>", qrCode);
       if (typeMapping[qrType] || qrType === "Link") {
         const initialData = {
           ...initialQrData,
+          theme: {
+            containerColor: qrCode?.containerColor,
+            buttonColor: qrCode?.buttonColor,
+            buttonTextColor: qrCode?.buttonTextColor,
+            eyeColor: qrCode?.eyeColor,
+            qrStyle: qrCode?.qrStyle,
+            eyeRadius: qrCode?.eyeRadius,
+          },
           type: typeMapping[qrType],
           data:
             qrType === "MultiAction"
@@ -142,9 +150,13 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
             ? qrCode?.data?.action?.map((action: any) => action?.url).join(",")
             : qrCode?.data?.free_text || qrCode?.data?.link;
 
-        console.log("initialData>>>", initialData);
         setQRData(initialData);
         setGeneratedQRCode(QRCodeData);
+        setLogoSize({
+          ...logoSize,
+          logoWidth: qrCode?.logoWidth,
+          logoHeight: qrCode?.logoHeight,
+        });
         if (qrType === "PhoneNumber") {
           setCountryCodeName(extractCountryCode(qrCode?.data?.free_text) || "");
         }
@@ -395,11 +407,18 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   };
 
   const callApi = async () => {
+    const { theme } = qrData;
+    /* const { containerColor, buttonColor, buttonTextColor, eyeColor, qrStyle, eyeRadius } = qrData.theme */
+    const { logoWidth, logoHeight } = logoSize;
+    const formData = new FormData();
     const payload: any = {
       qr_type: "",
       user_id: userId,
       data: {},
       status: qrData?.status,
+      ...theme,
+      logoWidth,
+      logoHeight,
     };
 
     switch (qrData.type) {
@@ -430,6 +449,14 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       ? "QR code updated successfully"
       : "QR code created successfully";
 
+    for (const key in payload) {
+      if (key === "data") {
+        formData.append(key, JSON.stringify(payload[key]));
+      } else {
+        formData.append(key, payload[key]);
+      }
+    }
+
     const res: any = await performRequest({
       endPoint: apiEndpoint,
       method: editQR ? method.put : method.post,
@@ -451,9 +478,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
         logoWidth: 30,
         logoHeight: 30,
       });
-      if (editQR) {
-        navigate("/qr-codes");
-      }
+      navigate(editQR ? "/qr-codes" : "/dashboard");
     }
   };
 

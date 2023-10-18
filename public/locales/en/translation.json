@@ -61,5 +61,9 @@
   "generateQRCode": "Generate QR Code",
   "QRCodePreview": "QR Code Preview",
   "colorContrastWarning": "Improve QR code scanability by increasing color contrast.",
-  "editQRCode": "Edit QR Code"
+  "editQRCode": "Edit QR Code",
+  "notAvailable": "Not available",
+  "blankSpaceNotAllowed": "Blank space not allowed",
+  "firstName": "First name",
+  "lastName": "Last name"
 }

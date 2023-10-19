@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import React, { useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { loadStateFn } from "../../utils/localStorage";
@@ -6,7 +5,7 @@ import { loadStateFn } from "../../utils/localStorage";
 const ProtectedRoute = () => {
   const history = useNavigate();
   const { pathname } = useLocation();
-  const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
+  const isAuthenticated = loadStateFn("isAuthenticated");
   const token = loadStateFn();
 
   useEffect(() => {

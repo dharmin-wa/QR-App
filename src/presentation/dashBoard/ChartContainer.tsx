@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DoughnutChart from "../../shared/DoughnutChart";
 import { ReactComponent as KpiQR } from "../../assets/svg/kpiQR.svg";
 import { List, ListItem, ListItemText } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 export interface ChartContainerProps {
   activeQrs: number;
@@ -46,19 +47,27 @@ const ChartContainer: React.FC<ChartContainerProps> = ({
 }) => {
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [data, setData] = useState<ChartData | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     setData({
       labels: [
-        `Active QR <strong>${(activeQrs / totalQrs) * 100}%</strong>`,
-        `Disable QR <strong>${(disableQrs / totalQrs) * 100}%</strong>`,
+        `Active QR <strong>${
+          totalQrs !== 0 ? ((activeQrs / totalQrs) * 100).toFixed(2) : 0
+        }%</strong>`,
+        `Disable QR <strong>${
+          totalQrs !== 0 ? ((disableQrs / totalQrs) * 100).toFixed(2) : 0
+        }%</strong>`,
       ],
       datasets: [
         {
           hoverOffset: 1,
           label: "# of Votes",
           data: [activeQrs, disableQrs],
-          backgroundColor: ["#356ABA", "#ECE9FF"],
+          backgroundColor: [
+            theme?.palette?.primary?.main,
+            theme?.palette?.secondary?.light,
+          ],
           cutout: 45,
           borderColor: ["#356ABA", "#ECE9FF"],
         },

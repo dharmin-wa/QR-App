@@ -65,5 +65,6 @@
   "notAvailable": "Not available",
   "blankSpaceNotAllowed": "Blank space not allowed",
   "firstName": "First name",
-  "lastName": "Last name"
+  "lastName": "Last name",
+  "title": "Title"
 }

@@ -60,6 +60,9 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
     handleLogoSizeChange,
     handleLinkNameChange,
     handleStatusChange,
+    handleTitleChange,
+    handleBgChange,
+    checked,
   } = QRFormContainer({ qrCode, editQR });
 
   const { t } = useTranslation();
@@ -72,6 +75,26 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Paper variant="outlined" style={{ padding: "24px" }}>
+            <QRTypography variant="h6" textAlign="center" p={1}>
+              {t("title")}
+            </QRTypography>
+            <QRTextField
+              fullWidth
+              label="Title"
+              value={qrData?.title}
+              onChange={(e) => handleTitleChange(e)}
+              error={
+                !!validationErrors.title.validationError ||
+                validationErrors.title.requiredError
+              }
+              helperText={
+                validationErrors.title?.requiredError
+                  ? t("required")
+                  : validationErrors.title?.validationError
+                  ? t("blankSpaceNotAllowed")
+                  : ""
+              }
+            />
             <QRTypography variant="h6" textAlign="center" p={1}>
               {t("QRCodeType")}
             </QRTypography>
@@ -88,6 +111,7 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
               <MenuItem value={QRType.MultiAction}>Multi Action</MenuItem>
             </Select>
             <Divider style={{ margin: "16px 0" }} />
+
             {qrData.type === QRType.MultiAction ? (
               <div>
                 {qrData.data.map((data, index) => (
@@ -258,10 +282,11 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                 bgColor={qrData?.theme?.containerColor}
                 eyeColor={qrData?.theme?.eyeColor}
                 logoImage={logo}
-                logoWidth={logoSize?.logoWidth}
-                logoHeight={logoSize?.logoHeight}
+                logoWidth={checked ? 128 : logoSize?.logoWidth}
+                logoHeight={checked ? 128 : logoSize?.logoHeight}
                 eyeRadius={qrData?.theme?.eyeRadius}
                 qrStyle={qrData?.theme?.qrStyle}
+                logoOpacity={checked ? 0.4 : 1}
               />
               {contrastError && (
                 <Alert severity="warning">{t("colorContrastWarning")}</Alert>
@@ -357,64 +382,84 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                 />
               </Grid>
             </Grid>
-            <input
-              type="file"
-              id="logo"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={handleLogoUpload}
-            />
-            <label htmlFor="logo" style={{ marginTop: "16px" }}>
-              <Button variant="outlined" component="span">
-                Upload Logo
-              </Button>
-            </label>
-            {logo && (
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setLogo(null);
-                  setLogoSize({
-                    logoWidth: 30,
-                    logoHeight: 30,
-                  });
-                }}
-                sx={{ margin: "0 16px" }}
-              >
-                <ClearIcon />
-              </Button>
-            )}
+            <QRBox
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <input
+                type="file"
+                id="logo"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleLogoUpload}
+              />
+              <label htmlFor="logo">
+                <Button variant="outlined" component="span">
+                  Upload Logo
+                </Button>
+              </label>
 
-            <div style={{ margin: "10px 0" }}>
-              <QRTypography id="logoWidthSlider" gutterBottom>
-                Logo Width: {logoSize?.logoWidth}
-              </QRTypography>
-              <Slider
-                value={logoSize?.logoWidth}
-                name="logoWidth"
-                onChange={handleLogoSizeChange}
-                min={30}
-                max={35}
-                // valueLabelDisplay="on"
-                aria-labelledby="logoWidthSlider"
-                // sx={{ m: "25px 0 0 0" }}
-              />
-            </div>
-            <div style={{ marginBottom: "16px" }}>
-              <QRTypography id="logoHeightSlider" gutterBottom>
-                Logo Height: {logoSize?.logoHeight}
-              </QRTypography>
-              <Slider
-                value={logoSize?.logoHeight}
-                name="logoHeight"
-                onChange={handleLogoSizeChange}
-                min={30}
-                max={35}
-                // valueLabelDisplay="on"
-                aria-labelledby="logoHeightSlider"
-                // sx={{ m: "25px 0" }}
-              />
-            </div>
+              {logo && (
+                <>
+                  <img src={logo} width={32} height={32} />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={checked}
+                        onChange={handleBgChange}
+                        inputProps={{ "aria-label": "controlled" }}
+                      />
+                    }
+                    label={"Set as a background image"}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      setLogo(null);
+                      setLogoSize({
+                        logoWidth: 30,
+                        logoHeight: 30,
+                      });
+                    }}
+                    sx={{ margin: "0 16px" }}
+                  >
+                    <ClearIcon />
+                  </Button>
+                </>
+              )}
+            </QRBox>
+            {!checked && logo ? (
+              <>
+                {" "}
+                <div style={{ margin: "10px 0" }}>
+                  <QRTypography id="logoWidthSlider" gutterBottom>
+                    Logo Width: {logoSize?.logoWidth}
+                  </QRTypography>
+                  <Slider
+                    value={logoSize?.logoWidth}
+                    name="logoWidth"
+                    onChange={handleLogoSizeChange}
+                    min={30}
+                    max={35}
+                    aria-labelledby="logoWidthSlider"
+                  />
+                </div>
+                <div style={{ marginBottom: "16px" }}>
+                  <QRTypography id="logoHeightSlider" gutterBottom>
+                    Logo Height: {logoSize?.logoHeight}
+                  </QRTypography>
+                  <Slider
+                    value={logoSize?.logoHeight}
+                    name="logoHeight"
+                    onChange={handleLogoSizeChange}
+                    min={30}
+                    max={35}
+                    aria-labelledby="logoHeightSlider"
+                  />
+                </div>{" "}
+              </>
+            ) : null}
           </Paper>
         </Grid>
       </Grid>

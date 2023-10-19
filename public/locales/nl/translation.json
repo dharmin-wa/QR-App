@@ -62,5 +62,9 @@
   "QRCodePreview": "Voorbeeld van QR-code",
   "colorContrastWarning": "Verbeter de scanbaarheid van QR-codes door het kleurcontrast te vergroten.",
   "editQRCode": "QR-code bewerken",
-  "notAvailable": "niet beschikbaar"
+  "notAvailable": "niet beschikbaar",
+  "blankSpaceNotAllowed": "Lege ruimte is niet toegestaan",
+  "firstName": "Voornaam",
+  "lastName": "Achternaam",
+  "title": "Titel"
 }

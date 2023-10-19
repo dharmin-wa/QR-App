@@ -22,6 +22,7 @@ export const apiEndPoints = {
   viewQR: "api/qrCode/readQrCode",
   editQR: "api/qrCode/editQrCode",
   countList: "api/qrCode/CountListQrCode",
+  userData: "api/auth/get-user-profile",
 };
 
 export const method = {

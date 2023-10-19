@@ -52,14 +52,21 @@ import QRStack from "../../shared/QRStack";
 import Logo from "../../assets/png/webAshlar.png";
 import QrFrameContainer from "../../container/qrFrame.container";
 import { useTranslation } from "react-i18next";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { imageSizes } from "../../description/dashboard.description";
 interface QRFrameProps {
   qrCodes: any;
   formPath: any;
   responseSelector?: boolean;
+  getCountListQrCode?: () => void;
 }
 
-const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
+const QRFrame = ({
+  qrCodes,
+  formPath,
+  responseSelector,
+  getCountListQrCode,
+}: QRFrameProps) => {
   const { t } = useTranslation();
 
   const {
@@ -79,7 +86,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
     handleEditQRCode,
     handleCloseSizeMenu,
     sizeMenuAnchor,
-  } = QrFrameContainer({ formPath, responseSelector });
+  } = QrFrameContainer({ formPath, responseSelector, getCountListQrCode });
 
   return (
     <>
@@ -128,15 +135,16 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       <Checkbox checked={qr.checked} />
                       <QRCode
                         value={qr?.data?.[qr?.qr_type]}
-                        fgColor={qr?.buttonColor}
-                        bgColor={qr?.containerColor}
+                        fgColor={qr?.buttonColor || "#000"}
+                        bgColor={qr?.containerColor || "#ffffff"}
                         size={qrCodeSize}
-                        eyeColor={qr?.eyeColor}
-                        eyeRadius={qr?.eyeRadius}
-                        logoImage={Logo}
+                        eyeColor={qr?.eyeColor || "#000"}
+                        eyeRadius={qr?.eyeRadius || 0}
+                        logoImage={qr?.logo}
                         enableCORS={true}
                         logoWidth={45}
                         logoHeight={45}
+                        qrStyle={qr?.qrStyle || "squares"}
                         id="QR"
                       />
                     </QRStack>
@@ -164,7 +172,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       >
                         <FileIcon style={{ width: "20px" }} />
                         <StyledText>
-                          {qr.companyName || t("notAvailable")}
+                          {qr?.title || t("notAvailable")}
                         </StyledText>
                       </Grid>
 
@@ -199,7 +207,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                             <EditIcon />
                           </span>
                           <QRTypography variant="caption" color="textSecondary">
-                            {qr?.qrLink || t("notAvailable")}
+                            {qr?.link || t("notAvailable")}
                           </QRTypography>
                         </QRStack>
                       </Grid>
@@ -307,6 +315,7 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       }}
                       startIcon={<DownloadQRIcon />}
                       onClick={handleOpenSizeMenu}
+                      endIcon={<KeyboardArrowDownIcon />}
                     >
                       Download QR
                     </StyledDownloadButton>
@@ -315,13 +324,16 @@ const QRFrame = ({ qrCodes, formPath, responseSelector }: QRFrameProps) => {
                       open={Boolean(sizeMenuAnchor)}
                       onClose={handleCloseSizeMenu}
                     >
-                      <MenuItem onClick={() => downloadQRCode("130", qr)}>
-                        Size 130
-                      </MenuItem>
-                      <MenuItem onClick={() => downloadQRCode("2100", qr)}>
-                        Size 200
-                      </MenuItem>
-                      {/* Add more size options here */}
+                      {imageSizes?.map((img, index) => {
+                        return (
+                          <MenuItem
+                            key={index}
+                            onClick={() => downloadQRCode(img)}
+                          >
+                            {img.width}x{img.height}
+                          </MenuItem>
+                        );
+                      })}
                     </Menu>
                     <div
                       style={{ display: "flex", alignItems: "flex-end" }}

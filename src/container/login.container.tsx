@@ -70,7 +70,7 @@ const LoginContainer = ({
       }
       dispatch({
         type: SET_APP_DATA,
-        payload: { isAuthenticated: true, id: _id },
+        payload: { auth: { isAuthenticated: true, id: _id } },
       });
       if (emailVerify) {
         navigate("/dashboard");

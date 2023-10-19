@@ -10,11 +10,13 @@ import { QRCode } from "react-qrcode-logo";
 interface QrFrameContainerProps {
   formPath: any;
   responseSelector?: boolean;
+  getCountListQrCode?: () => void;
 }
 
 const QrFrameContainer = ({
   formPath,
   responseSelector = false,
+  getCountListQrCode,
 }: QrFrameContainerProps) => {
   const [qrCodeSize, setQRCodeSize] = useState<number>(130);
   const [anchorEls, setAnchorEls] = useState<any[]>([]);
@@ -77,24 +79,31 @@ const QrFrameContainer = ({
     setQRCodeSize(pixelValue);
   };
 
-  const downloadQRCode = (selectedSize: string, qr?: any) => {
-    const canvas: any = document.getElementById("QR");
-    const qrCodeSize = parseFloat(selectedSize);
-    canvas.width = 50;
-    canvas.height = 50;
+  const downloadQRCode = (size: any) => {
+    const qrCanvas: any = document.getElementById("QR");
 
-    console.log("canvas", canvas);
+    if (qrCanvas) {
+      const img = new Image();
+      img.src = qrCanvas.toDataURL("image/png");
 
-    const pngUrl = canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = size.width;
+        canvas.height = size.height;
 
-    const downloadLink = document.createElement("a");
-    downloadLink.href = pngUrl;
-    downloadLink.download = `QR_${selectedSize}.png`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+        const ctx: any = canvas.getContext("2d");
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(img, 0, 0, size.width, size.height);
+
+        const pngUrl = canvas.toDataURL("image/png");
+        const downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = `QR_${size.width}x${size.height}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      };
+    }
   };
 
   const handleOpenDeleteQRDialog = (id: string) => {
@@ -128,6 +137,9 @@ const QrFrameContainer = ({
           type: SET_API_DATA,
           payload: { [formPath?.parent]: { data: res?.data } },
         });
+      }
+      if (getCountListQrCode) {
+        getCountListQrCode();
       }
     }
   };

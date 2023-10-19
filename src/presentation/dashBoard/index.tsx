@@ -15,8 +15,13 @@ import { JSX } from "react/jsx-runtime";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const { loadingStatus, qrCodesList, loadingStatusForCountList, topModule } =
-    DashboardContainer({ formPath });
+  const {
+    loadingStatus,
+    qrCodesList,
+    loadingStatusForCountList,
+    topModule,
+    getCountListQrCode,
+  } = DashboardContainer({ formPath });
   const navigate = useNavigate();
 
   const renderGridItem = (
@@ -86,7 +91,11 @@ const Dashboard = () => {
         </QRButton>
       </QRBox>
       {!loadingStatus ? (
-        <QRFrame qrCodes={qrCodesList} formPath={formPath} />
+        <QRFrame
+          qrCodes={qrCodesList}
+          formPath={formPath}
+          getCountListQrCode={getCountListQrCode}
+        />
       ) : (
         <QRFrameSkeleton numSkeletons={3} />
       )}

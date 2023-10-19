@@ -7,6 +7,7 @@ import {
 } from "../description/generateQR.description";
 import {
   emailValidation,
+  notEmpty,
   urlValidation,
   validPhoneNumber,
 } from "../utils/regex";
@@ -29,6 +30,7 @@ enum QRType {
 interface QRData {
   type: QRType;
   data: string[];
+  title: string;
   theme: {
     containerColor: string;
     buttonColor: string;
@@ -48,6 +50,10 @@ interface QRFormContainerProps {
 }
 
 const initialValidationErrors = {
+  title: {
+    validationError: false,
+    requiredError: false,
+  },
   [QRType.Link]: {
     validationError: false,
     requiredError: false,
@@ -67,6 +73,7 @@ const initialValidationErrors = {
 
 const initialQrData = {
   type: QRType.Link,
+  title: "",
   data: [""],
   theme: {
     containerColor: "#ffffff",
@@ -93,6 +100,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   const [validationErrors, setValidationErrors] = useState<any>(
     initialValidationErrors,
   );
+  const [checked, setChecked] = useState(false);
   const { performRequest } = ApiContainer();
   const userId = loadStateFn("id");
   const dispatch = useDispatch();
@@ -121,18 +129,18 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
         PhoneNumber: QRType.PhoneNumber,
         MultiAction: QRType.MultiAction,
       };
-      console.log("qrCode>>>", qrCode);
       if (typeMapping[qrType] || qrType === "Link") {
         const initialData = {
           ...initialQrData,
           theme: {
-            containerColor: qrCode?.containerColor,
-            buttonColor: qrCode?.buttonColor,
-            buttonTextColor: qrCode?.buttonTextColor,
-            eyeColor: qrCode?.eyeColor,
-            qrStyle: qrCode?.qrStyle,
-            eyeRadius: qrCode?.eyeRadius,
+            containerColor: qrCode?.containerColor || "#ffffff",
+            buttonColor: qrCode?.buttonColor || "#000",
+            buttonTextColor: qrCode?.buttonTextColor || "#ffffff",
+            eyeColor: qrCode?.eyeColor || "#000",
+            qrStyle: qrCode?.qrStyle || "squares",
+            eyeRadius: qrCode?.eyeRadius || 0,
           },
+          title: qrCode?.title || "",
           type: typeMapping[qrType],
           data:
             qrType === "MultiAction"
@@ -200,7 +208,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
     let validationError = false;
     let requiredError = false;
-
+    console.log("newData", newData);
     switch (qrData.type) {
       case QRType.Link:
         requiredError = isFieldEmpty(newData);
@@ -312,8 +320,8 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
     setContrastError(
       contrastRatio1 < MIN_CONTRAST_RATIO ||
-        contrastRatio2 < MIN_CONTRAST_RATIO ||
-        contrastRatio3 > MIN_CONTRAST_RATIO,
+      contrastRatio2 < MIN_CONTRAST_RATIO ||
+      contrastRatio3 > MIN_CONTRAST_RATIO,
     );
 
     setQRData({ ...qrData, theme: { ...qrData?.theme, [property]: value } });
@@ -326,25 +334,28 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   const handleLogoUpload = (e: any) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event: ProgressEvent<FileReader>) => {
-        if (event.target && typeof event.target.result === "string") {
-          setLogo(event.target.result);
-        }
-      };
-      reader.readAsDataURL(file);
+      setLogo(URL.createObjectURL(file));
+      /*  const reader = new FileReader();
+       reader.onload = (event: ProgressEvent<FileReader>) => {
+         if (event.target && typeof event.target.result === "string") {
+           setLogo(event.target.result);
+         }
+       };
+       reader.readAsDataURL(file); */
       e.target.value = null;
     }
   };
 
   const handleGenerateQR = () => {
-    const { type, data } = qrData;
+    const { type, data, title } = qrData;
     const validationErrorsForLink = [
       ...validationErrors[QRType.MultiAction].validationErrors,
     ];
 
     let validationError = false;
     let requiredError = false;
+    let validationErrorForTitle = false;
+    let requiredErrorForTitle = false;
 
     switch (type) {
       case QRType.Link:
@@ -366,6 +377,9 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
         break;
     }
 
+    requiredErrorForTitle = isFieldEmpty(title);
+    validationErrorForTitle = !notEmpty(title);
+
     if (type === QRType.MultiAction) {
       data.forEach((link, index) => {
         validationErrorsForLink[index] = {
@@ -384,6 +398,10 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       [QRType.MultiAction]: {
         validationErrors: validationErrorsForLink,
       },
+      title: {
+        validationError: validationErrorForTitle,
+        requiredError: requiredErrorForTitle,
+      },
     }));
 
     if (type === QRType.MultiAction) {
@@ -394,13 +412,23 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       if (validLinksCount && data?.length < 2) {
         showToast("Please add at least 2 valid links");
         return;
-      } else if (validLinksCount) {
+      } else if (
+        validLinksCount &&
+        !requiredErrorForTitle &&
+        !validationErrorForTitle
+      ) {
         setGeneratedQRCode(qrData.data.join(","));
         callApi();
       }
     }
 
-    if (!requiredError && !validationError && type !== QRType.MultiAction) {
+    if (
+      !requiredError &&
+      !validationError &&
+      type !== QRType.MultiAction &&
+      !requiredErrorForTitle &&
+      !validationErrorForTitle
+    ) {
       setGeneratedQRCode(qrData.data.join(","));
       callApi();
     }
@@ -408,19 +436,33 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
   const callApi = async () => {
     const { theme } = qrData;
+    const canvas = document.createElement("canvas");
+    let pngUrl;
+    if (canvas) {
+      pngUrl = canvas
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream");
+    }
+
     /* const { containerColor, buttonColor, buttonTextColor, eyeColor, qrStyle, eyeRadius } = qrData.theme */
     const { logoWidth, logoHeight } = logoSize;
+
     const formData = new FormData();
     const payload: any = {
       qr_type: "",
+      title: qrData.title,
       user_id: userId,
       data: {},
+      logo: logo.files[0],
+      thumbnail: pngUrl,
+      bgImage: checked,
       status: qrData?.status,
       ...theme,
       logoWidth,
       logoHeight,
     };
 
+    console.log("logo>>", logo);
     switch (qrData.type) {
       case QRType.Link:
         payload.data.link = qrData.data[0];
@@ -460,12 +502,13 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
     const res: any = await performRequest({
       endPoint: apiEndpoint,
       method: editQR ? method.put : method.post,
-      data: payload,
+      data: formData,
       showToastMessage: true,
       showErrorToastMessage: true,
       successToastMessage: successMessage,
       needLoader: true,
       parent: formPath.parent,
+      ContentType: "multipart/form-data",
     });
 
     if (res.status === 200) {
@@ -516,6 +559,29 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
     }
   }
 
+  const handleTitleChange = (event: any) => {
+    const newTitle = event.target.value;
+    let validationError = false;
+    let requiredError = false;
+
+    requiredError = isFieldEmpty(newTitle);
+    validationError = !notEmpty(newTitle);
+
+    setValidationErrors((prevErrors: any) => ({
+      ...prevErrors,
+      title: { requiredError, validationError },
+    }));
+
+    setQRData({
+      ...qrData,
+      title: newTitle,
+    });
+  };
+
+  const handleBgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
   const handleStatusChange = () => {
     const newStatus = qrData.status === "A" ? "D" : "A";
     setQRData({
@@ -546,6 +612,9 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
     handleLogoSizeChange,
     handleLinkNameChange,
     handleStatusChange,
+    handleTitleChange,
+    handleBgChange,
+    checked,
   };
 };
 

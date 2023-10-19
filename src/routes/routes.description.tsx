@@ -13,15 +13,16 @@ import AppLayout from "../presentation/layout/AppLayout";
 import PasswordRecoverySuccess from "../presentation/PasswordRecoverySuccess";
 import GenerateQR from "../presentation/generateQR";
 import AllQR from "../presentation/allQR";
-import { useSelector } from "react-redux";
 import { loadStateFn } from "../utils/localStorage";
 import ProtectedRoute from "../presentation/auth/ProtectedRoute";
 import QRCodeDetails from "../presentation/QRCodeDetails";
 import EditQRCode from "../presentation/QRCode/EditQRCode";
 import Test from "../presentation/Test";
+import UpgradePlan from "../presentation/upgradePlan";
+import Profile from "../presentation/profile";
 
 const RedirectComponent = () => {
-  const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
+  const isAuthenticated = loadStateFn("isAuthenticated");
   const token = loadStateFn();
   const navigate = useNavigate();
   useEffect(() => {
@@ -163,6 +164,24 @@ const privateRoutes: RouteObject[] = [
           {
             path: "/edit-qr-code/:qrCodeId",
             children: [{ index: true, element: <EditQRCode /> }],
+          },
+        ],
+      },
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/pricing",
+            children: [{ index: true, element: <UpgradePlan /> }],
+          },
+        ],
+      },
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/profile",
+            children: [{ index: true, element: <Profile /> }],
           },
         ],
       },

@@ -32,10 +32,8 @@ import { upperCase } from "../../utils/javascript";
 import { useTranslation } from "react-i18next";
 import Logo from "../../assets/png/logo.png";
 import MbLogo from "../../assets/png/mb-logo.png";
-import Footer from "../Footer";
 import QRButton from "../../shared/QRButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import theme from "../../themes/theme";
 import {
   CardContentStyle,
   CardStyle,
@@ -51,8 +49,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import LanguageSelector from "../../shared/LanguageSelector";
 import { LOGOUT } from "../../redux/constants";
 import { isExpired } from "react-jwt";
-import MenuIcon from "@mui/icons-material/Menu";
-import IconButton from "@mui/material/IconButton";
+import { formPath } from "../../description/user.description";
+import "./AppLayout.css";
+import AppLayoutContainer from "../../container/appLayout.container";
 
 const drawerWidth = 305;
 
@@ -65,13 +64,15 @@ export default function AppLayout(props: { window?: any }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { isAuthenticated } = useSelector((state: any) => state.app?.auth);
+  const isAuthenticated = loadStateFn("isAuthenticated");
   const token = loadStateFn();
   const userName = "XYZ";
   const theme = useTheme();
   const isScreenMedium = useMediaQuery(theme.breakpoints.up("md"));
   const isScreenSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const hidden = useMediaQuery(theme.breakpoints.up(900));
+
+  const { userData } = AppLayoutContainer({ formPath });
 
   useEffect(() => {
     if ((!isAuthenticated && !token) || isExpired(token)) {
@@ -232,6 +233,9 @@ export default function AppLayout(props: { window?: any }) {
                   background: "#fff",
                 },
               }}
+              onClick={() => {
+                navigate("/pricing");
+              }}
             >
               {t("upgradePlan")}
             </QRButton>
@@ -283,8 +287,12 @@ export default function AppLayout(props: { window?: any }) {
         }
       />
       <BottomNavigationAction
-        // onClick={ }
-        label={userName.trim()}
+        onClick={handleMobileMenu}
+        label={
+          `${userData?.firstName} ${userData?.lastName}` ||
+          userData?.userName ||
+          userData?.email.split("@")[0]
+        }
         // isActive={location.pathname === ""}
         icon={
           <Avatar
@@ -293,9 +301,8 @@ export default function AppLayout(props: { window?: any }) {
               height: 24,
               bgcolor: theme.palette.primary.main,
             }}
-          >
-            {userName.trim().charAt(0)}
-          </Avatar>
+            src={userData?.profile_pic}
+          />
         }
       />
     </StyledBottomNavigation>
@@ -351,41 +358,8 @@ export default function AppLayout(props: { window?: any }) {
             >
               <MobileMenu
                 aria-controls={"mobile-customized-menu"}
-                // onClick={handleDrawerToggle}
                 style={{ cursor: "pointer" }}
               />
-              <Menu
-                id="mobile-customized-menu"
-                MenuListProps={{
-                  "aria-labelledby": "mobile-customized-button",
-                }}
-                sx={{
-                  display: {
-                    xs: "flex",
-                    md: "none",
-                    maxWidth: "150px !important",
-                    "& .MuiMenu-paper": {
-                      width: "100%",
-                    },
-                  },
-                  "& .MuiList-root": {
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center !important",
-                    justifyContent: "center !important",
-                  },
-                }}
-                anchorEl={mobileAnchorEl}
-                open={Boolean(mobileAnchorEl)}
-                onClose={handleMobileClose}
-              >
-                <MenuItem onClick={handleClose} disableRipple>
-                  Profile
-                </MenuItem>
-                <MenuItem onClick={handleLogout} disableRipple>
-                  Logout
-                </MenuItem>
-              </Menu>
               <QRTypography
                 sx={{
                   fontSize: "10px",
@@ -458,13 +432,14 @@ export default function AppLayout(props: { window?: any }) {
                       height: 24,
                       bgcolor: theme.palette.primary.main,
                     }}
-                  >
-                    {userName.trim().charAt(0)}
-                  </Avatar>
+                    src={userData?.profile_pic}
+                  />
                 }
                 endIcon={<KeyboardArrowDownIcon />}
               >
-                {userName}
+                {`${userData?.firstName} ${userData?.lastName}` ||
+                  userData?.userName ||
+                  userData?.email.split("@")[0]}
               </QRButton>
             </div>
             <Menu
@@ -476,8 +451,22 @@ export default function AppLayout(props: { window?: any }) {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
             >
-              <MenuItem onClick={handleClose} disableRipple>
+              <MenuItem
+                onClick={() => {
+                  navigate("/profile");
+                  handleClose();
+                }}
+                disableRipple
+              >
                 Profile
               </MenuItem>
               <MenuItem onClick={handleLogout} disableRipple>
@@ -534,6 +523,7 @@ export default function AppLayout(props: { window?: any }) {
           </Drawer>
           <Drawer
             variant={mobileOpen ? undefined : "permanent"}
+            className="drawer-wrap"
             sx={{
               display: { xs: "none", md: "block" },
               flexDirection: "column",
@@ -557,12 +547,54 @@ export default function AppLayout(props: { window?: any }) {
             flexGrow: 1,
             pt: { xs: 2, sm: 4, md: 3 },
             px: { xs: 2, md: 2 },
-            pb: { xs: 9, md: 3 },
+            pb: { xs: 10, md: 3 },
           }}
         >
           <Toolbar sx={{ height: "90px" }} />
           <Outlet />
-          {hidden ? null : <QRBox>{bottomNavigation}</QRBox>}
+          {hidden ? null : (
+            <QRBox>
+              {bottomNavigation}
+              <Menu
+                id="mobile-customized-menu"
+                MenuListProps={{
+                  "aria-labelledby": "mobile-customized-button",
+                }}
+                sx={{
+                  display: {
+                    xs: "flex",
+                    md: "none",
+                    maxWidth: "150px !important",
+                    "& .MuiMenu-paper": {
+                      width: "100%",
+                    },
+                  },
+                  "& .MuiList-root": {
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center !important",
+                    justifyContent: "center !important",
+                  },
+                }}
+                anchorEl={mobileAnchorEl}
+                open={Boolean(mobileAnchorEl)}
+                onClose={handleMobileClose}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate("/profile");
+                    handleMobileClose();
+                  }}
+                  disableRipple
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout} disableRipple>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </QRBox>
+          )}
         </QRBox>
       </QRBox>
       {/* <Footer /> */}

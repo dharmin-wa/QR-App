@@ -27,6 +27,7 @@ interface performRequestProps {
   headerKey?: string;
   token?: string;
   responseSelector?: boolean;
+  ContentType?: string;
 }
 
 export const ApiContainer = () => {
@@ -53,11 +54,12 @@ export const ApiContainer = () => {
     headerKey = "Authorization",
     token = "",
     responseSelector = false,
+    ContentType = "application/json",
   }: performRequestProps) =>
     new Promise((resolve) => {
       const accessToken = loadStateFn("token");
       const headers = {
-        "Content-Type": "application/json",
+        "Content-Type": ContentType,
         ...(accessToken &&
           (equal(headerKey, "Authorization")
             ? { [headerKey]: `Bearer ${accessToken}` }

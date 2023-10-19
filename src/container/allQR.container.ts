@@ -25,6 +25,7 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     getAllQRCodes();
   }, [page, rowsPerPage, filterData]);
 
+  console.log("rowsPerPage", rowsPerPage);
   const { performRequest } = ApiContainer();
   const dispatch: any = useDispatch();
   console.log("filteData", filterData);
@@ -34,7 +35,7 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
       endPoint: `${apiEndPoints?.getAllQRs}?page=${
         page + 1
       }&size=${rowsPerPage}${
-        values(filterData)?.length && `&status=${checked ? "A" : "D"}`
+        values(filterData)?.length > 0 ? `&status=${checked ? "A" : "D"}` : ""
       }`,
       method: method?.get,
       needLoader: true,

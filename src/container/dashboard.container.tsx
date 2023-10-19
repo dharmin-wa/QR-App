@@ -106,6 +106,7 @@ const DashboardContainer = ({ formPath }: DashboardContainerProps) => {
     countListQrCode,
     loadingStatusForCountList,
     topModule,
+    getCountListQrCode,
   };
 };
 

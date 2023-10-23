@@ -55,18 +55,18 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
     contrastError,
     handleLogoUpload,
     handleThemeChange,
-    setLogo,
-    setLogoSize,
+    handleClearLogo,
     handleLogoSizeChange,
     handleLinkNameChange,
     handleStatusChange,
     handleTitleChange,
     handleBgChange,
     checked,
+    loadingStatus,
   } = QRFormContainer({ qrCode, editQR });
 
   const { t } = useTranslation();
-
+  console.log('logo-main', logo)
   return (
     <Container maxWidth={false}>
       <QRTypography variant="h4" align="center" gutterBottom>
@@ -91,8 +91,8 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                 validationErrors.title?.requiredError
                   ? t("required")
                   : validationErrors.title?.validationError
-                  ? t("blankSpaceNotAllowed")
-                  : ""
+                    ? t("blankSpaceNotAllowed")
+                    : ""
               }
             />
             <QRTypography variant="h6" textAlign="center" p={1}>
@@ -139,9 +139,9 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                         ]?.requiredError
                           ? t("required")
                           : validationErrors[QRType.MultiAction]
-                              ?.validationErrors[index]?.validationError
-                          ? t("enterValidURL")
-                          : ""
+                            ?.validationErrors[index]?.validationError
+                            ? t("enterValidURL")
+                            : ""
                       }
                     />
                     <QRTextField
@@ -185,8 +185,8 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                     validationErrors[qrData.type]?.requiredError
                       ? t("required")
                       : validationErrors[qrData.type]?.validationError
-                      ? t(getHelperText(qrData.type))
-                      : ""
+                        ? t(getHelperText(qrData.type))
+                        : ""
                   }
                 />
               )
@@ -234,8 +234,8 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                   {validationErrors[QRType.PhoneNumber]?.requiredError
                     ? t("required")
                     : validationErrors[QRType.PhoneNumber]?.validationError
-                    ? t("enterValidPhoneNumber")
-                    : ""}
+                      ? t("enterValidPhoneNumber")
+                      : ""}
                 </FormHelperText>
 
                 <QRTextField
@@ -251,6 +251,7 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
               color="primary"
               onClick={handleGenerateQR}
               fullWidth
+              isLoading={loadingStatus}
               sx={{ marginTop: 1 }}
             >
               {t(editQR ? "editQRCode" : "generateQRCode")}
@@ -276,12 +277,13 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
             </QRTypography>
             <div style={{ textAlign: "center", marginBottom: 1 }}>
               <QRCode
+                id="QR"
                 value={generatedQRCode}
                 size={128}
                 fgColor={qrData?.theme?.buttonColor}
                 bgColor={qrData?.theme?.containerColor}
                 eyeColor={qrData?.theme?.eyeColor}
-                logoImage={logo}
+                logoImage={logo && URL.createObjectURL(logo)}
                 logoWidth={checked ? 128 : logoSize?.logoWidth}
                 logoHeight={checked ? 128 : logoSize?.logoHeight}
                 eyeRadius={qrData?.theme?.eyeRadius}
@@ -402,7 +404,11 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
 
               {logo && (
                 <>
-                  <img src={logo} width={32} height={32} />
+                  <img
+                    src={logo && URL.createObjectURL(logo)}
+                    width={32}
+                    height={32}
+                  />
                   <FormControlLabel
                     control={
                       <Switch
@@ -415,13 +421,7 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                   />
                   <Button
                     variant="outlined"
-                    onClick={() => {
-                      setLogo(null);
-                      setLogoSize({
-                        logoWidth: 30,
-                        logoHeight: 30,
-                      });
-                    }}
+                    onClick={handleClearLogo}
                     sx={{ margin: "0 16px" }}
                   >
                     <ClearIcon />

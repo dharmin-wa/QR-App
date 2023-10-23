@@ -5,7 +5,6 @@ import { ApiContainer } from "../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_API_DATA } from "../redux/constants";
 import { useNavigate } from "react-router-dom";
-import { QRCode } from "react-qrcode-logo";
 
 interface QrFrameContainerProps {
   formPath: any;
@@ -18,19 +17,25 @@ const QrFrameContainer = ({
   responseSelector = false,
   getCountListQrCode,
 }: QrFrameContainerProps) => {
-  const [qrCodeSize, setQRCodeSize] = useState<number>(130);
   const [anchorEls, setAnchorEls] = useState<any[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteQRId, setDeleteQRId] = useState<string>("");
 
-  const [sizeMenuAnchor, setSizeMenuAnchor] = useState(null);
+  const [sizeMenuAnchor, setSizeMenuAnchor] = useState<any[]>([]);
 
-  const handleOpenSizeMenu = (event: any) => {
-    setSizeMenuAnchor(event.currentTarget);
+  const handleOpenSizeMenu = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    const newSizeMenuAnchor: any[] = [...sizeMenuAnchor];
+    newSizeMenuAnchor[index] = event.currentTarget;
+    setSizeMenuAnchor(newSizeMenuAnchor);
   };
 
-  const handleCloseSizeMenu = () => {
-    setSizeMenuAnchor(null);
+  const handleCloseSizeMenu = (index: number) => {
+    const newSizeMenuAnchor: any[] = [...sizeMenuAnchor];
+    newSizeMenuAnchor[index] = null;
+    setSizeMenuAnchor(newSizeMenuAnchor);
   };
 
   const { performRequest } = ApiContainer();
@@ -38,15 +43,6 @@ const QrFrameContainer = ({
   const loadingStatus = useSelector(
     (state: any) => state.api?.loader?.[formPath?.child],
   );
-
-  useEffect(() => {
-    window.addEventListener("resize", updateQRCodeSize);
-    updateQRCodeSize();
-
-    return () => {
-      window.removeEventListener("resize", updateQRCodeSize);
-    };
-  }, []);
 
   const open = Boolean(anchorEls);
   const dispatch = useDispatch();
@@ -67,25 +63,12 @@ const QrFrameContainer = ({
     setAnchorEls(newAnchorEls);
   };
 
-  const updateQRCodeSize = () => {
-    const fontSizeInPixels = parseFloat(
-      getComputedStyle(document.documentElement).fontSize,
-    );
-
-    const remValue = 7;
-
-    const pixelValue = remValue * fontSizeInPixels;
-
-    setQRCodeSize(pixelValue);
-  };
-
-  const downloadQRCode = (size: any) => {
-    const qrCanvas: any = document.getElementById("QR");
-
+  const downloadQRCode = (size: any, id: string, index: number) => {
+    const qrCanvas: any = document.getElementById(`${id}_${index}`);
     if (qrCanvas) {
       const img = new Image();
+      img.crossOrigin = "*";
       img.src = qrCanvas.toDataURL("image/png");
-
       img.onload = () => {
         const canvas = document.createElement("canvas");
         canvas.width = size.width;
@@ -102,6 +85,7 @@ const QrFrameContainer = ({
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
+        handleCloseSizeMenu(index)
       };
     }
   };
@@ -159,7 +143,6 @@ const QrFrameContainer = ({
   };
 
   return {
-    qrCodeSize,
     downloadQRCode,
     open,
     handleClick,

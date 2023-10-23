@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MIN_CONTRAST_RATIO,
   formPath,
@@ -101,13 +101,16 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
     initialValidationErrors,
   );
   const [checked, setChecked] = useState(false);
+  const loadingStatus = useSelector(
+    (state: any) => state.api?.loader?.[formPath?.parent],
+  );
   const { performRequest } = ApiContainer();
   const userId = loadStateFn("id");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { parent } = formPath;
-
+  console.log("qrCode", qrCode);
   const extractCountryCode = (phoneNumber: string) => {
     for (const countryCode in countryWisePhoneValidation) {
       const regexPattern = countryWisePhoneValidation[countryCode];
@@ -122,6 +125,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
   useEffect(() => {
     if (qrCode) {
+      console.log("qrCode>>>>>", qrCode, JSON.parse(qrCode?.data)?.link);
       const qrType: string = qrCode.qr_type.trim();
       const typeMapping: any = {
         Link: QRType.Link,
@@ -144,29 +148,49 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
           type: typeMapping[qrType],
           data:
             qrType === "MultiAction"
-              ? qrCode?.data?.action.map((action: any) => action?.url)
-              : [qrCode?.data?.free_text || qrCode?.data?.link],
+              ? JSON.parse(qrCode?.data)?.action.map(
+                (action: any) => action?.url,
+              )
+              : [
+                JSON.parse(qrCode?.data)?.free_text ||
+                JSON.parse(qrCode?.data)?.link,
+              ],
           status: qrCode?.status,
           linkNames:
             qrType === "MultiAction"
-              ? qrCode?.data?.action.map((action: any) => action?.action_name)
+              ? JSON.parse(qrCode?.data)?.action.map(
+                (action: any) => action?.action_name,
+              )
               : [""],
         };
 
         const QRCodeData =
           qrType === "MultiAction"
-            ? qrCode?.data?.action?.map((action: any) => action?.url).join(",")
-            : qrCode?.data?.free_text || qrCode?.data?.link;
+            ? JSON.parse(qrCode?.data)
+              ?.action?.map((action: any) => action?.url)
+              .join(",")
+            : JSON.parse(qrCode?.data)?.free_text ||
+            JSON.parse(qrCode?.data)?.link;
 
         setQRData(initialData);
         setGeneratedQRCode(QRCodeData);
+        {
+          qrCode?.logo?.length ?
+            fetch(`${process.env.REACT_APP_API_URL}/${qrCode?.logo}`)
+              .then((response) => response.blob())
+              .then((blob) => setLogo(blob))
+              .catch((error) => console.error("Error fetching image: ", error)) : setLogo(null)
+        }
+        setChecked(qrCode?.bgImage);
         setLogoSize({
           ...logoSize,
           logoWidth: qrCode?.logoWidth,
           logoHeight: qrCode?.logoHeight,
         });
         if (qrType === "PhoneNumber") {
-          setCountryCodeName(extractCountryCode(qrCode?.data?.free_text) || "");
+          setCountryCodeName(
+            extractCountryCode(JSON.parse(qrCode?.data)?.free_text) || "",
+          );
         }
       }
     }
@@ -196,6 +220,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   };
 
   const handleDataChange = (event: any, index: number) => {
+    event.preventDefault();
     const newData = event.target.value;
     const countryCodeName = event.target?.countryCodeName;
     const updatedData = [...qrData.data];
@@ -208,7 +233,6 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
     let validationError = false;
     let requiredError = false;
-    console.log("newData", newData);
     switch (qrData.type) {
       case QRType.Link:
         requiredError = isFieldEmpty(newData);
@@ -334,18 +358,11 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   const handleLogoUpload = (e: any) => {
     const file = e.target.files?.[0];
     if (file) {
-      setLogo(URL.createObjectURL(file));
-      /*  const reader = new FileReader();
-       reader.onload = (event: ProgressEvent<FileReader>) => {
-         if (event.target && typeof event.target.result === "string") {
-           setLogo(event.target.result);
-         }
-       };
-       reader.readAsDataURL(file); */
+      setLogo(file);
       e.target.value = null;
     }
   };
-
+  console.log("logo>>>>", logo);
   const handleGenerateQR = () => {
     const { type, data, title } = qrData;
     const validationErrorsForLink = [
@@ -436,30 +453,29 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
   const callApi = async () => {
     const { theme } = qrData;
-    const canvas = document.createElement("canvas");
-    let pngUrl;
-    if (canvas) {
-      pngUrl = canvas
-        .toDataURL("image/png")
-        .replace("image/png", "image/octet-stream");
+    let blob: any;
+    const qrCanvas: any = document.getElementById("QR");
+    if (qrCanvas) {
+      blob = await new Promise((resolve) => {
+        qrCanvas.toBlob((b: any) => resolve(b));
+      });
     }
 
-    /* const { containerColor, buttonColor, buttonTextColor, eyeColor, qrStyle, eyeRadius } = qrData.theme */
-    const { logoWidth, logoHeight } = logoSize;
+    console.log("pngUrl", blob);
 
     const formData = new FormData();
     const payload: any = {
       qr_type: "",
-      title: qrData.title,
+      title: qrData?.title,
       user_id: userId,
       data: {},
-      logo: logo.files[0],
-      thumbnail: pngUrl,
+      logo,
+      // thumbnail: pngUrl,
       bgImage: checked,
       status: qrData?.status,
       ...theme,
-      logoWidth,
-      logoHeight,
+      logoWidth: logoSize?.logoWidth,
+      logoHeight: logoSize?.logoHeight,
     };
 
     console.log("logo>>", logo);
@@ -498,6 +514,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
         formData.append(key, payload[key]);
       }
     }
+    formData.append("thumbnail", blob, "qr.png");
 
     const res: any = await performRequest({
       endPoint: apiEndpoint,
@@ -590,6 +607,15 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
     });
   };
 
+  const handleClearLogo = () => {
+    setLogo(null);
+    setLogoSize({
+      logoWidth: 30,
+      logoHeight: 30,
+    });
+    setChecked(false);
+  };
+
   return {
     qrData,
     handleChangeType,
@@ -615,6 +641,8 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
     handleTitleChange,
     handleBgChange,
     checked,
+    loadingStatus,
+    handleClearLogo,
   };
 };
 

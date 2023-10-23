@@ -10,6 +10,7 @@ const EditQRCode = () => {
   if (loadingStatus) {
     return <QRLoader variant="fullPage" />;
   }
+  console.log('qrCode1235', qrCode)
   return <QRForm headTitle="editQRCode" qrCode={qrCode} editQR={true} />;
 };
 

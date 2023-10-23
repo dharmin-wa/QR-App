@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Container } from "@mui/material";
 import { QRCode } from "react-qrcode-logo";
@@ -30,7 +31,7 @@ const QRCodeDetails: React.FC = () => {
   const { qrCode, loadingStatus } = QRCodeDetailsContainer({ formPath });
   const navigate = useNavigate();
 
-  const renderQRCode = (data: QRCodeDetailsData | null) => {
+  const renderQRCode = (data: any) => {
     if (!data) return null;
 
     const renderQrType = () => {
@@ -38,9 +39,9 @@ const QRCodeDetails: React.FC = () => {
         case "Link":
           return (
             <div>
-              <QRCode value={data.data.link} />
+              <QRCode value={JSON.parse(data?.data)?.link} />
               <QRTypography variant="body1">
-                <strong>Link:</strong> {data.data.link}
+                <strong>Link:</strong> {JSON.parse(data.data).link}
               </QRTypography>
             </div>
           );
@@ -48,9 +49,9 @@ const QRCodeDetails: React.FC = () => {
         case "Email":
           return (
             <div>
-              <QRCode value={`mailto:${data.data.free_text}`} />
+              <QRCode value={`mailto:${JSON.parse(data.data).free_text}`} />
               <QRTypography variant="body1">
-                <strong>Email:</strong> {data.data.free_text}
+                <strong>Email:</strong> {JSON.parse(data.data).free_text}
               </QRTypography>
             </div>
           );
@@ -58,9 +59,9 @@ const QRCodeDetails: React.FC = () => {
         case "PhoneNumber":
           return (
             <div>
-              <QRCode value={data.data.free_text} />
+              <QRCode value={JSON.parse(data.data).free_text} />
               <QRTypography variant="body1">
-                <strong>Phone number:</strong> {data.data.free_text}
+                <strong>Phone number:</strong> {JSON.parse(data.data).free_text}
               </QRTypography>
             </div>
           );
@@ -68,7 +69,7 @@ const QRCodeDetails: React.FC = () => {
         case "MultiAction":
           return (
             <div>
-              {data?.data?.action?.map((action, index) => (
+              {JSON.parse(data?.data)?.action?.map((action: any, index: number) => (
                 <div key={index}>
                   <QRCode value={action.url} />
                   <QRTypography variant="body1">

@@ -32,11 +32,9 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
 
   const getAllQRCodes = async () => {
     const res: any = await performRequest({
-      endPoint: `${apiEndPoints?.getAllQRs}?page=${
-        page + 1
-      }&size=${rowsPerPage}${
-        values(filterData)?.length > 0 ? `&status=${checked ? "A" : "D"}` : ""
-      }`,
+      endPoint: `${apiEndPoints?.getAllQRs}?page=${page + 1
+        }&size=${rowsPerPage}${values(filterData)?.length > 0 ? `&status=${checked ? "A" : "D"}` : ""
+        }`,
       method: method?.get,
       needLoader: true,
       parent: formPath?.parent,

@@ -22,21 +22,22 @@ const StyledTextField = styled(TextField)(() => ({
 
 const QRTextField = ({ formLabel, ...rest }: QRTextFieldProps) => {
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       {formLabel && (
         <FormLabel
           sx={{
-            color: "primary.dark",
-            fontSize: 14,
-            marginBottom: 1,
-            display: "block",
+            fontSize: "1.2rem",
+            fontWeight: 500,
+            lineHeight: "33px",
+            letterSpacing: "0",
+            color: "#1C1C1C",
           }}
         >
           {formLabel}
         </FormLabel>
       )}
       <StyledTextField {...rest} />
-    </>
+    </div>
   );
 };
 

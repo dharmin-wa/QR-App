@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_API_DATA } from "../redux/constants";
+import { CLEAR_STATE, SET_API_DATA } from "../redux/constants";
 import ModuleContainer from "../presentation/dashBoard/ModuleContainer";
 import { ReactComponent as TotalQR } from "../assets/svg/dbAllQR.svg";
 import { ReactComponent as ActiveQR } from "../assets/svg/dbActiveQR.svg";
@@ -32,6 +32,15 @@ const DashboardContainer = ({ formPath }: DashboardContainerProps) => {
   useEffect(() => {
     getAllQRs();
     getCountListQrCode();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: CLEAR_STATE,
+        payload: { [parent]: { data: {} } },
+      });
+    };
   }, []);
 
   useEffect(() => {
@@ -93,11 +102,18 @@ const DashboardContainer = ({ formPath }: DashboardContainerProps) => {
       parent,
     });
     if (res.status === 200) {
+      dispatch(setAllQrData(res?.data));
+    }
+  };
+
+  const setAllQrData = (data: any) => {
+    return async (dispatch: any, getState: any) => {
+      const prevData = getState()?.api?.[parent];
       dispatch({
         type: SET_API_DATA,
-        payload: { [parent]: { data: res?.data } },
+        payload: { [parent]: { ...prevData, data } },
       });
-    }
+    };
   };
 
   return {

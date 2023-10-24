@@ -1,4 +1,4 @@
-import { SET_APP_DATA, SET_PAGE_LOADER } from "../constants";
+import { CLEAR_STATE, SET_APP_DATA, SET_PAGE_LOADER } from "../constants";
 
 const initialState = {
   pages: {},
@@ -16,6 +16,11 @@ const App = (state = initialState, action: { type: any; payload: any }) => {
       return {
         ...state,
         pages: { ...state?.pages, ...payload },
+      };
+    case CLEAR_STATE:
+      return {
+        ...state,
+        ...payload,
       };
     default:
       return state;

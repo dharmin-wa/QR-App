@@ -66,7 +66,6 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
   } = QRFormContainer({ qrCode, editQR });
 
   const { t } = useTranslation();
-  console.log('logo-main', logo)
   return (
     <Container maxWidth={false}>
       <QRTypography variant="h4" align="center" gutterBottom>
@@ -91,8 +90,8 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                 validationErrors.title?.requiredError
                   ? t("required")
                   : validationErrors.title?.validationError
-                    ? t("blankSpaceNotAllowed")
-                    : ""
+                  ? t("blankSpaceNotAllowed")
+                  : ""
               }
             />
             <QRTypography variant="h6" textAlign="center" p={1}>
@@ -139,9 +138,9 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                         ]?.requiredError
                           ? t("required")
                           : validationErrors[QRType.MultiAction]
-                            ?.validationErrors[index]?.validationError
-                            ? t("enterValidURL")
-                            : ""
+                              ?.validationErrors[index]?.validationError
+                          ? t("enterValidURL")
+                          : ""
                       }
                     />
                     <QRTextField
@@ -185,8 +184,8 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                     validationErrors[qrData.type]?.requiredError
                       ? t("required")
                       : validationErrors[qrData.type]?.validationError
-                        ? t(getHelperText(qrData.type))
-                        : ""
+                      ? t(getHelperText(qrData.type))
+                      : ""
                   }
                 />
               )
@@ -234,8 +233,8 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
                   {validationErrors[QRType.PhoneNumber]?.requiredError
                     ? t("required")
                     : validationErrors[QRType.PhoneNumber]?.validationError
-                      ? t("enterValidPhoneNumber")
-                      : ""}
+                    ? t("enterValidPhoneNumber")
+                    : ""}
                 </FormHelperText>
 
                 <QRTextField
@@ -277,13 +276,14 @@ const QRForm = ({ headTitle, qrCode, editQR = false }: QRFormProps) => {
             </QRTypography>
             <div style={{ textAlign: "center", marginBottom: 1 }}>
               <QRCode
-                id="QR"
+                id={`QR-${qrData?.id}`}
                 value={generatedQRCode}
                 size={128}
                 fgColor={qrData?.theme?.buttonColor}
                 bgColor={qrData?.theme?.containerColor}
                 eyeColor={qrData?.theme?.eyeColor}
                 logoImage={logo && URL.createObjectURL(logo)}
+                // logoImage={logo && `${URL.createObjectURL(logo)}?timestamp=${Date.now()}`}
                 logoWidth={checked ? 128 : logoSize?.logoWidth}
                 logoHeight={checked ? 128 : logoSize?.logoHeight}
                 eyeRadius={qrData?.theme?.eyeRadius}

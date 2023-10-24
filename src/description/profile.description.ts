@@ -24,14 +24,28 @@ export const attribute: attributeTypes[] = [
     error: ["emailRequired", "invalidEmail"],
   },
   {
-    name: "password",
-    type: "password",
+    name: "state",
+    type: "text",
     isRequired: true,
     pattern: notEmptyOrNull,
     error: ["pwdRequired"],
   },
   {
+    name: "city",
+    type: "text",
+    isRequired: false,
+    pattern: notEmptyOrNull,
+    error: ["pwdRequired"],
+  },
+  {
     name: "phoneNo",
+    type: "text",
+    isRequired: false,
+    pattern: notEmptyOrNull,
+    error: ["blankSpaceNotAllowed"],
+  },
+  {
+    name: "address",
     type: "text",
     isRequired: false,
     pattern: notEmptyOrNull,
@@ -43,8 +57,10 @@ export const defaultValues: any = {
   firstName: "",
   lastName: "",
   email: "",
-  password: "",
   phoneNo: "",
+  city: "",
+  state: "",
+  address: "",
 };
 
 export const formPath = { parent: "profile" };

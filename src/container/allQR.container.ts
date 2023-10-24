@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ApiContainer } from "../utils/api";
 import { apiEndPoints, method } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_API_DATA } from "../redux/constants";
+import { CLEAR_STATE, SET_API_DATA } from "../redux/constants";
 
 interface AllQRContainerProps {
   formPath: any;
@@ -25,16 +25,25 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
     getAllQRCodes();
   }, [page, rowsPerPage, filterData]);
 
-  console.log("rowsPerPage", rowsPerPage);
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: CLEAR_STATE,
+        payload: { [parent]: { data: {} } },
+      });
+    };
+  }, []);
+
   const { performRequest } = ApiContainer();
   const dispatch: any = useDispatch();
-  console.log("filteData", filterData);
 
   const getAllQRCodes = async () => {
     const res: any = await performRequest({
-      endPoint: `${apiEndPoints?.getAllQRs}?page=${page + 1
-        }&size=${rowsPerPage}${values(filterData)?.length > 0 ? `&status=${checked ? "A" : "D"}` : ""
-        }`,
+      endPoint: `${apiEndPoints?.getAllQRs}?page=${
+        page + 1
+      }&size=${rowsPerPage}${
+        values(filterData)?.length > 0 ? `&status=${checked ? "A" : "D"}` : ""
+      }`,
       method: method?.get,
       needLoader: true,
       parent: formPath?.parent,
@@ -52,7 +61,6 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
   const setApiData = (data: any) => {
     return async (dispatch: any, getState: any) => {
       const prevData = getState()?.api?.[parent];
-      console.log("getState", getState(), prevData);
       dispatch({
         type: SET_API_DATA,
         payload: { [parent]: { ...prevData, data } },
@@ -93,7 +101,6 @@ const AllQRContainer = ({ formPath }: AllQRContainerProps) => {
       return k !== key;
     });
 
-    console.log("data", { data, value }, Object.fromEntries(data));
     setChecked(!!Object.fromEntries(data)?.active);
     dispatch({
       type: SET_API_DATA,

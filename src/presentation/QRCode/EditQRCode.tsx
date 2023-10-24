@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import QRForm from "./QRForm";
 import QRCodeDetailsContainer from "../../container/qrCodeDetails.container";
@@ -10,8 +9,9 @@ const EditQRCode = () => {
   if (loadingStatus) {
     return <QRLoader variant="fullPage" />;
   }
-  console.log('qrCode1235', qrCode)
-  return <QRForm headTitle="editQRCode" qrCode={qrCode} editQR={true} />;
+  return qrCode ? (
+    <QRForm headTitle="editQRCode" qrCode={qrCode} editQR={true} />
+  ) : null;
 };
 
 export default EditQRCode;

@@ -8,6 +8,7 @@ import AniImage from "../../assets/png/aniImage.png";
 import QRBox from "../../shared/QRBox";
 import Coupons from "../../assets/svg/coupons.svg";
 import { useTranslation } from "react-i18next";
+import LanguageSelector from "../../shared/LanguageSelector";
 
 const AuthLayout: React.FC = () => {
   const { t } = useTranslation();
@@ -21,26 +22,36 @@ const AuthLayout: React.FC = () => {
         flexDirection: "column",
       }}
     >
-      <QRBoxContainer>
-        <img src={Coupons} alt="Coupons" />
-        <QRTypography
-          sx={{ paddingLeft: 1, fontSize: ["12px", "16px", "16px", "16px"] }}
-        >
-          {t("pricingPlan")}
-        </QRTypography>
-        <QRTypography
-          sx={{
-            fontWeight: 700,
-            paddingLeft: 0.5,
-            fontSize: ["12px", "16px", "16px", "16px"],
-          }}
-        >
-          15% off %{" "}
-          <Link to="" style={{ color: "#fff" }}>
-            {t("grabNow")}
-          </Link>{" "}
-          %
-        </QRTypography>
+      <QRBoxContainer className="main-nav-wrap">
+        <div className="nav-top-out-wrap">
+          <div className="center-top-nav-wrap">
+            <img src={Coupons} alt="Coupons" />
+            <QRTypography
+              sx={{
+                paddingLeft: 1,
+                fontSize: ["12px", "16px", "16px", "16px"],
+              }}
+            >
+              {t("pricingPlan")}
+            </QRTypography>
+            <QRTypography
+              sx={{
+                fontWeight: 700,
+                paddingLeft: 0.5,
+                fontSize: ["12px", "16px", "16px", "16px"],
+              }}
+            >
+              15% off %{" "}
+              <Link to="" style={{ color: "#fff" }}>
+                {t("grabNow")}
+              </Link>{" "}
+              %
+            </QRTypography>
+          </div>
+          <div className="select-lan-wrap">
+            <LanguageSelector />
+          </div>
+        </div>
       </QRBoxContainer>
       <AuthLayoutUpperContainer>
         <QRContainer>

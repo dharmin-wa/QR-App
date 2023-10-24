@@ -85,7 +85,7 @@ const QrFrameContainer = ({
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
-        handleCloseSizeMenu(index)
+        handleCloseSizeMenu(index);
       };
     }
   };

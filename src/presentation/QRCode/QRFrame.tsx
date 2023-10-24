@@ -91,320 +91,325 @@ const QRFrame = ({
     <>
       {qrCodes?.length
         ? qrCodes?.map((qr: any, index: number) => {
-          console.log('qr>>>>>', qr)
-          return <StyledPaper
-            elevation={0}
-            sx={{
-              flexGrow: 1,
-              border: { xs: "1px solid #356ABA", lg: "none" },
-            }}
-            key={index}
-          >
-            <Grid
-              container
-              sm={12}
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: { sm: "center", xs: "center", lg: "" },
-              }}
-            >
-              {/* first section */}
-              <Grid
-                xs={12}
-                md={12}
-                lg={5}
-                item
+            return (
+              <StyledPaper
+                elevation={0}
                 sx={{
-                  display: "flex",
-                  justifyContent: { xs: "center", lg: "start" },
-                  paddingBottom: { sm: "10px", lg: "0px" },
+                  flexGrow: 1,
+                  border: { xs: "1px solid #356ABA", lg: "none" },
                 }}
+                key={index}
               >
-                <QRStack
-                  direction={"row"}
-                  spacing={{ xl: 5, md: 1, xs: 0 }}
-                  sx={{
-                    flexDirection: { xs: "column", sm: "row", md: "row" },
-                  }}
-                >
-                  <QRStack
-                    direction={{ xl: "row", md: "row", sm: "column" }}
-                    alignItems="center"
-                    spacing={{ xl: 1, md: 0, xs: 0 }}
-                  >
-                    <Checkbox checked={qr?.checked} />
-                    <QRCode
-                      value={
-                        qr?.qr_type === "MultiAction"
-                          ? JSON.parse(qr?.data)
-                            ?.action?.map((action: any) => action?.url)
-                            .join(",")
-                          : JSON.parse(qr?.data)?.free_text ||
-                          JSON.parse(qr?.data)?.link || "None"
-                      }
-                      fgColor={qr?.buttonColor || "#000"}
-                      bgColor={qr?.containerColor || "#ffffff"}
-                      size={112}
-                      enableCORS
-                      eyeColor={qr?.eyeColor || "#000"}
-                      eyeRadius={qr?.eyeRadius || 0}
-                      logoImage={`${process.env.REACT_APP_API_URL}/${qr?.logo}`}
-                      logoWidth={qr?.bgImage ? 112 : 30}
-                      logoHeight={qr?.bgImage ? 112 : 30}
-                      qrStyle={qr?.qrStyle || "squares"}
-                      logoOpacity={qr?.bgImage ? 0.4 : 1}
-                      id={`${qr?._id}_${index}`}
-                    />
-                  </QRStack>
-                  <Grid
-                    container
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "3px",
-                      justifyContent: { sm: "end", md: "center" },
-                      alignItems: { xs: "center", sm: "start" },
-                    }}
-                  >
-                    <Grid item>
-                      <StyledTypography>{qr?.qr_type}</StyledTypography>
-                    </Grid>
-
-                    <Grid
-                      item
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <FileIcon style={{ width: "20px" }} />
-                      <StyledText>
-                        {qr?.title || t("notAvailable")}
-                      </StyledText>
-                    </Grid>
-
-                    <Grid
-                      item
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <QRDateIcon style={{ width: "20px" }} />
-                      <StyledText>
-                        {moment(qr?.created_at).format("MMM D, YYYY")}
-                      </StyledText>
-                    </Grid>
-
-                    <Grid
-                      item
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <LinkIcon style={{ width: "20px" }} />
-                      <QRStack direction="column">
-                        <span style={{ whiteSpace: "nowrap" }}>
-                          <StyledLink href={qr.url}>
-                            <span>{qr.url || t("notAvailable")}</span>
-                          </StyledLink>{" "}
-                          <EditIcon />
-                        </span>
-                        <QRTypography variant="caption" color="textSecondary">
-                          {qr?.link || t("notAvailable")}
-                        </QRTypography>
-                      </QRStack>
-                    </Grid>
-                  </Grid>
-                </QRStack>
-              </Grid>
-              {/* second section */}
-              <Grid
-                xs={12}
-                md={6}
-                lg={3}
-                item
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRight: { lg: "1px dashed #ccc" },
-                  borderLeft: { lg: "1px dashed #ccc" },
-                }}
-              >
-                <QRStack direction="row" gap={1} alignItems="center">
-                  <Grid
-                    container
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "3px",
-                      justifyContent: "center",
-                      alignItems: { xs: "center", sm: "start" },
-                    }}
-                  >
-                    <Grid
-                      item
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <ScannerIcon style={{ width: "20px" }} />
-                      <StyledMiddleText
-                        sx={{
-                          lineHeight: "35px",
-                        }}
-                      >
-                        Scans:
-                        <span className="fs" style={{ fontWeight: 700 }}>
-                          {qr?.scans || t("notAvailable")}
-                        </span>
-                      </StyledMiddleText>
-                    </Grid>
-
-                    <Grid
-                      item
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        alignItems: "start",
-                      }}
-                    >
-                      <LocationIcon style={{ width: "20px" }} />
-                      <QRBox>
-                        <StyledMiddleText
-                          sx={{
-                            lineHeight: "22px",
-                            textAlign: "left",
-                          }}
-                        >
-                          Locations:
-                        </StyledMiddleText>
-                        <StyledLocation>
-                          {qr?.location || t("notAvailable")}
-                        </StyledLocation>
-                        <StyledIp>{qr?.ip || t("notAvailable")}</StyledIp>
-                      </QRBox>
-                    </Grid>
-                  </Grid>
-                </QRStack>
-                <QRStack
-                  gap={1}
-                  direction="row"
-                  alignItems="center"
-                  flexWrap="nowrap"
-                >
-                  <StyledLocationFont>
-                    {qr?.no || t("notAvailable")}
-                  </StyledLocationFont>
-                  <StyledViewMore href="#">View More</StyledViewMore>
-                </QRStack>
-              </Grid>
-              {/* third section */}
-              <Grid sm={12} md={6} lg={4} item>
-                <ItemContainer
+                <Grid
+                  container
+                  sm={12}
                   sx={{
                     display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
+                    flexDirection: "row",
+                    justifyContent: { sm: "center", xs: "center", lg: "" },
                   }}
                 >
-                  <StyledDownloadButton
-                    variant="outlined"
+                  {/* first section */}
+                  <Grid
+                    xs={12}
+                    md={12}
+                    lg={5}
+                    item
                     sx={{
-                      padding: "7px 50px",
+                      display: "flex",
+                      justifyContent: { xs: "center", lg: "start" },
+                      paddingBottom: { sm: "10px", lg: "0px" },
                     }}
-                    startIcon={<DownloadQRIcon />}
-                    onClick={(e) => handleOpenSizeMenu(e, index)}
-                    endIcon={<KeyboardArrowDownIcon />}
                   >
-                    Download QR
-                  </StyledDownloadButton>
-                  <Menu
-                    anchorEl={sizeMenuAnchor[index]}
-                    open={Boolean(sizeMenuAnchor[index])}
-                    onClose={() => handleCloseSizeMenu(index)}
-                  >
-                    {imageSizes?.map((img, ind) => {
-                      return (
-                        <MenuItem
-                          key={ind}
-                          onClick={() => downloadQRCode(img, qr?._id, index)}
-                        >
-                          {img.width}x{img.height}
-                        </MenuItem>
-                      );
-                    })}
-                  </Menu>
-                  <div
-                    style={{ display: "flex", alignItems: "flex-end" }}
-                    onClick={() => handleEditQRCode(qr?._id)}
-                  >
-                    <StyledEditContainer>
-                      <EditQRIcon />
-                      <StyledEditQRText>Edit QR</StyledEditQRText>
-                    </StyledEditContainer>
-                    <StyledEditContainer>
-                      <EditQRDesignIcon />
-                      <StyledEditQRText>Edit QR Design</StyledEditQRText>
-                    </StyledEditContainer>
-                  </div>
-                  <StyledDurationButton>
-                    <Timer
-                      fill="#2D333D"
-                      style={{
-                        width: "15.44px",
-                        height: "15.44px",
-                        margin: 4,
+                    <QRStack
+                      direction={"row"}
+                      spacing={{ xl: 5, md: 1, xs: 0 }}
+                      sx={{
+                        flexDirection: { xs: "column", sm: "row", md: "row" },
                       }}
-                    />{" "}
-                    Pack Duration: 15 days
-                  </StyledDurationButton>
-                </ItemContainer>
-              </Grid>
-            </Grid>
-            <IconButton
-              style={{ position: "absolute", top: "5px", right: "1px" }}
-              onClick={(e) => handleClick(e, index)}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEls[index]}
-              open={Boolean(anchorEls[index])}
-              onClose={() => handleClose(index)}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-              sx={{
-                "& .MuiPaper-root": {
-                  boxShadow: "1px 1px 1px 1px #ccc",
-                },
-              }}
-            >
-              <MenuItem onClick={() => handleViewQRCode(qr?._id)}>
-                View
-              </MenuItem>
-              <MenuItem onClick={() => handleEditQRCode(qr?._id)}>
-                Edit
-              </MenuItem>
-              <MenuItem onClick={() => handleOpenDeleteQRDialog(qr?._id)}>
-                Delete
-              </MenuItem>
-            </Menu>
-            {/* </StyledPaper> */}
-          </StyledPaper>
-        })
+                    >
+                      <QRStack
+                        direction={{ xl: "row", md: "row", sm: "column" }}
+                        alignItems="center"
+                        spacing={{ xl: 1, md: 0, xs: 0 }}
+                      >
+                        <Checkbox checked={qr?.checked} />
+                        <QRCode
+                          value={
+                            qr?.qr_type === "MultiAction"
+                              ? qr?.data?.action
+                                  ?.map((action: any) => action?.url)
+                                  .join(",")
+                              : qr?.data?.free_text || qr?.data?.link || "None"
+                          }
+                          fgColor={qr?.buttonColor || "#000"}
+                          bgColor={qr?.containerColor || "#ffffff"}
+                          size={112}
+                          enableCORS
+                          eyeColor={qr?.eyeColor || "#000"}
+                          eyeRadius={qr?.eyeRadius || 0}
+                          logoImage={`${process.env.REACT_APP_API_URL}/${qr?.logo}`}
+                          logoWidth={qr?.bgImage ? 112 : 30}
+                          logoHeight={qr?.bgImage ? 112 : 30}
+                          qrStyle={qr?.qrStyle || "squares"}
+                          logoOpacity={qr?.bgImage ? 0.4 : 1}
+                          id={`${qr?._id}_${index}`}
+                        />
+                      </QRStack>
+                      <Grid
+                        container
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "3px",
+                          justifyContent: { sm: "end", md: "center" },
+                          alignItems: { xs: "center", sm: "start" },
+                        }}
+                      >
+                        <Grid item>
+                          <StyledTypography>{qr?.qr_type}</StyledTypography>
+                        </Grid>
+
+                        <Grid
+                          item
+                          sx={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FileIcon style={{ width: "20px" }} />
+                          <StyledText>
+                            {qr?.title || t("notAvailable")}
+                          </StyledText>
+                        </Grid>
+
+                        <Grid
+                          item
+                          sx={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <QRDateIcon style={{ width: "20px" }} />
+                          <StyledText>
+                            {moment(qr?.created_at).format("MMM D, YYYY")}
+                          </StyledText>
+                        </Grid>
+
+                        <Grid
+                          item
+                          sx={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <LinkIcon style={{ width: "20px" }} />
+                          <QRStack direction="column">
+                            <span style={{ whiteSpace: "nowrap" }}>
+                              <StyledLink href={qr.url}>
+                                <span>{qr.url || t("notAvailable")}</span>
+                              </StyledLink>{" "}
+                              <EditIcon />
+                            </span>
+                            <QRTypography
+                              variant="caption"
+                              color="textSecondary"
+                            >
+                              {qr?.link || t("notAvailable")}
+                            </QRTypography>
+                          </QRStack>
+                        </Grid>
+                      </Grid>
+                    </QRStack>
+                  </Grid>
+                  {/* second section */}
+                  <Grid
+                    xs={12}
+                    md={6}
+                    lg={3}
+                    item
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRight: { lg: "1px dashed #ccc" },
+                      borderLeft: { lg: "1px dashed #ccc" },
+                    }}
+                  >
+                    <QRStack direction="row" gap={1} alignItems="center">
+                      <Grid
+                        container
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "3px",
+                          justifyContent: "center",
+                          alignItems: { xs: "center", sm: "start" },
+                        }}
+                      >
+                        <Grid
+                          item
+                          sx={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <ScannerIcon style={{ width: "20px" }} />
+                          <StyledMiddleText
+                            sx={{
+                              lineHeight: "35px",
+                            }}
+                          >
+                            Scans:
+                            <span className="fs" style={{ fontWeight: 700 }}>
+                              {qr?.scans || t("notAvailable")}
+                            </span>
+                          </StyledMiddleText>
+                        </Grid>
+
+                        <Grid
+                          item
+                          sx={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "start",
+                          }}
+                        >
+                          <LocationIcon style={{ width: "20px" }} />
+                          <QRBox>
+                            <StyledMiddleText
+                              sx={{
+                                lineHeight: "22px",
+                                textAlign: "left",
+                              }}
+                            >
+                              Locations:
+                            </StyledMiddleText>
+                            <StyledLocation>
+                              {qr?.location || t("notAvailable")}
+                            </StyledLocation>
+                            <StyledIp>{qr?.ip || t("notAvailable")}</StyledIp>
+                          </QRBox>
+                        </Grid>
+                      </Grid>
+                    </QRStack>
+                    <QRStack
+                      gap={1}
+                      direction="row"
+                      alignItems="center"
+                      flexWrap="nowrap"
+                    >
+                      <StyledLocationFont>
+                        {qr?.no || t("notAvailable")}
+                      </StyledLocationFont>
+                      <StyledViewMore href="#">View More</StyledViewMore>
+                    </QRStack>
+                  </Grid>
+                  {/* third section */}
+                  <Grid sm={12} md={6} lg={4} item>
+                    <ItemContainer
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <StyledDownloadButton
+                        variant="outlined"
+                        sx={{
+                          padding: "7px 50px",
+                        }}
+                        startIcon={<DownloadQRIcon />}
+                        onClick={(e) => handleOpenSizeMenu(e, index)}
+                        endIcon={<KeyboardArrowDownIcon />}
+                      >
+                        Download QR
+                      </StyledDownloadButton>
+                      <Menu
+                        anchorEl={sizeMenuAnchor[index]}
+                        open={Boolean(sizeMenuAnchor[index])}
+                        onClose={() => handleCloseSizeMenu(index)}
+                      >
+                        {imageSizes?.map((img, ind) => {
+                          return (
+                            <MenuItem
+                              key={ind}
+                              onClick={() =>
+                                downloadQRCode(img, qr?._id, index)
+                              }
+                            >
+                              {img.width}x{img.height}
+                            </MenuItem>
+                          );
+                        })}
+                      </Menu>
+                      <div
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                        onClick={() => handleEditQRCode(qr?._id)}
+                      >
+                        <StyledEditContainer>
+                          <EditQRIcon />
+                          <StyledEditQRText>Edit QR</StyledEditQRText>
+                        </StyledEditContainer>
+                        <StyledEditContainer>
+                          <EditQRDesignIcon />
+                          <StyledEditQRText>Edit QR Design</StyledEditQRText>
+                        </StyledEditContainer>
+                      </div>
+                      <StyledDurationButton>
+                        <Timer
+                          fill="#2D333D"
+                          style={{
+                            width: "15.44px",
+                            height: "15.44px",
+                            margin: 4,
+                          }}
+                        />{" "}
+                        Pack Duration: 15 days
+                      </StyledDurationButton>
+                    </ItemContainer>
+                  </Grid>
+                </Grid>
+                <IconButton
+                  style={{ position: "absolute", top: "5px", right: "1px" }}
+                  onClick={(e) => handleClick(e, index)}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEls[index]}
+                  open={Boolean(anchorEls[index])}
+                  onClose={() => handleClose(index)}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                  sx={{
+                    "& .MuiPaper-root": {
+                      boxShadow: "1px 1px 1px 1px #ccc",
+                    },
+                  }}
+                >
+                  <MenuItem onClick={() => handleViewQRCode(qr?._id)}>
+                    View
+                  </MenuItem>
+                  <MenuItem onClick={() => handleEditQRCode(qr?._id)}>
+                    Edit
+                  </MenuItem>
+                  <MenuItem onClick={() => handleOpenDeleteQRDialog(qr?._id)}>
+                    Delete
+                  </MenuItem>
+                </Menu>
+                {/* </StyledPaper> */}
+              </StyledPaper>
+            );
+          })
         : "Qr code not found"}
 
       <Dialog open={openDialog} onClose={handleCloseDeleteQRDialog}>

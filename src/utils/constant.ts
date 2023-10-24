@@ -23,6 +23,7 @@ export const apiEndPoints = {
   editQR: "api/qrCode/editQrCode",
   countList: "api/qrCode/CountListQrCode",
   userData: "api/auth/get-user-profile",
+  updateProfile: "api/auth/edit-user-profile",
 };
 
 export const method = {

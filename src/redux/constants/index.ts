@@ -17,3 +17,5 @@ export const SET_PAGE_LOADER = "SET_PAGE_LOADER";
 export const SET_FORM_DATA = "SET_FORM_DATA";
 
 export const SET_FORM_ERROR_DATA = "SET_FORM_ERROR_DATA";
+
+export const CLEAR_STATE = "CLEAR_STATE";

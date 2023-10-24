@@ -289,9 +289,13 @@ export default function AppLayout(props: { window?: any }) {
       <BottomNavigationAction
         onClick={handleMobileMenu}
         label={
-          `${userData?.firstName} ${userData?.lastName}` ||
-          userData?.userName ||
-          userData?.email.split("@")[0]
+          userData?.firstName || userData?.lastName
+            ? `${userData?.firstName} ${userData?.lastName}`
+            : userData?.userName
+            ? userData?.userName
+            : userData?.email
+            ? userData?.email.split("@")[0]
+            : "UnKnown"
         }
         // isActive={location.pathname === ""}
         icon={
@@ -307,9 +311,6 @@ export default function AppLayout(props: { window?: any }) {
       />
     </StyledBottomNavigation>
   );
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <>
@@ -437,9 +438,13 @@ export default function AppLayout(props: { window?: any }) {
                 }
                 endIcon={<KeyboardArrowDownIcon />}
               >
-                {`${userData?.firstName} ${userData?.lastName}` ||
-                  userData?.userName ||
-                  userData?.email.split("@")[0]}
+                {userData?.firstName || userData?.lastName
+                  ? `${userData?.firstName} ${userData?.lastName}`
+                  : userData?.userName
+                  ? userData?.userName
+                  : userData?.email
+                  ? userData?.email.split("@")[0]
+                  : "UnKnown"}
               </QRButton>
             </div>
             <Menu

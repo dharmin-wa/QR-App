@@ -24,7 +24,7 @@ const AllQR = () => {
   } = AllQRContainer({
     formPath,
   });
-  console.log("values(filterData).length", values(filterData).length);
+
   return (
     <>
       <QRBox sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>

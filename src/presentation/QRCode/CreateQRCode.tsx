@@ -231,7 +231,7 @@ const CreateQRCode = ({ formPath }: any) => {
   };
 
   const isFieldEmpty = (value: string | undefined) => {
-    return !value || value.trim() === "";
+    return !value || value?.trim() === "";
   };
 
   const handleLogoUpload = (e: any) => {

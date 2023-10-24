@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getObject, head, last } from "../utils/javascript";
 import validation from "../utils/validation";
 import { useDispatch } from "react-redux";
@@ -20,6 +20,10 @@ const FormContainer = ({
   const [error, setError] = useState<any>({});
   const dispatch = useDispatch();
   const { parent } = formPath;
+
+  useEffect(() => {
+    setFormData(defaultValues);
+  }, [defaultValues]);
 
   const handleChange = (e: { target: { name?: any; value?: any } }) => {
     const { name, value } = e.target;

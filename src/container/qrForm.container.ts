@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   MIN_CONTRAST_RATIO,
@@ -29,6 +29,7 @@ enum QRType {
 
 interface QRData {
   type: QRType;
+  id?: string;
   data: string[];
   title: string;
   theme: {
@@ -87,7 +88,7 @@ const initialQrData = {
   status: "A",
 };
 
-const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
+const QRFormContainer = ({ qrCode = {}, editQR }: QRFormContainerProps) => {
   const [qrData, setQRData] = useState<QRData>(initialQrData);
   const [logo, setLogo] = useState<any>(null);
   const [logoSize, setLogoSize] = useState({
@@ -108,9 +109,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   const userId = loadStateFn("id");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { parent } = formPath;
-  console.log("qrCode", qrCode);
   const extractCountryCode = (phoneNumber: string) => {
     for (const countryCode in countryWisePhoneValidation) {
       const regexPattern = countryWisePhoneValidation[countryCode];
@@ -125,8 +124,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
   useEffect(() => {
     if (qrCode) {
-      console.log("qrCode>>>>>", qrCode, JSON.parse(qrCode?.data)?.link);
-      const qrType: string = qrCode.qr_type.trim();
+      const qrType: string = qrCode.qr_type?.trim();
       const typeMapping: any = {
         Link: QRType.Link,
         Email: QRType.Email,
@@ -136,6 +134,7 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       if (typeMapping[qrType] || qrType === "Link") {
         const initialData = {
           ...initialQrData,
+          id: qrCode?._id,
           theme: {
             containerColor: qrCode?.containerColor || "#ffffff",
             buttonColor: qrCode?.buttonColor || "#000",
@@ -148,39 +147,32 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
           type: typeMapping[qrType],
           data:
             qrType === "MultiAction"
-              ? JSON.parse(qrCode?.data)?.action.map(
-                (action: any) => action?.url,
-              )
-              : [
-                JSON.parse(qrCode?.data)?.free_text ||
-                JSON.parse(qrCode?.data)?.link,
-              ],
+              ? qrCode?.data?.action.map((action: any) => action?.url)
+              : [qrCode?.data?.free_text || qrCode?.data?.link],
           status: qrCode?.status,
           linkNames:
             qrType === "MultiAction"
-              ? JSON.parse(qrCode?.data)?.action.map(
-                (action: any) => action?.action_name,
-              )
+              ? qrCode?.data?.action.map((action: any) => action?.action_name)
               : [""],
         };
 
         const QRCodeData =
           qrType === "MultiAction"
-            ? JSON.parse(qrCode?.data)
-              ?.action?.map((action: any) => action?.url)
-              .join(",")
-            : JSON.parse(qrCode?.data)?.free_text ||
-            JSON.parse(qrCode?.data)?.link;
+            ? qrCode?.data?.action?.map((action: any) => action?.url).join(",")
+            : qrCode?.data?.free_text || qrCode?.data?.link;
 
         setQRData(initialData);
         setGeneratedQRCode(QRCodeData);
-        {
-          qrCode?.logo?.length ?
-            fetch(`${process.env.REACT_APP_API_URL}/${qrCode?.logo}`)
+
+        qrCode?.logo?.length
+          ? fetch(`${process.env.REACT_APP_API_URL}/${qrCode?.logo}`)
               .then((response) => response.blob())
-              .then((blob) => setLogo(blob))
-              .catch((error) => console.error("Error fetching image: ", error)) : setLogo(null)
-        }
+              .then((blob) => {
+                setLogo(blob);
+              })
+              .catch((error) => console.error("Error fetching image: ", error))
+          : setLogo(null);
+
         setChecked(qrCode?.bgImage);
         setLogoSize({
           ...logoSize,
@@ -188,13 +180,11 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
           logoHeight: qrCode?.logoHeight,
         });
         if (qrType === "PhoneNumber") {
-          setCountryCodeName(
-            extractCountryCode(JSON.parse(qrCode?.data)?.free_text) || "",
-          );
+          setCountryCodeName(extractCountryCode(qrCode?.data?.free_text) || "");
         }
       }
     }
-  }, [qrCode]);
+  }, [qrCode, qrCode?.logo]);
 
   const handleLogoSizeChange = (event: any) => {
     const { name, value } = event.target;
@@ -220,7 +210,6 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   };
 
   const handleDataChange = (event: any, index: number) => {
-    event.preventDefault();
     const newData = event.target.value;
     const countryCodeName = event.target?.countryCodeName;
     const updatedData = [...qrData.data];
@@ -344,15 +333,15 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
 
     setContrastError(
       contrastRatio1 < MIN_CONTRAST_RATIO ||
-      contrastRatio2 < MIN_CONTRAST_RATIO ||
-      contrastRatio3 > MIN_CONTRAST_RATIO,
+        contrastRatio2 < MIN_CONTRAST_RATIO ||
+        contrastRatio3 > MIN_CONTRAST_RATIO,
     );
 
     setQRData({ ...qrData, theme: { ...qrData?.theme, [property]: value } });
   };
 
   const isFieldEmpty = (value: string | undefined) => {
-    return !value || value.trim() === "";
+    return !value || value?.trim() === "";
   };
 
   const handleLogoUpload = (e: any) => {
@@ -362,7 +351,6 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       e.target.value = null;
     }
   };
-  console.log("logo>>>>", logo);
   const handleGenerateQR = () => {
     const { type, data, title } = qrData;
     const validationErrorsForLink = [
@@ -454,14 +442,12 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
   const callApi = async () => {
     const { theme } = qrData;
     let blob: any;
-    const qrCanvas: any = document.getElementById("QR");
+    const qrCanvas: any = document.getElementById(`QR-${qrData?.id}`);
     if (qrCanvas) {
       blob = await new Promise((resolve) => {
         qrCanvas.toBlob((b: any) => resolve(b));
       });
     }
-
-    console.log("pngUrl", blob);
 
     const formData = new FormData();
     const payload: any = {
@@ -478,7 +464,6 @@ const QRFormContainer = ({ qrCode, editQR }: QRFormContainerProps) => {
       logoHeight: logoSize?.logoHeight,
     };
 
-    console.log("logo>>", logo);
     switch (qrData.type) {
       case QRType.Link:
         payload.data.link = qrData.data[0];

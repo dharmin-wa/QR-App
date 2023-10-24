@@ -2,3 +2,26 @@
   width: 0px;
   height: 0px;
 }
+
+.nav-top-out-wrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: stretch;
+}
+
+.center-top-nav-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.main-nav-wrap {
+  width: 100%;
+  padding: 0px 30px;
+}
+
+.select-lan-wrap .MuiSvgIcon-root {
+  color: white !important;
+}

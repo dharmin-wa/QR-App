@@ -8,3 +8,7 @@
   line-height: 57px;
   letter-spacing: 0em;
 }
+
+.react-tel-input .flag-dropdown {
+  border-radius: 8 !important;
+}
